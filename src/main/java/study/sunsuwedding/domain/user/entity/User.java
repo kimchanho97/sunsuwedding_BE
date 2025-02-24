@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.constant.Grade;
 
 
@@ -17,7 +18,7 @@ import study.sunsuwedding.domain.user.constant.Grade;
 @SQLRestriction("is_active = true")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class User {
+public abstract class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +39,7 @@ public abstract class User {
     private Grade grade;
 
     private boolean isActive;
+    private String avatarUrl;
 
     public User(String email, String username, String password, Grade grade, boolean isActive) {
         this.email = email;
