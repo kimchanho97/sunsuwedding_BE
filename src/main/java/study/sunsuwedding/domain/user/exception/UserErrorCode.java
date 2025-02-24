@@ -1,4 +1,4 @@
-package study.sunsuwedding.user.exception;
+package study.sunsuwedding.domain.user.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
