@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.sunsuwedding.domain.user.constant.Grade;
 
 @Entity
 @Getter
@@ -15,7 +14,7 @@ import study.sunsuwedding.domain.user.constant.Grade;
 public class Couple extends User {
 
     @Builder
-    public Couple(String email, String username, String password, Grade grade, boolean isActive) {
-        super(email, username, password, grade, isActive);
+    public Couple(String username, String email, String password) {
+        super(username, email, password);
     }
 }

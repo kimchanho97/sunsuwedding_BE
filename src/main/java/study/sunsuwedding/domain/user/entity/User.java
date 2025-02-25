@@ -4,19 +4,24 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.constant.Grade;
 
+import java.time.LocalDateTime;
+
 
 @Entity
-@Table(name = "user")
+@Getter
+@Table(name = "users") // user 테이블은 MySQL에서 예약어이므로 users로 변경
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@SQLDelete(sql = "UPDATE user SET is_active = false WHERE id = ?")
-@SQLRestriction("is_active = true")
-@Getter
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
+@FilterDef(name = "userDeletedFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "userDeletedFilter", condition = "is_deleted = :isDeleted")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class User extends BaseTimeEntity {
 
@@ -25,11 +30,11 @@ public abstract class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -38,15 +43,17 @@ public abstract class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
-    private boolean isActive;
+    @Column(nullable = false)
+    private Boolean isDeleted;
+    private LocalDateTime deletedAt;
     private String avatarUrl;
 
-    public User(String email, String username, String password, Grade grade, boolean isActive) {
-        this.email = email;
+    public User(String username, String email, String password) {
         this.username = username;
+        this.email = email;
         this.password = password;
-        this.grade = grade;
-        this.isActive = isActive;
+        this.grade = Grade.NORMAL;
+        this.isDeleted = false;
     }
 }
 
