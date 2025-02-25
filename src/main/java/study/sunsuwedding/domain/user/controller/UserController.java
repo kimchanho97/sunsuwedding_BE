@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.user;
+package study.sunsuwedding.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
