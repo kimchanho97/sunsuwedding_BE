@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.user.constant.Grade;
 import study.sunsuwedding.domain.user.entity.Couple;
@@ -15,7 +14,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles("test")
 class UserRepositoryTest {
 
     @Autowired

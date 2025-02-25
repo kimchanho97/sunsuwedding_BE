@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.user.constant.Grade;
 import study.sunsuwedding.domain.user.dto.UserSignUpRequest;
@@ -21,7 +20,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles("test")
 class UserServiceImplTest {
 
     @Autowired
