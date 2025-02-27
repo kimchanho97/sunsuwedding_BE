@@ -27,11 +27,7 @@ class UserRepositoryTest {
     @DisplayName("ID로 사용자(Couple) 조회")
     void findByUser() {
         // Given
-        Couple couple = Couple.builder()
-                .username("CoupleUser")
-                .email("couple@example.com")
-                .password("securePass")
-                .build();
+        Couple couple = new Couple("CoupleUser", "couple@example.com", "securePass");
 
         coupleRepository.save(couple);
         em.flush();

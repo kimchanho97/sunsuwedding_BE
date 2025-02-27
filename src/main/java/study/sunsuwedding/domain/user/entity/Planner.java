@@ -3,7 +3,6 @@ package study.sunsuwedding.domain.user.entity;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Planner extends User {
 
-    @Builder
     public Planner(String username, String email, String password) {
         super(username, email, password);
     }

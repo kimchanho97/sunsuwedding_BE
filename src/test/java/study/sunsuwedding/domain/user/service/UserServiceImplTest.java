@@ -37,11 +37,7 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        Couple existingUser = Couple.builder()
-                .email(duplicatedEmail)
-                .username(existingUsername)
-                .password(passwordEncoder.encode(existingPassword)) // 비밀번호 암호화
-                .build();
+        Couple existingUser = new Couple(existingUsername, duplicatedEmail, passwordEncoder.encode(existingPassword));
         userRepository.save(existingUser);
         em.flush();
         em.clear();
