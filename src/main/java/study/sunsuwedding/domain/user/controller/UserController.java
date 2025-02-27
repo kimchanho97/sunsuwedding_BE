@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.sunsuwedding.common.response.ApiResponse;
-import study.sunsuwedding.domain.user.dto.UserSignUpRequest;
+import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 import study.sunsuwedding.domain.user.service.UserService;
 
 @RestController

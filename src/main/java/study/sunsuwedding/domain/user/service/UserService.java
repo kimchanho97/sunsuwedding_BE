@@ -1,6 +1,6 @@
 package study.sunsuwedding.domain.user.service;
 
-import study.sunsuwedding.domain.user.dto.UserSignUpRequest;
+import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 
 public interface UserService {
 

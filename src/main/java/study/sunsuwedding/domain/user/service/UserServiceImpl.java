@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.user.constant.Role;
-import study.sunsuwedding.domain.user.dto.UserSignUpRequest;
+import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.CoupleRepository;
 import study.sunsuwedding.domain.user.repository.PlannerRepository;

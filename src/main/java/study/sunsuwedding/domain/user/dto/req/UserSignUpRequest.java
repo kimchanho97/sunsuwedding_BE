@@ -1,15 +1,15 @@
-package study.sunsuwedding.domain.user.dto;
+package study.sunsuwedding.domain.user.dto.req;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import study.sunsuwedding.domain.user.entity.Couple;
 import study.sunsuwedding.domain.user.entity.Planner;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSignUpRequest {
