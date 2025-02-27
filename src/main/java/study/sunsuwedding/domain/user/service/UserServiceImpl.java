@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.user.constant.Role;
 import study.sunsuwedding.domain.user.dto.UserSignUpRequest;
-import study.sunsuwedding.domain.user.entity.Couple;
-import study.sunsuwedding.domain.user.entity.Planner;
-import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.CoupleRepository;
 import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
 import java.util.Objects;
+
+import static study.sunsuwedding.domain.user.constant.Role.PLANNER;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +33,11 @@ public class UserServiceImpl implements UserService {
         Role role = Role.fromString(request.getRole());
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        User newUser = createUser(request, encodedPassword, role);
-        saveUser(newUser);
+        if (role == PLANNER) {
+            plannerRepository.save(request.toPlannerEntity(encodedPassword));
+        } else {
+            coupleRepository.save(request.toCoupleEntity(encodedPassword));
+        }
     }
 
     private void validateDuplicateEmail(String email) {
@@ -50,30 +52,6 @@ public class UserServiceImpl implements UserService {
     private void validatePasswordsMatch(String password, String password2) {
         if (!Objects.equals(password, password2)) {
             throw UserException.passwordMismatch();
-        }
-    }
-
-    private User createUser(UserSignUpRequest request, String encodedPassword, Role role) {
-        return role == Role.COUPLE ?
-                Couple.builder()
-                        .email(request.getEmail())
-                        .username(request.getUsername())
-                        .password(encodedPassword)
-                        .build()
-                :
-                Planner.builder()
-                        .email(request.getEmail())
-                        .username(request.getUsername())
-                        .password(encodedPassword)
-                        .build();
-
-    }
-
-    private void saveUser(User user) {
-        if (user instanceof Couple) {
-            coupleRepository.save((Couple) user);
-        } else {
-            plannerRepository.save((Planner) user);
         }
     }
 
