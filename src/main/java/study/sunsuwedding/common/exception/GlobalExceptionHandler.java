@@ -14,13 +14,48 @@ import study.sunsuwedding.common.response.ErrorResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
-        log.error("BaseException", e);
-
+    /**
+     * 비즈니스 예외 처리
+     */
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        log.warn("Business Exception 발생: {}", e.getMessage());
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ErrorResponse(e));
+    }
+
+    /**
+     * 인증/인가 예외 처리
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
+        log.warn("Authentication Exception 발생: {}", e.getMessage());
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ErrorResponse(e));
+    }
+
+    /**
+     * 데이터베이스 예외 처리
+     */
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<ErrorResponse> handleDatabaseException(DataAccessException e) {
+        log.error("Database Error 발생", e); // ERROR 레벨
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(CommonErrorCode.DB_ERROR));
+    }
+
+    /**
+     * 정의하지 않은 모든 예외를 서버 오류로 처리
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception e) {
+        log.error("System Exception 발생", e); // ERROR 레벨
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(CommonErrorCode.SYSTEM_ERROR));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,19 +79,4 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(CommonErrorCode.BAD_REQUEST));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception e) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(CommonErrorCode.SYSTEM_ERROR));
-    }
-
-
-    // DB 예외는 DataAccessException 하나로 통합 처리
-    @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ErrorResponse> handleDatabaseException(DataAccessException e) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(CommonErrorCode.SYSTEM_ERROR));
-    }
 }
