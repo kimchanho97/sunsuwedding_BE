@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.sunsuwedding.common.response.ApiResponse;
 import study.sunsuwedding.domain.auth.constant.SessionConst;
-import study.sunsuwedding.domain.auth.dto.req.AuthLoginRequest;
-import study.sunsuwedding.domain.auth.dto.res.AuthLoginResponse;
+import study.sunsuwedding.domain.auth.dto.AuthLoginRequest;
+import study.sunsuwedding.domain.auth.dto.AuthLoginResponse;
 import study.sunsuwedding.domain.auth.service.AuthService;
 import study.sunsuwedding.domain.user.entity.User;
 
