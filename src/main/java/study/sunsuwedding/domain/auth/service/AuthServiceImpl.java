@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.common.filter.FilterManager;
 import study.sunsuwedding.domain.auth.dto.req.AuthLoginRequest;
-import study.sunsuwedding.domain.auth.dto.res.AuthLoginResponse;
 import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.UserRepository;
@@ -21,7 +20,7 @@ public class AuthServiceImpl implements AuthService {
     private final FilterManager filterManager;
 
     @Transactional
-    public AuthLoginResponse login(AuthLoginRequest request) {
+    public User login(AuthLoginRequest request) {
         filterManager.enableFilter("userDeletedFilter", "isDeleted", false);
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(UserException::userNotFound);
@@ -29,6 +28,6 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw UserException.passwordMismatch();
         }
-        return AuthLoginResponse.fromEntity(user);
+        return user;
     }
 }

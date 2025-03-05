@@ -14,6 +14,7 @@ import study.sunsuwedding.domain.auth.constant.SessionConst;
 import study.sunsuwedding.domain.auth.dto.req.AuthLoginRequest;
 import study.sunsuwedding.domain.auth.dto.res.AuthLoginResponse;
 import study.sunsuwedding.domain.auth.service.AuthService;
+import study.sunsuwedding.domain.user.entity.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +25,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthLoginResponse>> login(@RequestBody @Valid AuthLoginRequest request, HttpServletRequest httpRequest) {
-        AuthLoginResponse response = authService.login(request);
+        User loginedUser = authService.login(request);
 
         HttpSession session = httpRequest.getSession();
-        session.setAttribute(SessionConst.USER_ID, response.getUserId());
+        session.setAttribute(SessionConst.USER_ID, loginedUser.getId());
+        session.setAttribute(SessionConst.USER_ROLE, loginedUser.getDtype());
+
+        AuthLoginResponse response = AuthLoginResponse.fromEntity(loginedUser);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

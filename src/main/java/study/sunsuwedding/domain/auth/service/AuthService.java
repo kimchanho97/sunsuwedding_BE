@@ -1,9 +1,9 @@
 package study.sunsuwedding.domain.auth.service;
 
 import study.sunsuwedding.domain.auth.dto.req.AuthLoginRequest;
-import study.sunsuwedding.domain.auth.dto.res.AuthLoginResponse;
+import study.sunsuwedding.domain.user.entity.User;
 
 public interface AuthService {
 
-    AuthLoginResponse login(AuthLoginRequest request);
+    User login(AuthLoginRequest request);
 }
