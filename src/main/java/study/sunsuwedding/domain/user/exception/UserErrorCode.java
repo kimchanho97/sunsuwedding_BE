@@ -22,8 +22,7 @@ public enum UserErrorCode implements ErrorCode {
     // 유저 정보 조회
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, 2007, "해당 사용자를 찾을 수 없습니다. 탈퇴했거나 존재하지 않는 계정입니다."),
 
-    PLANNER_NOT_FOUND(HttpStatus.NOT_FOUND, 2001, "해당 플래너를 찾을 수 없습니다. 탈퇴했거나 존재하지 않는 계정입니다."),
-    ALREADY_PREMIUM_USER(HttpStatus.BAD_REQUEST, 2007, "이미 프리미엄 회원입니다.");
+    PLANNER_NOT_FOUND(HttpStatus.NOT_FOUND, 2001, "해당 플래너를 찾을 수 없습니다. 탈퇴했거나 존재하지 않는 계정입니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

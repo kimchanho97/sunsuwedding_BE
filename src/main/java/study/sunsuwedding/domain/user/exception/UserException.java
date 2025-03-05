@@ -41,9 +41,6 @@ public class UserException extends BusinessException {
     public static UserException plannerNotFound() {
         return new UserException(UserErrorCode.PLANNER_NOT_FOUND);
     }
-
-    public static UserException alreadyPremiumUser() {
-        return new UserException(UserErrorCode.ALREADY_PREMIUM_USER);
-    }
+    
 }
 

@@ -34,11 +34,15 @@ public class Payment extends BaseTimeEntity {
     private String paymentKey;
     private LocalDateTime payedAt;
 
-    public Payment(User user, String orderId, Long payedAmount, String paymentKey, LocalDateTime payedAt) {
+    public Payment(User user, String orderId, Long payedAmount) {
         this.user = user;
         this.orderId = orderId;
         this.payedAmount = payedAmount;
-        this.paymentKey = paymentKey;
-        this.payedAt = payedAt;
     }
+
+    public void update(String orderId, Long amount) {
+        this.orderId = orderId;
+        this.payedAmount = amount;
+    }
+
 }
