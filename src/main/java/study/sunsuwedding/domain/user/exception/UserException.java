@@ -8,6 +8,30 @@ public class UserException extends BusinessException {
         super(errorCode);
     }
 
+    public static UserException emailNotFound() {
+        return new UserException(UserErrorCode.EMAIL_NOT_FOUND);
+    }
+
+    public static UserException incorrectPassword() {
+        return new UserException(UserErrorCode.INCORRECT_PASSWORD);
+    }
+
+    public static UserException deletedUser() {
+        return new UserException(UserErrorCode.DELETED_USER);
+    }
+
+    public static UserException duplicateEmail() {
+        return new UserException(UserErrorCode.DUPLICATE_EMAIL);
+    }
+
+    public static UserException invalidRole() {
+        return new UserException(UserErrorCode.INVALID_ROLE);
+    }
+
+    public static UserException passwordMismatch() {
+        return new UserException(UserErrorCode.PASSWORD_MISMATCH);
+    }
+
     public static UserException userNotFound() {
         return new UserException(UserErrorCode.USER_NOT_FOUND);
     }
@@ -16,32 +40,8 @@ public class UserException extends BusinessException {
         return new UserException(UserErrorCode.PLANNER_NOT_FOUND);
     }
 
-    public static UserException duplicateEmail() {
-        return new UserException(UserErrorCode.DUPLICATE_EMAIL);
-    }
-
-    public static UserException emailNotFound() {
-        return new UserException(UserErrorCode.EMAIL_NOT_FOUND);
-    }
-
-    public static UserException invalidRole() {
-        return new UserException(UserErrorCode.INVALID_ROLE);
-    }
-
-    public static UserException incorrectPassword() {
-        return new UserException(UserErrorCode.INCORRECT_PASSWORD);
-    }
-
-    public static UserException passwordMismatch() {
-        return new UserException(UserErrorCode.PASSWORD_MISMATCH);
-    }
-
     public static UserException alreadyPremiumUser() {
         return new UserException(UserErrorCode.ALREADY_PREMIUM_USER);
-    }
-
-    public static UserException deletedUser() {
-        return new UserException(UserErrorCode.DELETED_USER);
     }
 }
 

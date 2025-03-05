@@ -23,10 +23,10 @@ public class AuthServiceImpl implements AuthService {
     public User login(AuthLoginRequest request) {
         filterManager.enableFilter("userDeletedFilter", "isDeleted", false);
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(UserException::userNotFound);
+                .orElseThrow(UserException::emailNotFound);
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw UserException.passwordMismatch();
+            throw UserException.incorrectPassword();
         }
         return user;
     }
