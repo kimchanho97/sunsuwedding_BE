@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.auth.dto.res;
+package study.sunsuwedding.domain.auth.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
