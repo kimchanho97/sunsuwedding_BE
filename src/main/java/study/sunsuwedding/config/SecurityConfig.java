@@ -86,13 +86,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/portfolio/self", "GET")
-                        ).hasAuthority("planner")
-                        .requestMatchers(
                                 new AntPathRequestMatcher("/api/user/signup"),
                                 new AntPathRequestMatcher("/api/auth/login"),
-                                new AntPathRequestMatcher("/api/portfolio/**", "GET"),
-                                new AntPathRequestMatcher("/api/mail/**")
+                                new AntPathRequestMatcher("/api/portfolio/**", "GET")
                         ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/chat"),
@@ -104,6 +100,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/review/**", "DELETE")
                         ).hasAuthority("couple")
                         .requestMatchers(
+                                new AntPathRequestMatcher("/api/portfolio/self", "GET"),
                                 new AntPathRequestMatcher("/api/portfolio", "POST"),
                                 new AntPathRequestMatcher("/api/portfolio", "PUT"),
                                 new AntPathRequestMatcher("/api/portfolio", "DELETE"),
