@@ -4,24 +4,21 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.constant.Grade;
 
 import java.time.LocalDateTime;
 
 
-@Entity
 @Getter
+@Entity
 @Table(name = "users") // user 테이블은 MySQL에서 예약어이므로 users로 변경
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
-@FilterDef(name = "userDeletedFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
-@Filter(name = "userDeletedFilter", condition = "is_deleted = :isDeleted")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE user_id = ?")
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class User extends BaseTimeEntity {
 
@@ -46,6 +43,7 @@ public abstract class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
+    private LocalDateTime upgradeAt;
     private String avatarUrl;
 
     public User(String username, String email, String password) {
@@ -61,5 +59,6 @@ public abstract class User extends BaseTimeEntity {
         DiscriminatorValue val = this.getClass().getAnnotation(DiscriminatorValue.class);
         return val == null ? null : val.value();
     }
+
 }
 
