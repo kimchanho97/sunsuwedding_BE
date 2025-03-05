@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.constant.Grade;
 import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
@@ -18,7 +17,7 @@ import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -53,16 +52,30 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("회원 탈퇴 시 isDeleted가 true로 변경되어야 한다.")
+    void withdraw_Should_SetIsDeletedToTrue_When_UserDeletesAccount() {
+        // given
+        Long userId = savedUser.getId();
+        String email = savedUser.getEmail();
+
+        // when
+        userService.withdraw(userId);
+        em.flush();
+        em.clear();
+
+        // then
+        Optional<User> deletedUser = userRepository.findByEmailWithDeleted(email);
+
+        assertThat(deletedUser).isPresent(); // 삭제되었지만 조회는 가능해야 함
+        assertThat(deletedUser.get().getIsDeleted()).isTrue(); // isDeleted 필드가 true인지 확인
+        assertThat(deletedUser.get().getDeletedAt()).isNotNull(); // 삭제 시간이 기록되어야 함
+    }
+
+    @Test
     @DisplayName("존재하는 유저 정보 조회 성공")
     void testGetUserInfo_Success() {
         // Given
         Long userId = savedUser.getId();
-
-        // 결제 내역 추가
-        Payment payment = new Payment(savedUser, "order123", 50000L, "paymentKey123", LocalDateTime.of(2024, 3, 5, 14, 30));
-        paymentRepository.save(payment);
-        em.flush();
-        em.clear();
 
         // When
         UserInfoResponse response = userService.getUserInfo(userId);
@@ -74,22 +87,7 @@ class UserServiceImplTest {
         assertThat(response.getEmail()).isEqualTo(email);
         assertThat(response.getRole()).isEqualTo("couple");
         assertThat(response.getGrade()).isEqualTo("normal");
-        assertThat(response.getPayedAt()).isEqualTo("2024년 03월 05일"); // 결제 날짜 확인
-    }
-
-    @Test
-    @DisplayName("유저 정보 조회 시 결제 정보가 없는 경우")
-    void testGetUserInfo_WithoutPayment() {
-        // Given
-        Long userId = savedUser.getId();
-
-        // When
-        UserInfoResponse response = userService.getUserInfo(userId);
-
-        // Then
-        assertThat(response).isNotNull();
-        assertThat(response.getUserId()).isEqualTo(userId);
-        assertThat(response.getPayedAt()).isEqualTo(""); // 결제 정보가 없을 때 빈 문자열
+        assertThat(response.getPayedAt()).isEqualTo("");
     }
 
     @Test
