@@ -12,7 +12,6 @@ public enum CommonErrorCode implements ErrorCode {
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, 401, "유효하지 않은 입력값입니다."),
 
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, 401, "인증이 필요합니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 401, "유효하지 않은 토큰입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, 403, "접근이 거부되었습니다."),
 
     NOT_FOUND(HttpStatus.NOT_FOUND, 404, "요청한 리소스를 찾을 수 없습니다."),

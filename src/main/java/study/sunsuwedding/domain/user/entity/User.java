@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "users") // user 테이블은 MySQL에서 예약어이므로 users로 변경
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
 @FilterDef(name = "userDeletedFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
 @Filter(name = "userDeletedFilter", condition = "is_deleted = :isDeleted")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +54,12 @@ public abstract class User extends BaseTimeEntity {
         this.password = password;
         this.grade = Grade.NORMAL;
         this.isDeleted = false;
+    }
+
+    @Transient
+    public String getDtype() {
+        DiscriminatorValue val = this.getClass().getAnnotation(DiscriminatorValue.class);
+        return val == null ? null : val.value();
     }
 }
 
