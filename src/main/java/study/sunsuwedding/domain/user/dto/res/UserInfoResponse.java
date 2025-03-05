@@ -3,7 +3,6 @@ package study.sunsuwedding.domain.user.dto.res;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import study.sunsuwedding.common.util.DateFormatter;
-import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.user.entity.User;
 
 @Getter
@@ -17,13 +16,13 @@ public class UserInfoResponse {
     private final String grade;
     private final String payedAt;
 
-    public static UserInfoResponse fromEntity(User user, Payment payment) {
+    public static UserInfoResponse fromEntity(User user) {
         return new UserInfoResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getDtype(),
                 user.getGrade().getGradeName(),
-                payment != null ? DateFormatter.formatDateInKorean(payment.getPayedAt()) : "");
+                DateFormatter.formatDateInKorean(user.getUpgradeAt()));
     }
 }
