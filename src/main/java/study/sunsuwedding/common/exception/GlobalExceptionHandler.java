@@ -26,17 +26,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 인증/인가 예외 처리
-     */
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
-        log.warn("Authentication Exception 발생: {}", e.getMessage());
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ErrorResponse(e));
-    }
-
-    /**
      * 데이터베이스 예외 처리
      */
     @ExceptionHandler(DataAccessException.class)
@@ -58,6 +47,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(CommonErrorCode.SYSTEM_ERROR));
     }
 
+    /**
+     * @Valid 유효성 검사 실패 예외 처리
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult()
@@ -72,6 +64,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(400, errorMessage));
     }
 
+    /**
+     * 바인딩 타입 불일치 예외 처리
+     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatchException(MethodArgumentTypeMismatchException e) {
         return ResponseEntity
