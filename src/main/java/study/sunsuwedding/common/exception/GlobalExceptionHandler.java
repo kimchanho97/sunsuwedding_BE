@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         log.error("Database Error 발생", e); // ERROR 레벨
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(CommonErrorCode.DB_ERROR));
+                .body(new ErrorResponse(CommonErrorCode.SYSTEM_ERROR));
     }
 
     /**
