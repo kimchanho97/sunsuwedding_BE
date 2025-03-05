@@ -34,4 +34,13 @@ public class UserController {
         UserInfoResponse response = userService.getUserInfo(userId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    /**
+     * 회원 탈퇴
+     */
+    @DeleteMapping("")
+    public ResponseEntity<ApiResponse<Void>> withdraw(@AuthenticationPrincipal Long userId) {
+        userService.withdraw(userId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }

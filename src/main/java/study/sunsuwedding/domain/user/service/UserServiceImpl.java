@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.constant.Role;
 import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
@@ -50,14 +49,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserException::userNotFound);
 
-        Payment payment = paymentRepository.findByUserId(userId)
-                .orElse(null);
+        return UserInfoResponse.fromEntity(user);
+    }
 
-        return UserInfoResponse.fromEntity(user, payment);
+    @Override
+    @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserException::userNotFound);
+
+        userRepository.delete(user);
     }
 
     private void validateDuplicateEmail(String email) {
-        userRepository.findByEmail(email)
+        userRepository.findByEmailWithDeleted(email)
                 .ifPresent(user -> {
                     throw user.getIsDeleted() ?
                             UserException.deletedUser() :

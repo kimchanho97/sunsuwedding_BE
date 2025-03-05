@@ -8,4 +8,7 @@ public interface UserService {
     void signUp(UserSignUpRequest userSignUpRequest);
 
     UserInfoResponse getUserInfo(Long userId);
+
+    void withdraw(Long userId);
+    
 }
