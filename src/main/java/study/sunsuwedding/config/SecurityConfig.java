@@ -88,6 +88,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/user/signup"),
                                 new AntPathRequestMatcher("/api/auth/login"),
+                                new AntPathRequestMatcher("/api/auth/logout"),
                                 new AntPathRequestMatcher("/api/portfolio/**", "GET")
                         ).permitAll()
                         .requestMatchers(
@@ -109,7 +110,6 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/quotation/**", "DELETE")
                         ).hasAuthority("planner")
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/auth/logout"),
                                 new AntPathRequestMatcher("/api/user/**"),
                                 new AntPathRequestMatcher("/api/portfolio/**"),
                                 new AntPathRequestMatcher("/api/chat/**"),
