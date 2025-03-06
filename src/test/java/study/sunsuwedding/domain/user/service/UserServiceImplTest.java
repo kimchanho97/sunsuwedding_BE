@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.constant.Grade;
 import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 import study.sunsuwedding.domain.user.dto.res.UserInfoResponse;
@@ -34,8 +33,6 @@ class UserServiceImplTest {
     EntityManager em;
     @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
-    PaymentRepository paymentRepository;
 
     String email = "test@example.com";
     String username = "existingUser";
