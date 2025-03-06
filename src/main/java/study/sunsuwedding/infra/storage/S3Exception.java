@@ -1,4 +1,4 @@
-package study.sunsuwedding.common.s3;
+package study.sunsuwedding.infra.storage;
 
 import study.sunsuwedding.common.exception.BusinessException;
 import study.sunsuwedding.common.exception.ErrorCode;

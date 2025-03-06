@@ -1,4 +1,4 @@
-package study.sunsuwedding.common.security;
+package study.sunsuwedding.infra.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

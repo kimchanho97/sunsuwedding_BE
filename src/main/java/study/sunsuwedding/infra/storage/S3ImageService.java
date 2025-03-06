@@ -1,4 +1,4 @@
-package study.sunsuwedding.common.s3;
+package study.sunsuwedding.infra.storage;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,5 +109,5 @@ public class S3ImageService {
         RequestBody requestBody = RequestBody.fromBytes(file.getBytes());
         s3Client.putObject(putObjectRequest, requestBody);
     }
-    
+
 }

@@ -1,4 +1,4 @@
-package study.sunsuwedding.config;
+package study.sunsuwedding.infra.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

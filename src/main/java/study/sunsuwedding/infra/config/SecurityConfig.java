@@ -1,4 +1,4 @@
-package study.sunsuwedding.config;
+package study.sunsuwedding.infra.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import study.sunsuwedding.common.exception.CommonErrorCode;
 import study.sunsuwedding.common.response.ErrorResponse;
-import study.sunsuwedding.common.security.SessionAuthenticationFilter;
+import study.sunsuwedding.infra.security.SessionAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.Collections;

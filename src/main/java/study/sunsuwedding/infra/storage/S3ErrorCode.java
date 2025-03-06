@@ -1,4 +1,4 @@
-package study.sunsuwedding.common.s3;
+package study.sunsuwedding.infra.storage;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
