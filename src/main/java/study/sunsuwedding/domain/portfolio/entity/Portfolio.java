@@ -47,6 +47,9 @@ public class Portfolio {
     @Column(nullable = false, length = 1000)
     private String partnerCompany;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     private Long totalPrice;
     private Long contractCount;
     private Long avgPrice;
