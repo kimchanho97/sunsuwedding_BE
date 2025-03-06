@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import study.sunsuwedding.common.entity.BaseTimeEntity;
+import study.sunsuwedding.domain.payment.exception.PaymentException;
 import study.sunsuwedding.domain.user.constant.Grade;
 
 import java.time.LocalDateTime;
+
+import static study.sunsuwedding.domain.user.constant.Grade.PREMIUM;
 
 
 @Getter
@@ -58,6 +61,18 @@ public abstract class User extends BaseTimeEntity {
     public String getDtype() {
         DiscriminatorValue val = this.getClass().getAnnotation(DiscriminatorValue.class);
         return val == null ? null : val.value();
+    }
+
+    public void upgrade() {
+        if (this.grade == PREMIUM) {
+            throw PaymentException.alreadyPremiumUser();
+        }
+        this.grade = PREMIUM;
+        this.upgradeAt = LocalDateTime.now();
+    }
+
+    public boolean isPremium() {
+        return this.grade == PREMIUM;
     }
 
 }

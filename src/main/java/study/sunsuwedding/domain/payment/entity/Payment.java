@@ -45,4 +45,12 @@ public class Payment extends BaseTimeEntity {
         this.payedAmount = amount;
     }
 
+    public void markAsApproved(String paymentKey) {
+        this.paymentKey = paymentKey;
+        this.payedAt = LocalDateTime.now();
+    }
+
+    public boolean matches(String orderId, Long amount) {
+        return this.orderId.equals(orderId) && this.payedAmount.equals(amount);
+    }
 }

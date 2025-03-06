@@ -36,7 +36,7 @@ public class PaymentController {
     @PostMapping("/approve")
     public ResponseEntity<ApiResponse<Void>> approve(@AuthenticationPrincipal Long userId,
                                                      @Valid @RequestBody PaymentApproveRequest request) {
-        paymentService.approveAndUserGradeUpdate(userId, request);
+        paymentService.approvePaymentAndUpgradeUser(userId, request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 }
