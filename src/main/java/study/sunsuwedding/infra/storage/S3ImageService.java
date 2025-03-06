@@ -32,7 +32,7 @@ public class S3ImageService {
      * @param file 업로드할 이미지 파일
      * @return 업로드된 이미지의 S3 URL
      */
-    public String uploadImage(MultipartFile file) {
+    public S3UploadResultDto uploadImage(MultipartFile file) {
         if (file.isEmpty() || Objects.isNull(file.getOriginalFilename())) {
             throw S3Exception.emptyFile();
         }
@@ -41,9 +41,10 @@ public class S3ImageService {
 
         try {
             uploadFileToS3(file, storedFileName);
-            return generateS3Url(storedFileName);
+            String fileUrl = generateS3Url(storedFileName);
+            return new S3UploadResultDto(storedFileName, fileUrl);
         } catch (IOException e) {
-            throw S3Exception.ioExceptionOnImageUpload();
+            throw S3Exception.s3UploadFailed();
         }
     }
 
@@ -61,7 +62,7 @@ public class S3ImageService {
 
             s3Client.deleteObject(deleteRequest);
         } catch (Exception e) {
-            throw S3Exception.deleteObjectException();
+            throw S3Exception.s3DeleteFailed();
         }
     }
 
@@ -74,7 +75,7 @@ public class S3ImageService {
     private String validateAndExtractExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf(".");
         if (lastDotIndex == -1) {
-            throw S3Exception.noFileExtension();
+            throw S3Exception.missingFileExtension();
         }
 
         String extension = fileName.substring(lastDotIndex + 1).toLowerCase();

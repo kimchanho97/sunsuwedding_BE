@@ -3,6 +3,8 @@ package study.sunsuwedding.infra.storage;
 import study.sunsuwedding.common.exception.BusinessException;
 import study.sunsuwedding.common.exception.ErrorCode;
 
+import static study.sunsuwedding.infra.storage.S3ErrorCode.*;
+
 public class S3Exception extends BusinessException {
 
     public S3Exception(ErrorCode errorCode) {
@@ -10,26 +12,22 @@ public class S3Exception extends BusinessException {
     }
 
     public static S3Exception emptyFile() {
-        return new S3Exception(S3ErrorCode.EMPTY_FILE);
+        return new S3Exception(EMPTY_FILE);
     }
 
-    public static S3Exception ioExceptionOnImageUpload() {
-        return new S3Exception(S3ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD);
-    }
-
-    public static S3Exception noFileExtension() {
-        return new S3Exception(S3ErrorCode.NO_FILE_EXTENSION);
+    public static S3Exception missingFileExtension() {
+        return new S3Exception(MISSING_FILE_EXTENSION);
     }
 
     public static S3Exception invalidFileExtension() {
-        return new S3Exception(S3ErrorCode.INVALID_FILE_EXTENSION);
+        return new S3Exception(INVALID_FILE_EXTENSION);
     }
 
-    public static S3Exception putObjectException() {
-        return new S3Exception(S3ErrorCode.PUT_OBJECT_EXCEPTION);
+    public static S3Exception s3UploadFailed() {
+        return new S3Exception(S3_UPLOAD_FAILED);
     }
 
-    public static Exception deleteObjectException() {
-        return new S3Exception(S3ErrorCode.DELETE_OBJECT_EXCEPTION);
+    public static S3Exception s3DeleteFailed() {
+        return new S3Exception(S3_DELETE_FAILED);
     }
 }
