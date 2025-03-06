@@ -44,7 +44,7 @@ class UserRepositoryTest {
         assertThat(foundCouple.getGrade()).isEqualTo(Grade.NORMAL);
         assertThat(foundCouple.getIsDeleted()).isFalse();
         assertThat(foundCouple.getDeletedAt()).isNull();
-        assertThat(foundCouple.getAvatarUrl()).isNull();
+        assertThat(foundCouple.getFileUrl()).isNull();
     }
 
 }

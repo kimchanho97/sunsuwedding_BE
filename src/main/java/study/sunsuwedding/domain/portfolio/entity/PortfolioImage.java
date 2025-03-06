@@ -23,7 +23,7 @@ public class PortfolioImage {
     private Portfolio portfolio;
 
     private String fileName; // S3에 저장된 파일명(Key)
-    private String imageUrl; // S3에 저장된 이미지 URL
+    private String fileUrl; // S3에 저장된 이미지 URL
 
     @Column(nullable = false)
     private Boolean isThumbnail;

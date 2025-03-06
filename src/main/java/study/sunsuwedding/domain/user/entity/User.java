@@ -47,7 +47,8 @@ public abstract class User extends BaseTimeEntity {
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
     private LocalDateTime upgradeAt;
-    private String avatarUrl;
+    private String fileName;
+    private String fileUrl;
 
     public User(String username, String email, String password) {
         this.username = username;
