@@ -53,7 +53,7 @@ public class S3ImageService {
      *
      * @param fileName 삭제할 이미지 파일명 (S3 Key)
      */
-    public void deleteImage(String fileName) throws Exception {
+    public void deleteImage(String fileName) {
         try {
             DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)

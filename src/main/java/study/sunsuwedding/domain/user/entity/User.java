@@ -76,5 +76,9 @@ public abstract class User extends BaseTimeEntity {
         return this.grade == PREMIUM;
     }
 
+    public void changeProfileImage(String fileName, String fileUrl) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+    }
 }
 
