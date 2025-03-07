@@ -29,7 +29,39 @@ public class PortfolioQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     /**
-     * DTO 조회
+     * V1: 엔티티 조회 후 DTO 변환 + 오프셋 기반 페이징
+     */
+    public List<PortfolioImage> findPortfolioImagesByEntity(PortfolioSearchRequest searchRequest, Pageable pageable) {
+        return queryFactory
+                .selectFrom(portfolioImage) // PortfolioImage 기준으로 조회
+                .join(portfolioImage.portfolio, portfolio)
+                .on(portfolioImage.isThumbnail.isTrue()) // 썸네일 이미지만 조회
+                .fetchJoin()
+                .where(
+                        nameContains(searchRequest.getName()),
+                        locationEq(searchRequest.getLocation()),
+                        priceBetween(searchRequest.getMinPrice(), searchRequest.getMaxPrice())
+                )
+                .orderBy(portfolio.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+    }
+
+    // 좋아요 목록 조회 (Set<Long>으로 반환)
+    public Set<Long> findFavoritePortfolioIds(Long userId) {
+        if (userId == null) {
+            return new HashSet<>();
+        }
+        return new HashSet<>(queryFactory
+                .select(favorite.portfolio.id)
+                .from(favorite)
+                .where(favorite.user.id.eq(userId))
+                .fetch());
+    }
+
+    /**
+     * V2: DTO 조회 + 오프셋 기반 페이징
      */
     public Slice<PortfolioListResponse> findPortfoliosByDto(Long userId, PortfolioSearchRequest searchRequest, Pageable pageable) {
         Set<Long> favoritePortfolioIds = findFavoritePortfolioIds(userId);
@@ -68,34 +100,40 @@ public class PortfolioQueryRepository {
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
-    // Entity 조회
-    public List<PortfolioImage> findPortfolioImagesByEntity(PortfolioSearchRequest searchRequest, Pageable pageable) {
-        return queryFactory
-                .selectFrom(portfolioImage) // PortfolioImage 기준으로 조회
-                .join(portfolioImage.portfolio, portfolio)
-                .on(portfolioImage.isThumbnail.isTrue()) // 썸네일 이미지만 조회
-                .fetchJoin()
+    /**
+     * V3: DTO 조회 + 커서 기반 페이징
+     */
+    public Slice<PortfolioListResponse> findPortfoliosByCursor(Long userId, PortfolioSearchRequest searchRequest, Long cursor, Pageable pageable) {
+        Set<Long> favoritePortfolioIds = findFavoritePortfolioIds(userId);
+        List<PortfolioListResponse> results = queryFactory
+                .select(new QPortfolioListResponse(
+                        portfolio.id,
+                        portfolioImage.fileUrl,
+                        portfolio.title,
+                        portfolio.plannerName,
+                        portfolio.totalPrice,
+                        portfolio.location,
+                        portfolio.contractCount,
+                        portfolio.avgStars,
+                        new CaseBuilder()
+                                .when(portfolio.id.in(favoritePortfolioIds)).then(true)
+                                .otherwise(false)
+                ))
+                .from(portfolio)
+                .leftJoin(portfolioImage)
+                .on(portfolioImage.portfolio.eq(portfolio), portfolioImage.isThumbnail.isTrue())
                 .where(
+                        cursor == null ? null : portfolio.id.loe(cursor), // 커서 이후 데이터만 조회
                         nameContains(searchRequest.getName()),
                         locationEq(searchRequest.getLocation()),
                         priceBetween(searchRequest.getMinPrice(), searchRequest.getMaxPrice())
                 )
-                .orderBy(portfolio.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
+                .orderBy(portfolio.id.desc()) // ID 역순 정렬
+                .limit(pageable.getPageSize() + 1) // 다음 페이지 존재 여부 확인
                 .fetch();
-    }
 
-    // 좋아요 목록 조회 (Set<Long>으로 반환)
-    public Set<Long> findFavoritePortfolioIds(Long userId) {
-        if (userId == null) {
-            return new HashSet<>();
-        }
-        return new HashSet<>(queryFactory
-                .select(favorite.portfolio.id)
-                .from(favorite)
-                .where(favorite.user.id.eq(userId))
-                .fetch());
+        boolean hasNext = results.size() > pageable.getPageSize();
+        return new SliceImpl<>(results, pageable, hasNext);
     }
 
     private BooleanExpression nameContains(String name) {
