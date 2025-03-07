@@ -15,6 +15,7 @@ public class UserInfoResponse {
     private final String role;
     private final String grade;
     private final String payedAt;
+    private final String profileImageUrl;
 
     public static UserInfoResponse fromEntity(User user) {
         return new UserInfoResponse(
@@ -23,6 +24,7 @@ public class UserInfoResponse {
                 user.getEmail(),
                 user.getDtype(),
                 user.getGrade().getGradeName(),
-                DateFormatter.formatDateInKorean(user.getUpgradeAt()));
+                DateFormatter.formatDateInKorean(user.getUpgradeAt()),
+                user.getFileUrl());
     }
 }
