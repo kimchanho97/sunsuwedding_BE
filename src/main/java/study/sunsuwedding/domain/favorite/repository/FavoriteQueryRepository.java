@@ -53,8 +53,8 @@ public class FavoriteQueryRepository {
                         Expressions.constant(true)
                 ))
                 .from(portfolio)
-                .join(portfolioImage).on(portfolioImage.portfolio.eq(portfolio)
-                        .and(portfolioImage.isThumbnail.isTrue()))
+                .join(portfolioImage)
+                .on(portfolioImage.portfolio.eq(portfolio), portfolioImage.isThumbnail.isTrue())
                 .where(portfolio.id.in(favoritePortfolioIds)) // 찜한 포트폴리오만 필터링
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1) // `limit + 1` 개 조회하여 다음 페이지가 있는지 확인
