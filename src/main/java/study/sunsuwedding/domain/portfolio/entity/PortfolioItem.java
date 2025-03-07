@@ -28,4 +28,10 @@ public class PortfolioItem {
     @Column(nullable = false)
     private Long itemPrice;
 
+    public PortfolioItem(Portfolio portfolio, String itemTitle, Long itemPrice) {
+        this.portfolio = portfolio;
+        this.itemTitle = itemTitle;
+        this.itemPrice = itemPrice;
+    }
+    
 }

@@ -1,5 +1,6 @@
 package study.sunsuwedding.domain.portfolio.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -7,11 +8,17 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.common.response.ApiResponse;
 import study.sunsuwedding.common.response.SliceResponse;
+import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
+import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
 import study.sunsuwedding.domain.portfolio.service.PortfolioQueryService;
+import study.sunsuwedding.domain.portfolio.service.PortfolioService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +26,7 @@ import study.sunsuwedding.domain.portfolio.service.PortfolioQueryService;
 public class PortfolioController {
 
     private final PortfolioQueryService portfolioQueryService;
+    private final PortfolioService portfolioService;
 
     @GetMapping("/v1")
     public ResponseEntity<ApiResponse<Slice<PortfolioListResponse>>> getPortfoliosV1EntityPaging(
@@ -45,5 +53,17 @@ public class PortfolioController {
         return ResponseEntity.ok(ApiResponse.success(portfolioQueryService.getPortfoliosV3DtoCursorPaging(userId, searchRequest, cursor, pageable)));
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse<Void>> addPortfolio(
+            @AuthenticationPrincipal Long userId,
+            @RequestPart("portfolio") @Valid PortfolioRequest request,
+            @RequestPart("images") List<MultipartFile> images) {
+        // 이미지 유효성 검사(비어 있는지 확인)
+        if (images == null || images.isEmpty()) {
+            throw PortfolioException.portfolioImageEmpty();
+        }
 
+        portfolioService.createPortfolio(userId, request, images);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }

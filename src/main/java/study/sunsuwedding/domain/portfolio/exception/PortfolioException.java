@@ -15,6 +15,14 @@ public class PortfolioException extends BusinessException {
         return new PortfolioException(PORTFOLIO_NOT_FOUND);
     }
 
+    public static PortfolioException portfolioImageEmpty() {
+        return new PortfolioException(PORTFOLIO_IMAGE_EMPTY);
+    }
+
+    public static PortfolioException plannerNotFound() {
+        return new PortfolioException(PLANNER_NOT_FOUND);
+    }
+
     public static PortfolioException portfolioAlreadyExists() {
         return new PortfolioException(PORTFOLIO_ALREADY_EXISTS);
     }

@@ -38,9 +38,5 @@ public class UserException extends BusinessException {
         return new UserException(USER_NOT_FOUND);
     }
 
-    public static UserException plannerNotFound() {
-        return new UserException(UserErrorCode.PLANNER_NOT_FOUND);
-    }
-    
 }
 

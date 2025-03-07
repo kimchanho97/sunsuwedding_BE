@@ -2,6 +2,7 @@ package study.sunsuwedding.domain.portfolio.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,5 +29,12 @@ public class PortfolioImage {
     @Column(nullable = false)
     private Boolean isThumbnail;
 
+    @Builder
+    public PortfolioImage(Portfolio portfolio, String fileName, String fileUrl, Boolean isThumbnail) {
+        this.portfolio = portfolio;
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.isThumbnail = isThumbnail;
+    }
 
 }

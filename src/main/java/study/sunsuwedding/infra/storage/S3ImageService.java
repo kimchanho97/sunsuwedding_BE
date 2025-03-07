@@ -27,6 +27,18 @@ public class S3ImageService {
     private static final List<String> ALLOWED_EXTENSIONS = List.of("jpg", "jpeg", "png", "gif", "webp");
 
     /**
+     * 여러 개의 이미지 업로드
+     */
+    public List<S3UploadResultDto> uploadImages(List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            throw S3Exception.emptyFile();
+        }
+        return files.stream()
+                .map(this::uploadImage)
+                .toList();
+    }
+
+    /**
      * 이미지 업로드 후 S3 URL 반환
      *
      * @param file 업로드할 이미지 파일

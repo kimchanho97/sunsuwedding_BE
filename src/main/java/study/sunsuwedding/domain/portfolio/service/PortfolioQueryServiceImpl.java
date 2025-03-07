@@ -62,4 +62,8 @@ public class PortfolioQueryServiceImpl implements PortfolioQueryService {
         Long nextCursor = slice.hasNext() ? slice.getContent().removeLast().getId() : null;
         return new SliceResponse<>(slice, nextCursor);
     }
+
+    /**
+     * V4: V3 + Redis 캐싱
+     */
 }

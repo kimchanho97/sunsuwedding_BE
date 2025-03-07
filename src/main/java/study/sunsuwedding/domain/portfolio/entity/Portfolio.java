@@ -2,6 +2,7 @@ package study.sunsuwedding.domain.portfolio.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -50,13 +51,11 @@ public class Portfolio extends BaseTimeEntity {
 
     private Long totalPrice;
     private Long contractCount;
-    private Long avgPrice;
-    private Long minPrice;
-    private Long maxPrice;
     private Double avgStars;
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
 
+    @Builder
     public Portfolio(Planner planner, String plannerName, String title, String location, String description, String career, String partnerCompany, Long totalPrice, Long contractCount, Long avgPrice, Long minPrice, Long maxPrice, Double avgStars) {
         this.planner = planner;
         this.plannerName = plannerName;
@@ -67,9 +66,6 @@ public class Portfolio extends BaseTimeEntity {
         this.partnerCompany = partnerCompany;
         this.totalPrice = totalPrice;
         this.contractCount = contractCount;
-        this.avgPrice = avgPrice;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
         this.avgStars = avgStars;
     }
 
