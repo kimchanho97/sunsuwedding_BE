@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public void approvePaymentAndUpgradeUser(Long userId, PaymentApproveRequest request) {
         User user = getValidatedUser(userId);
-        Payment payment = findPaymentByUserId(userId);
+        Payment payment = getPaymentByUserId(userId);
 
         // 1. 검증: 결제 정보와 요청이 일치하는지 확인
         validatePaymentRequest(payment, request);
@@ -57,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    private Payment findPaymentByUserId(Long userId) {
+    private Payment getPaymentByUserId(Long userId) {
         return paymentRepository.findByUserId(userId)
                 .orElseThrow(PaymentException::paymentNotFound);
     }
