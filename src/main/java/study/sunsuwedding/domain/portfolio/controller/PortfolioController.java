@@ -1,9 +1,11 @@
 package study.sunsuwedding.domain.portfolio.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +22,13 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<PortfolioListResponse>>> getPofolios(
+    public ResponseEntity<ApiResponse<Slice<PortfolioListResponse>>> getPortfolios(
+            @AuthenticationPrincipal Long userId,
             @ModelAttribute PortfolioSearchRequest searchRequest,
-            Pageable pageable
+            @PageableDefault(size = 10) Pageable pageable
     ) {
-        Page<PortfolioListResponse> portfolios = portfolioService.getPortfolios(searchRequest, pageable);
+        Slice<PortfolioListResponse> portfolios = portfolioService.getPortfolios(userId, searchRequest, pageable);
         return ResponseEntity.ok(ApiResponse.success(portfolios));
     }
 

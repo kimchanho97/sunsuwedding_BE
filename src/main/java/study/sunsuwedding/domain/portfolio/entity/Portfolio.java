@@ -57,4 +57,20 @@ public class Portfolio extends BaseTimeEntity {
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
 
+    public Portfolio(Planner planner, String plannerName, String title, String location, String description, String career, String partnerCompany, Long totalPrice, Long contractCount, Long avgPrice, Long minPrice, Long maxPrice, Double avgStars) {
+        this.planner = planner;
+        this.plannerName = plannerName;
+        this.title = title;
+        this.location = location;
+        this.description = description;
+        this.career = career;
+        this.partnerCompany = partnerCompany;
+        this.totalPrice = totalPrice;
+        this.contractCount = contractCount;
+        this.avgPrice = avgPrice;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.avgStars = avgStars;
+    }
+
 }

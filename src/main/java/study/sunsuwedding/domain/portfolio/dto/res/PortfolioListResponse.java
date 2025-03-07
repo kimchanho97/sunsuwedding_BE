@@ -3,6 +3,10 @@ package study.sunsuwedding.domain.portfolio.dto.res;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import study.sunsuwedding.domain.portfolio.entity.Portfolio;
+import study.sunsuwedding.domain.portfolio.entity.PortfolioImage;
+
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -29,5 +33,20 @@ public class PortfolioListResponse {
         this.contractCount = contractCount;
         this.avgStars = avgStars;
         this.isLiked = isLiked;
+    }
+
+    public static PortfolioListResponse fromEntity(PortfolioImage portfolioImage, Set<Long> favoritePortfolioIds) {
+        Portfolio portfolio = portfolioImage.getPortfolio(); // PortfolioImage에서 Portfolio 가져오기
+        return new PortfolioListResponse(
+                portfolio.getId(),
+                portfolioImage.getFileUrl(),
+                portfolio.getTitle(),
+                portfolio.getPlannerName(),
+                portfolio.getTotalPrice(),
+                portfolio.getLocation(),
+                portfolio.getContractCount(),
+                portfolio.getAvgStars(),
+                favoritePortfolioIds.contains(portfolio.getId())
+        );
     }
 }
