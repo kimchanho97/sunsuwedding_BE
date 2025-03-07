@@ -11,25 +11,27 @@ public class PortfolioException extends BusinessException {
         super(errorCode);
     }
 
-    public static PortfolioException notFound() {
+    public static PortfolioException portfolioNotFound() {
         return new PortfolioException(PORTFOLIO_NOT_FOUND);
     }
 
-    public static PortfolioException alreadyExists() {
+    public static PortfolioException portfolioAlreadyExists() {
         return new PortfolioException(PORTFOLIO_ALREADY_EXISTS);
     }
 
-    public static PortfolioException imageNotFound() {
+    public static PortfolioException portfolioImageNotFound() {
         return new PortfolioException(PORTFOLIO_IMAGE_NOT_FOUND);
     }
 
-    public static PortfolioException imageLimitExceeded() {
+    public static PortfolioException portfolioImageLimitExceeded() {
         return new PortfolioException(PORTFOLIO_IMAGE_LIMIT_EXCEEDED);
     }
 
-    public static PortfolioException imageUploadFailed() {
+    public static PortfolioException portfolioImageUploadFailed() {
         return new PortfolioException(PORTFOLIO_IMAGE_UPLOAD_FAILED);
     }
 
-
+    public static PortfolioException portfolioImageEncodingFailed() {
+        return new PortfolioException(PORTFOLIO_IMAGE_ENCODING_FAILED);
+    }
 }

@@ -10,5 +10,5 @@ public interface UserService {
     UserInfoResponse getUserInfo(Long userId);
 
     void withdraw(Long userId);
-    
+
 }

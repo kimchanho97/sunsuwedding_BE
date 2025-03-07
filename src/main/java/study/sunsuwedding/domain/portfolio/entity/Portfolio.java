@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.entity.Planner;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @SQLDelete(sql = "UPDATE portfolio SET is_deleted = true, deleted_at = NOW() WHERE portfolio_id = ?")
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Portfolio {
+public class Portfolio extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +47,6 @@ public class Portfolio {
 
     @Column(nullable = false, length = 1000)
     private String partnerCompany;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     private Long totalPrice;
     private Long contractCount;
