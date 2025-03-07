@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.common.response.ApiResponse;
 import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 import study.sunsuwedding.domain.user.dto.res.UserInfoResponse;
+import study.sunsuwedding.domain.user.dto.res.UserProfileImageResponse;
 import study.sunsuwedding.domain.user.service.UserService;
 
 @RestController
@@ -42,5 +44,14 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> withdraw(@AuthenticationPrincipal Long userId) {
         userService.withdraw(userId);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * 프로필 이미지 변경
+     */
+    @PutMapping("/profile-image")
+    public ResponseEntity<ApiResponse<UserProfileImageResponse>> changeProfileImage(
+            @AuthenticationPrincipal Long userId, @RequestParam MultipartFile profileImage) {
+        return ResponseEntity.ok(ApiResponse.success(userService.changeProfileImage(userId, profileImage)));
     }
 }

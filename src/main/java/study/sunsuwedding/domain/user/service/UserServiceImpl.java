@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.domain.user.constant.Role;
 import study.sunsuwedding.domain.user.dto.req.UserSignUpRequest;
 import study.sunsuwedding.domain.user.dto.res.UserInfoResponse;
+import study.sunsuwedding.domain.user.dto.res.UserProfileImageResponse;
 import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.CoupleRepository;
 import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.domain.user.repository.UserRepository;
+import study.sunsuwedding.infra.storage.S3ImageService;
+import study.sunsuwedding.infra.storage.S3UploadResultDto;
 
 import java.util.Objects;
 
@@ -26,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final CoupleRepository coupleRepository;
     private final PlannerRepository plannerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final S3ImageService s3ImageService;
 
     @Override
     @Transactional
@@ -44,19 +49,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponse getUserInfo(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserException::userNotFound);
-
+        User user = getUserById(userId);
         return UserInfoResponse.fromEntity(user);
     }
 
     @Override
     @Transactional
     public void withdraw(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserException::userNotFound);
-
+        User user = getUserById(userId);
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserProfileImageResponse changeProfileImage(Long userId, MultipartFile profileImage) {
+        User user = getUserById(userId);
+        if (user.getFileUrl() != null) {
+            s3ImageService.deleteImage(user.getFileName());
+        }
+
+        S3UploadResultDto result = s3ImageService.uploadImage(profileImage);
+        user.changeProfileImage(result.getFileName(), result.getFileUrl());
+        return new UserProfileImageResponse(result.getFileUrl());
     }
 
     private void validateDuplicateEmail(String email) {
@@ -72,6 +85,11 @@ public class UserServiceImpl implements UserService {
         if (!Objects.equals(password, password2)) {
             throw UserException.passwordMismatch();
         }
+    }
+
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserException::userNotFound);
     }
 
 }
