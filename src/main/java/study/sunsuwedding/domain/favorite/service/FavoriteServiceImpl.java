@@ -1,11 +1,15 @@
 package study.sunsuwedding.domain.favorite.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.favorite.entity.Favorite;
 import study.sunsuwedding.domain.favorite.exception.FavoriteException;
+import study.sunsuwedding.domain.favorite.repository.FavoriteQueryRepository;
 import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
+import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
 import study.sunsuwedding.domain.portfolio.entity.Portfolio;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
 import study.sunsuwedding.domain.portfolio.repository.PortfolioRepository;
@@ -21,6 +25,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
     private final FavoriteRepository favoriteRepository;
+    private final FavoriteQueryRepository favoriteQueryRepository;
 
     @Override
     @Transactional
@@ -33,7 +38,6 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteRepository.save(new Favorite(user, portfolio));
     }
 
-
     @Override
     @Transactional
     public void removeFavorite(Long userId, Long portfolioId) {
@@ -44,6 +48,11 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .orElseThrow(FavoriteException::favoriteNotFound);
 
         favoriteRepository.delete(favorite);
+    }
+
+    @Override
+    public Slice<PortfolioListResponse> getUserFavoritePortfolios(Long userId, Pageable pageable) {
+        return favoriteQueryRepository.findUserFavoritePortfolios(userId, pageable);
     }
 
     private User getUserById(Long userId) {

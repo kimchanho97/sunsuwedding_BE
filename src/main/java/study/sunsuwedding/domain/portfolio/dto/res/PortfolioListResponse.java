@@ -1,12 +1,11 @@
 package study.sunsuwedding.domain.portfolio.dto.res;
 
-import lombok.AllArgsConstructor;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class PortfolioListResponse {
 
     private Long id;
@@ -18,4 +17,17 @@ public class PortfolioListResponse {
     private Long contractCount;
     private Double avgStars;
     private Boolean isLiked;
+
+    @QueryProjection
+    public PortfolioListResponse(Long id, String image, String title, String plannerName, Long price, String location, Long contractCount, Double avgStars, Boolean isLiked) {
+        this.id = id;
+        this.image = image;
+        this.title = title;
+        this.plannerName = plannerName;
+        this.price = price;
+        this.location = location;
+        this.contractCount = contractCount;
+        this.avgStars = avgStars;
+        this.isLiked = isLiked;
+    }
 }
