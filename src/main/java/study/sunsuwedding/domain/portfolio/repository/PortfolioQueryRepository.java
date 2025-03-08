@@ -73,8 +73,8 @@ public class PortfolioQueryRepository {
                         portfolio.plannerName,
                         portfolio.totalPrice,
                         portfolio.location,
-                        portfolio.contractCount,
-                        portfolio.avgStars,
+                        portfolio.contractedCount,
+                        portfolio.averageRating,
                         new CaseBuilder()
                                 .when(portfolio.id.in(favoritePortfolioIds)).then(true)
                                 .otherwise(false) // 좋아요 여부 계산
@@ -113,8 +113,8 @@ public class PortfolioQueryRepository {
                         portfolio.plannerName,
                         portfolio.totalPrice,
                         portfolio.location,
-                        portfolio.contractCount,
-                        portfolio.avgStars,
+                        portfolio.contractedCount,
+                        portfolio.averageRating,
                         new CaseBuilder()
                                 .when(portfolio.id.in(favoritePortfolioIds)).then(true)
                                 .otherwise(false)

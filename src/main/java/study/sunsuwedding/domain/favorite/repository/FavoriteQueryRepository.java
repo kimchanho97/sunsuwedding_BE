@@ -48,8 +48,8 @@ public class FavoriteQueryRepository {
                         portfolio.plannerName,
                         portfolio.totalPrice,
                         portfolio.location,
-                        portfolio.contractCount,
-                        portfolio.avgStars,
+                        portfolio.contractedCount,
+                        portfolio.averageRating,
                         Expressions.constant(true)
                 ))
                 .from(portfolio)

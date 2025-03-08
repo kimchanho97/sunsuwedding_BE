@@ -55,8 +55,8 @@ public class PortfolioRequest {
                 .career(career)
                 .partnerCompany(partnerCompany)
                 .totalPrice(getTotalPrice())
-                .contractCount(0L)
-                .avgStars(0.0)
+                .contractedCount(0L)
+                .averageRating(0.0)
                 .build();
     }
 
