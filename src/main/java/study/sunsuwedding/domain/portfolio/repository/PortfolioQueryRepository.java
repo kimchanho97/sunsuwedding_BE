@@ -35,9 +35,9 @@ public class PortfolioQueryRepository {
         return queryFactory
                 .selectFrom(portfolioImage) // PortfolioImage 기준으로 조회
                 .join(portfolioImage.portfolio, portfolio)
-                .on(portfolioImage.isThumbnail.isTrue()) // 썸네일 이미지만 조회
                 .fetchJoin()
                 .where(
+                        portfolioImage.isThumbnail.isTrue(), // 썸네일 이미지만 조회
                         nameContains(searchRequest.getName()),
                         locationEq(searchRequest.getLocation()),
                         priceBetween(searchRequest.getMinPrice(), searchRequest.getMaxPrice())
