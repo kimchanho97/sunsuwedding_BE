@@ -23,7 +23,7 @@ class PaymentTest {
         // then
         assertThat(payment.getUser()).isEqualTo(user);
         assertThat(payment.getOrderId()).isEqualTo(orderId);
-        assertThat(payment.getPayedAmount()).isEqualTo(amount);
+        assertThat(payment.getPaidAmount()).isEqualTo(amount);
     }
 
     @Test
@@ -40,7 +40,7 @@ class PaymentTest {
 
         // then
         assertThat(payment.getOrderId()).isEqualTo(newOrderId);
-        assertThat(payment.getPayedAmount()).isEqualTo(newAmount);
+        assertThat(payment.getPaidAmount()).isEqualTo(newAmount);
     }
 
     @Test
@@ -56,7 +56,7 @@ class PaymentTest {
 
         // then
         assertThat(payment.getPaymentKey()).isEqualTo(paymentKey);
-        assertThat(payment.getPayedAt()).isNotNull();
+        assertThat(payment.getPaidAt()).isNotNull();
     }
 
     @Test

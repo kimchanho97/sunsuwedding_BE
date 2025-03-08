@@ -26,7 +26,7 @@ public class OwnPortfolioResponse {
         return new OwnPortfolioResponse(
                 portfolio.getPlannerName(),
                 portfolio.getItems().stream()
-                        .map(item -> new PortfolioItemDto(item.getItemTitle(), item.getItemPrice()))
+                        .map(item -> new PortfolioItemDto(item.getItemName(), item.getItemPrice()))
                         .toList(),
                 portfolio.getImages().stream()
                         .map(PortfolioImage::getFileUrl)

@@ -23,15 +23,15 @@ public class PortfolioItem {
     private Portfolio portfolio;
 
     @Column(nullable = false)
-    private String itemTitle;
+    private String itemName;
 
     @Column(nullable = false)
     private Long itemPrice;
 
-    public PortfolioItem(Portfolio portfolio, String itemTitle, Long itemPrice) {
+    public PortfolioItem(Portfolio portfolio, String itemName, Long itemPrice) {
         this.portfolio = portfolio;
-        this.itemTitle = itemTitle;
+        this.itemName = itemName;
         this.itemPrice = itemPrice;
     }
-    
+
 }

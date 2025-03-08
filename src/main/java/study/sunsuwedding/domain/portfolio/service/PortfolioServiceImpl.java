@@ -52,7 +52,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Portfolio portfolio = getPortfolioByPlanner(planner);
 
         deleteExistingPortfolioData(portfolio);
-        updatePortfolioData(request, portfolio);
+        updatePortfolio(request, portfolio);
         savePortfolioData(portfolio, request, images);
     }
 
@@ -88,7 +88,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .orElse(null); // 포트폴리오가 없으면 null 반환
     }
 
-    private void updatePortfolioData(PortfolioRequest request, Portfolio portfolio) {
+    private void updatePortfolio(PortfolioRequest request, Portfolio portfolio) {
         portfolio.update(
                 request.getPlannerName(),
                 request.getTitle(),

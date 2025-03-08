@@ -44,8 +44,8 @@ public class PortfolioListResponse {
                 portfolio.getPlannerName(),
                 portfolio.getTotalPrice(),
                 portfolio.getLocation(),
-                portfolio.getContractCount(),
-                portfolio.getAvgStars(),
+                portfolio.getContractedCount(),
+                portfolio.getAverageRating(),
                 favoritePortfolioIds.contains(portfolio.getId())
         );
     }

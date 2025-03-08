@@ -74,7 +74,7 @@ class PaymentServiceImplTest {
 
         // then
         assertThat(payment.getOrderId()).isEqualTo("order-456");
-        assertThat(payment.getPayedAmount()).isEqualTo(70000L);
+        assertThat(payment.getPaidAmount()).isEqualTo(70000L);
     }
 
     @Test
@@ -92,7 +92,7 @@ class PaymentServiceImplTest {
         // then
         assertThat(user.getGrade()).isEqualTo(Grade.PREMIUM);
         assertThat(payment.getPaymentKey()).isEqualTo("payment-key-123");
-        assertThat(payment.getPayedAt()).isNotNull();
+        assertThat(payment.getPaidAt()).isNotNull();
     }
 
     @Test

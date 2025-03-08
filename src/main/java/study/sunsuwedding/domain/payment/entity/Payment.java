@@ -30,28 +30,28 @@ public class Payment extends BaseTimeEntity {
     private String orderId;
 
     @Column(nullable = false)
-    private Long payedAmount;
+    private Long paidAmount;
 
     private String paymentKey;
-    private LocalDateTime payedAt;
+    private LocalDateTime paidAt;
 
-    public Payment(User user, String orderId, Long payedAmount) {
+    public Payment(User user, String orderId, Long paidAmount) {
         this.user = user;
         this.orderId = orderId;
-        this.payedAmount = payedAmount;
+        this.paidAmount = paidAmount;
     }
 
     public void update(String orderId, Long amount) {
         this.orderId = orderId;
-        this.payedAmount = amount;
+        this.paidAmount = amount;
     }
 
     public void markAsApproved(String paymentKey) {
         this.paymentKey = paymentKey;
-        this.payedAt = LocalDateTime.now();
+        this.paidAt = LocalDateTime.now();
     }
 
     public boolean matches(String orderId, Long amount) {
-        return this.orderId.equals(orderId) && this.payedAmount.equals(amount);
+        return this.orderId.equals(orderId) && this.paidAmount.equals(amount);
     }
 }

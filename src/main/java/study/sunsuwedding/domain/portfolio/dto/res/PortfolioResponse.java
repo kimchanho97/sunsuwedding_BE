@@ -29,12 +29,12 @@ public class PortfolioResponse {
         response.title = portfolio.getTitle();
         response.plannerName = portfolio.getPlannerName();
         response.plannerId = portfolio.getPlanner().getId();
-        response.contractCount = portfolio.getContractCount();
+        response.contractCount = portfolio.getContractedCount();
         response.location = portfolio.getLocation();
         response.description = portfolio.getDescription();
         response.career = portfolio.getCareer();
         response.partnerCompany = portfolio.getPartnerCompany();
-        response.avgStars = portfolio.getAvgStars();
+        response.avgStars = portfolio.getAverageRating();
         response.isLiked = isLiked;
 
         // Portfolio Images 변환
@@ -44,7 +44,7 @@ public class PortfolioResponse {
 
         // Portfolio Items 변환
         List<PortfolioItemDto> items = portfolio.getItems().stream()
-                .map(item -> new PortfolioItemDto(item.getItemTitle(), item.getItemPrice()))
+                .map(item -> new PortfolioItemDto(item.getItemName(), item.getItemPrice()))
                 .toList();
 
         response.priceInfo = new PortfolioItemsDto(

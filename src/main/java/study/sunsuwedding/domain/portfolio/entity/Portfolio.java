@@ -58,13 +58,13 @@ public class Portfolio extends BaseTimeEntity {
     private List<PortfolioImage> images = new ArrayList<>();
 
     private Long totalPrice;
-    private Long contractCount;
-    private Double avgStars;
+    private Long contractedCount;
+    private Double averageRating;
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
 
     @Builder
-    public Portfolio(Planner planner, String plannerName, String title, String location, String description, String career, String partnerCompany, Long totalPrice, Long contractCount, Long avgPrice, Long minPrice, Long maxPrice, Double avgStars) {
+    public Portfolio(Planner planner, String plannerName, String title, String location, String description, String career, String partnerCompany, Long totalPrice, Long contractedCount, Double averageRating) {
         this.planner = planner;
         this.plannerName = plannerName;
         this.title = title;
@@ -73,8 +73,8 @@ public class Portfolio extends BaseTimeEntity {
         this.career = career;
         this.partnerCompany = partnerCompany;
         this.totalPrice = totalPrice;
-        this.contractCount = contractCount;
-        this.avgStars = avgStars;
+        this.contractedCount = contractedCount;
+        this.averageRating = averageRating;
     }
 
     public void update(String plannerName, String title, String description, String location, String career, String partnerCompany) {

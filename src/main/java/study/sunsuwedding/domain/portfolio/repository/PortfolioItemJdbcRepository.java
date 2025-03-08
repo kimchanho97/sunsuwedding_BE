@@ -22,7 +22,7 @@ public class PortfolioItemJdbcRepository {
         jdbcTemplate.batchUpdate(INSERT_SQL, portfolioItems, portfolioItems.size(),
                 (ps, item) -> {
                     ps.setLong(1, item.getPortfolio().getId());
-                    ps.setString(2, item.getItemTitle());
+                    ps.setString(2, item.getItemName());
                     ps.setLong(3, item.getItemPrice());
                 });
     }
