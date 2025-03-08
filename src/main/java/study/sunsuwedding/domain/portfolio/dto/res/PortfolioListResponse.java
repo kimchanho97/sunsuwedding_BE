@@ -12,27 +12,27 @@ import java.util.Set;
 @NoArgsConstructor
 public class PortfolioListResponse {
 
-    private Long id;
-    private String image;
+    private Long portfolioId;
+    private String thumbnail;
     private String title;
     private String plannerName;
-    private Long price;
+    private Long totalPrice;
     private String location;
-    private Long contractCount;
-    private Double avgStars;
-    private Boolean isLiked;
+    private Long contractedCount;
+    private Double averageRating;
+    private Boolean isFavorited;
 
     @QueryProjection
-    public PortfolioListResponse(Long id, String image, String title, String plannerName, Long price, String location, Long contractCount, Double avgStars, Boolean isLiked) {
-        this.id = id;
-        this.image = image;
+    public PortfolioListResponse(Long portfolioId, String thumbnail, String title, String plannerName, Long totalPrice, String location, Long contractedCount, Double averageRating, Boolean isFavorited) {
+        this.portfolioId = portfolioId;
+        this.thumbnail = thumbnail;
         this.title = title;
         this.plannerName = plannerName;
-        this.price = price;
+        this.totalPrice = totalPrice;
         this.location = location;
-        this.contractCount = contractCount;
-        this.avgStars = avgStars;
-        this.isLiked = isLiked;
+        this.contractedCount = contractedCount;
+        this.averageRating = averageRating;
+        this.isFavorited = isFavorited;
     }
 
     public static PortfolioListResponse fromEntity(PortfolioImage portfolioImage, Set<Long> favoritePortfolioIds) {

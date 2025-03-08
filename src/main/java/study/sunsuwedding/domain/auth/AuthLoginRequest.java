@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.auth.dto;
+package study.sunsuwedding.domain.auth;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

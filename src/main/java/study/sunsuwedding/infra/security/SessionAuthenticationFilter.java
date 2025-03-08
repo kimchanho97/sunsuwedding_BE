@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import study.sunsuwedding.domain.auth.constant.SessionConst;
+import study.sunsuwedding.domain.auth.SessionConst;
 
 import java.io.IOException;
 import java.util.Collections;

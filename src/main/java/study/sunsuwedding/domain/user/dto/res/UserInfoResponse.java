@@ -14,7 +14,7 @@ public class UserInfoResponse {
     private final String email;
     private final String role;
     private final String grade;
-    private final String payedAt;
+    private final String upgradeAt;
     private final String profileImageUrl;
 
     public static UserInfoResponse fromEntity(User user) {

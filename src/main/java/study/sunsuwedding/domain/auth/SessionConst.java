@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.auth.constant;
+package study.sunsuwedding.domain.auth;
 
 public class SessionConst {
     public static final String USER_ID = "USER_ID";

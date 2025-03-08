@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.auth.controller;
+package study.sunsuwedding.domain.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.sunsuwedding.common.response.ApiResponse;
-import study.sunsuwedding.domain.auth.constant.SessionConst;
-import study.sunsuwedding.domain.auth.dto.AuthLoginRequest;
-import study.sunsuwedding.domain.auth.dto.AuthLoginResponse;
-import study.sunsuwedding.domain.auth.service.AuthService;
+import study.sunsuwedding.domain.user.dto.res.UserInfoResponse;
 import study.sunsuwedding.domain.user.entity.User;
 
 @RestController
@@ -24,14 +21,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthLoginResponse>> login(@RequestBody @Valid AuthLoginRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<ApiResponse<UserInfoResponse>> login(@RequestBody @Valid AuthLoginRequest request, HttpServletRequest httpRequest) {
         User loginedUser = authService.login(request);
 
         HttpSession session = httpRequest.getSession();
         session.setAttribute(SessionConst.USER_ID, loginedUser.getId());
         session.setAttribute(SessionConst.USER_ROLE, loginedUser.getDtype());
 
-        AuthLoginResponse response = AuthLoginResponse.fromEntity(loginedUser);
+        UserInfoResponse response = UserInfoResponse.fromEntity(loginedUser);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

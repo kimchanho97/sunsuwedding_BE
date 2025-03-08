@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PortfolioItemDto {
 
-    private final String itemTitle;
+    private final String itemName;
     private final Long itemPrice;
 }

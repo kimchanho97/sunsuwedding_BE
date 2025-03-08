@@ -3,14 +3,14 @@ package study.sunsuwedding.domain.portfolio.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.common.response.ApiResponse;
-import study.sunsuwedding.common.response.SliceResponse;
+import study.sunsuwedding.common.response.CursorPaginationResponse;
+import study.sunsuwedding.common.response.OffsetPaginationResponse;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.OwnPortfolioResponse;
@@ -31,7 +31,7 @@ public class PortfolioController {
     private final PortfolioService portfolioService;
 
     @GetMapping("/v1")
-    public ResponseEntity<ApiResponse<Slice<PortfolioListResponse>>> getPortfoliosV1EntityPaging(
+    public ResponseEntity<ApiResponse<OffsetPaginationResponse<PortfolioListResponse>>> getPortfoliosV1EntityPaging(
             @AuthenticationPrincipal Long userId,
             @ModelAttribute PortfolioSearchRequest searchRequest,
             @PageableDefault(size = 10) Pageable pageable) {
@@ -39,7 +39,7 @@ public class PortfolioController {
     }
 
     @GetMapping("/v2")
-    public ResponseEntity<ApiResponse<Slice<PortfolioListResponse>>> getPortfoliosV2DtoPaging(
+    public ResponseEntity<ApiResponse<OffsetPaginationResponse<PortfolioListResponse>>> getPortfoliosV2DtoPaging(
             @AuthenticationPrincipal Long userId,
             @ModelAttribute PortfolioSearchRequest searchRequest,
             @PageableDefault(size = 10) Pageable pageable) {
@@ -47,12 +47,19 @@ public class PortfolioController {
     }
 
     @GetMapping("/v3")
-    public ResponseEntity<ApiResponse<SliceResponse<PortfolioListResponse>>> getPortfoliosV3DtoCursorPaging(
+    public ResponseEntity<ApiResponse<CursorPaginationResponse<PortfolioListResponse>>> getPortfoliosV3DtoCursorPaging(
             @AuthenticationPrincipal Long userId,
             @ModelAttribute PortfolioSearchRequest searchRequest,
             @RequestParam(required = false) Long cursor,
             @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.success(portfolioQueryService.getPortfoliosV3DtoCursorPaging(userId, searchRequest, cursor, pageable)));
+    }
+
+    @GetMapping("/{portfolioId}")
+    public ResponseEntity<ApiResponse<PortfolioResponse>> getPortfolio(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long portfolioId) {
+        return ResponseEntity.ok(ApiResponse.success(portfolioService.getPortfolio(userId, portfolioId)));
     }
 
     @PostMapping
@@ -70,13 +77,6 @@ public class PortfolioController {
 
         portfolioService.createPortfolio(userId, request, images);
         return ResponseEntity.ok(ApiResponse.success(null));
-    }
-
-    @GetMapping("/{portfolioId}")
-    public ResponseEntity<ApiResponse<PortfolioResponse>> getPortfolio(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long portfolioId) {
-        return ResponseEntity.ok(ApiResponse.success(portfolioService.getPortfolio(userId, portfolioId)));
     }
 
     @PutMapping

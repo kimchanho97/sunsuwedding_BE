@@ -75,8 +75,8 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
 
         // 찜 여부 확인
-        boolean isLiked = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
-        return PortfolioResponse.fromEntity(portfolio, isLiked);
+        boolean isFavorited = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
+        return PortfolioResponse.fromEntity(portfolio, isFavorited);
     }
 
     @Override

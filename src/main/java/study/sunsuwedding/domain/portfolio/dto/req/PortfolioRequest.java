@@ -62,7 +62,7 @@ public class PortfolioRequest {
 
     public List<PortfolioItem> toPortfolioItems(Portfolio portfolio) {
         return items.stream()
-                .map(itemDto -> new PortfolioItem(portfolio, itemDto.getItemTitle(), itemDto.getItemPrice()))
+                .map(itemDto -> new PortfolioItem(portfolio, itemDto.getItemName(), itemDto.getItemPrice()))
                 .toList();
     }
 
@@ -75,11 +75,11 @@ public class PortfolioRequest {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PortfolioItemDto {
+    private static class PortfolioItemDto {
 
         @NotEmpty(message = "포트폴리오 가격의 제목은 비어있으면 안됩니다.")
         @Size(max = 255, message = "포트폴리오 가격의 제목은 최대 255자까지 입력 가능합니다.")
-        private String itemTitle;
+        private String itemName;
 
         @NotEmpty(message = "포트폴리오 가격은 비어있으면 안됩니다.")
         @Min(value = 0, message = "포트폴리오 가격은 양수여야 합니다.")

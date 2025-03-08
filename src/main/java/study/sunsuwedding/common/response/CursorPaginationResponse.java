@@ -10,11 +10,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SliceResponse<T> {
-    private List<T> data;
-    private Long nextCursor; // ✅ 다음 페이지 조회를 위한 커서 값
+public class CursorPaginationResponse<T> {
 
-    public SliceResponse(Slice<T> slice, Long nextCursor) {
+    private List<T> data;
+    private Long nextCursor; // 다음 페이지의 커서 값 (없으면 null)
+
+    public CursorPaginationResponse(Slice<T> slice, Long nextCursor) {
         this.data = slice.getContent();
         this.nextCursor = nextCursor;
     }
