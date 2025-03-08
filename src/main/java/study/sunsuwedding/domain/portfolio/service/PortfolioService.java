@@ -11,4 +11,6 @@ public interface PortfolioService {
     void createPortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images);
 
     PortfolioResponse getPortfolio(Long userId, Long portfolioId);
+
+    void updatePortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images);
 }

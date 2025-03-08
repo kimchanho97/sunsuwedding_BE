@@ -74,4 +74,18 @@ public class PortfolioController {
             @PathVariable Long portfolioId) {
         return ResponseEntity.ok(ApiResponse.success(portfolioService.getPortfolio(userId, portfolioId)));
     }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse<Void>> updatePortfolio(
+            @AuthenticationPrincipal Long userId,
+            @RequestPart("portfolio") @Valid PortfolioRequest request,
+            @RequestPart("images") List<MultipartFile> images) {
+        // 이미지 유효성 검사(비어 있는지 확인)
+        if (images == null || images.isEmpty()) {
+            throw PortfolioException.portfolioImageEmpty();
+        }
+
+        portfolioService.updatePortfolio(userId, request, images);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }

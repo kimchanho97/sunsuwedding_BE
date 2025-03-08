@@ -20,4 +20,5 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
             """)
     Optional<Portfolio> findPortfolioWithDetails(@Param("portfolioId") Long portfolioId);
 
+    Optional<Portfolio> findByPlanner(Planner planner);
 }

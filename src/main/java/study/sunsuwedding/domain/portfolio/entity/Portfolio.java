@@ -77,4 +77,12 @@ public class Portfolio extends BaseTimeEntity {
         this.avgStars = avgStars;
     }
 
+    public void update(String plannerName, String title, String description, String location, String career, String partnerCompany) {
+        this.plannerName = plannerName;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.career = career;
+        this.partnerCompany = partnerCompany;
+    }
 }

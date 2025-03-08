@@ -61,6 +61,16 @@ public class S3ImageService {
     }
 
     /**
+     * 여러 개의 이미지 삭제
+     */
+    public void deleteImages(List<String> fileNames) {
+        if (fileNames == null || fileNames.isEmpty()) {
+            return;
+        }
+        fileNames.forEach(this::deleteImage);
+    }
+
+    /**
      * S3에서 이미지 삭제
      *
      * @param fileName 삭제할 이미지 파일명 (S3 Key)
