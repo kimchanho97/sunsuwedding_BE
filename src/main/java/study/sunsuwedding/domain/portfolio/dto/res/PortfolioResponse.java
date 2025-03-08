@@ -66,16 +66,4 @@ public class PortfolioResponse {
             this.items = items;
         }
     }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PortfolioItemDto {
-        private String itemTitle;
-        private Long itemPrice;
-
-        public PortfolioItemDto(String itemTitle, Long itemPrice) {
-            this.itemTitle = itemTitle;
-            this.itemPrice = itemPrice;
-        }
-    }
 }

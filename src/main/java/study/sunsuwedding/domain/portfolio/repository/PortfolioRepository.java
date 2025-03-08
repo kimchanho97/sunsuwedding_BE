@@ -16,9 +16,18 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
             SELECT DISTINCT p FROM Portfolio p 
             LEFT JOIN FETCH p.items 
             LEFT JOIN FETCH p.images 
-            WHERE p.id = :portfolioId AND p.isDeleted = false
+            WHERE p.id = :portfolioId
             """)
     Optional<Portfolio> findPortfolioWithDetails(@Param("portfolioId") Long portfolioId);
 
     Optional<Portfolio> findByPlanner(Planner planner);
+
+    @Query("""
+            SELECT DISTINCT p FROM Portfolio p 
+            LEFT JOIN FETCH p.items 
+            LEFT JOIN FETCH p.images 
+            WHERE p.planner = :planner
+            """)
+    Optional<Portfolio> findPortfolioWithDetailsByPlanner(@Param("planner") Planner planner);
+    
 }

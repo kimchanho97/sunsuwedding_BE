@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
+import study.sunsuwedding.domain.portfolio.dto.res.OwnPortfolioResponse;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioResponse;
 import study.sunsuwedding.domain.portfolio.entity.Portfolio;
 import study.sunsuwedding.domain.portfolio.entity.PortfolioImage;
@@ -56,6 +57,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     @Override
+    @Transactional
     public void deletePortfolio(Long userId) {
         Planner planner = getPlannerById(userId);
         Portfolio portfolio = getPortfolioByPlanner(planner);
@@ -75,6 +77,15 @@ public class PortfolioServiceImpl implements PortfolioService {
         // 찜 여부 확인
         boolean isLiked = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
         return PortfolioResponse.fromEntity(portfolio, isLiked);
+    }
+
+    @Override
+    public OwnPortfolioResponse getOwnPortfolio(Long userId) {
+        Planner planner = getPlannerById(userId);
+
+        return portfolioRepository.findPortfolioWithDetailsByPlanner(planner)
+                .map(OwnPortfolioResponse::fromEntity)
+                .orElse(null); // 포트폴리오가 없으면 null 반환
     }
 
     private void updatePortfolioData(PortfolioRequest request, Portfolio portfolio) {

@@ -13,6 +13,7 @@ import study.sunsuwedding.common.response.ApiResponse;
 import study.sunsuwedding.common.response.SliceResponse;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
+import study.sunsuwedding.domain.portfolio.dto.res.OwnPortfolioResponse;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioResponse;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
@@ -93,5 +94,10 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<Void>> deletePortfolio(@AuthenticationPrincipal Long userId) {
         portfolioService.deletePortfolio(userId);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<OwnPortfolioResponse>> getMyPortfolio(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(portfolioService.getOwnPortfolio(userId)));
     }
 }
