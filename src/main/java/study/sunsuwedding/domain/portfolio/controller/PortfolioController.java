@@ -64,6 +64,9 @@ public class PortfolioController {
         if (images == null || images.isEmpty()) {
             throw PortfolioException.portfolioImageEmpty();
         }
+        if (images.size() > 5) {
+            throw PortfolioException.portfolioImageLimitExceeded();
+        }
 
         portfolioService.createPortfolio(userId, request, images);
         return ResponseEntity.ok(ApiResponse.success(null));
@@ -84,6 +87,9 @@ public class PortfolioController {
         // 이미지 유효성 검사(비어 있는지 확인)
         if (images == null || images.isEmpty()) {
             throw PortfolioException.portfolioImageEmpty();
+        }
+        if (images.size() > 5) {
+            throw PortfolioException.portfolioImageLimitExceeded();
         }
 
         portfolioService.updatePortfolio(userId, request, images);
