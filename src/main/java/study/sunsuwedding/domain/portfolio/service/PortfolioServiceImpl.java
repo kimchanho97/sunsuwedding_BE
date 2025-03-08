@@ -48,12 +48,19 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Transactional
     public void updatePortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images) {
         Planner planner = getPlannerById(userId);
-        Portfolio portfolio = portfolioRepository.findByPlanner(planner)
-                .orElseThrow(PortfolioException::portfolioNotFound);
+        Portfolio portfolio = getPortfolioByPlanner(planner);
 
         deleteExistingPortfolioData(portfolio);
         updatePortfolioData(request, portfolio);
         savePortfolioData(portfolio, request, images);
+    }
+
+    @Override
+    public void deletePortfolio(Long userId) {
+        Planner planner = getPlannerById(userId);
+        Portfolio portfolio = getPortfolioByPlanner(planner);
+        deleteExistingPortfolioData(portfolio);
+        portfolioRepository.delete(portfolio);
     }
 
     @Override
@@ -117,5 +124,10 @@ public class PortfolioServiceImpl implements PortfolioService {
     private Planner getPlannerById(Long userId) {
         return plannerRepository.findById(userId)
                 .orElseThrow(PortfolioException::plannerNotFound);
+    }
+
+    private Portfolio getPortfolioByPlanner(Planner planner) {
+        return portfolioRepository.findByPlanner(planner)
+                .orElseThrow(PortfolioException::portfolioNotFound);
     }
 }

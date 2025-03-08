@@ -13,4 +13,6 @@ public interface PortfolioService {
     PortfolioResponse getPortfolio(Long userId, Long portfolioId);
 
     void updatePortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images);
+
+    void deletePortfolio(Long userId);
 }

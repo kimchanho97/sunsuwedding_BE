@@ -88,4 +88,10 @@ public class PortfolioController {
         portfolioService.updatePortfolio(userId, request, images);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deletePortfolio(@AuthenticationPrincipal Long userId) {
+        portfolioService.deletePortfolio(userId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
