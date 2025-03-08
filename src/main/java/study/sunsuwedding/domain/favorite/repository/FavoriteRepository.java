@@ -5,6 +5,7 @@ import study.sunsuwedding.domain.favorite.entity.Favorite;
 import study.sunsuwedding.domain.portfolio.entity.Portfolio;
 import study.sunsuwedding.domain.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
@@ -12,4 +13,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     boolean existsByUserAndPortfolio(User user, Portfolio portfolio);
 
     Optional<Favorite> findByUserAndPortfolio(User user, Portfolio portfolio);
+
+    List<Favorite> findAllByUserId(Long userId);
+
+    boolean existsByUserIdAndPortfolioId(Long userId, Long portfolioId);
 }

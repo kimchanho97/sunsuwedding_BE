@@ -11,6 +11,8 @@ import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.entity.Planner;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -48,6 +50,12 @@ public class Portfolio extends BaseTimeEntity {
 
     @Column(nullable = false, length = 1000)
     private String partnerCompany;
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<PortfolioItem> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<PortfolioImage> images = new ArrayList<>();
 
     private Long totalPrice;
     private Long contractCount;

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
+import study.sunsuwedding.domain.portfolio.dto.res.PortfolioResponse;
 import study.sunsuwedding.domain.portfolio.entity.Portfolio;
 import study.sunsuwedding.domain.portfolio.entity.PortfolioImage;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
@@ -25,6 +27,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
     private final PlannerRepository plannerRepository;
+    private final FavoriteRepository favoriteRepository;
     private final PortfolioItemJdbcRepository portfolioItemJdbcRepository;
     private final PortfolioImageJdbcRepository portfolioImageJdbcRepository;
     private final S3ImageService s3ImageService;
@@ -46,6 +49,20 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .map(result -> new PortfolioImage(portfolio, result.getFileUrl(), result.getFileName(), result.equals(uploadResults.get(0))))
                 .toList();
         portfolioImageJdbcRepository.batchInsert(portfolioImages);
+    }
+
+    @Override
+    public PortfolioResponse getPortfolio(Long userId, Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findPortfolioWithDetails(portfolioId)
+                .orElseThrow(PortfolioException::portfolioNotFound);
+
+        if (userId == null) {
+            return PortfolioResponse.fromEntity(portfolio, false);
+        }
+
+        // 찜 여부 확인
+        boolean isLiked = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
+        return PortfolioResponse.fromEntity(portfolio, isLiked);
     }
 
     private void checkIfAlreadyRegisteredPortfolio(Planner planner) {

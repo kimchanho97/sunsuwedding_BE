@@ -14,6 +14,7 @@ import study.sunsuwedding.common.response.SliceResponse;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
+import study.sunsuwedding.domain.portfolio.dto.res.PortfolioResponse;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
 import study.sunsuwedding.domain.portfolio.service.PortfolioQueryService;
 import study.sunsuwedding.domain.portfolio.service.PortfolioService;
@@ -65,5 +66,12 @@ public class PortfolioController {
 
         portfolioService.createPortfolio(userId, request, images);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @GetMapping("/{portfolioId}")
+    public ResponseEntity<ApiResponse<PortfolioResponse>> getPortfolio(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long portfolioId) {
+        return ResponseEntity.ok(ApiResponse.success(portfolioService.getPortfolio(userId, portfolioId)));
     }
 }
