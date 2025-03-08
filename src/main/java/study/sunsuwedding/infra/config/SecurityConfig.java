@@ -84,46 +84,32 @@ public class SecurityConfig {
 
         // 10. 인증, 권한 필터 설정
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/api/user/signup"),
-                                new AntPathRequestMatcher("/api/auth/login"),
-                                new AntPathRequestMatcher("/api/auth/logout"),
-                                new AntPathRequestMatcher("/api/portfolio/**", "GET")
-                        ).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/api/chat"),
-                                new AntPathRequestMatcher("/api/match/**"),
-                                new AntPathRequestMatcher("/api/review/all", "GET"),
-                                new AntPathRequestMatcher("/api/review/{reviewId}", "GET"),
-                                new AntPathRequestMatcher("/api/review/**", "POST"),
-                                new AntPathRequestMatcher("/api/review/**", "PUT"),
-                                new AntPathRequestMatcher("/api/review/**", "DELETE")
-                        ).hasAuthority("couple")
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/api/portfolio/self", "GET"),
-                                new AntPathRequestMatcher("/api/portfolio", "POST"),
-                                new AntPathRequestMatcher("/api/portfolio", "PUT"),
-                                new AntPathRequestMatcher("/api/portfolio", "DELETE"),
-                                new AntPathRequestMatcher("/api/quotation/**", "PUT"),
-                                new AntPathRequestMatcher("/api/quotation/**", "POST"),
-                                new AntPathRequestMatcher("/api/quotation/**", "DELETE")
-                        ).hasAuthority("planner")
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/api/user/**"),
-                                new AntPathRequestMatcher("/api/portfolio/**"),
-                                new AntPathRequestMatcher("/api/chat/**"),
-                                new AntPathRequestMatcher("/api/match/**"),
-                                new AntPathRequestMatcher("/api/quotation/**"),
-                                new AntPathRequestMatcher("/api/payment/**"),
-                                new AntPathRequestMatcher("/api/review/all", "GET"),
-                                new AntPathRequestMatcher("/api/review/{reviewId}", "GET"),
-                                new AntPathRequestMatcher("/api/review/**", "POST"),
-                                new AntPathRequestMatcher("/api/review/**", "PUT"),
-                                new AntPathRequestMatcher("/api/review/**", "DELETE"),
-                                new AntPathRequestMatcher("/api/favorite/**")
-                        ).authenticated()
-                        .anyRequest().permitAll()
+                        authorizeHttpRequests
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/api/auth/login"),
+                                        new AntPathRequestMatcher("/api/auth/logout"),
+                                        new AntPathRequestMatcher("/api/user/signup"),
+                                        new AntPathRequestMatcher("/api/portfolio", "GET"),
+                                        new AntPathRequestMatcher("/api/portfolio/{portfolioId}", "GET")
+                                ).permitAll()
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/api/chat/room")
+                                ).hasAuthority("couple")
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/api/portfolio", "POST"),
+                                        new AntPathRequestMatcher("/api/portfolio", "PUT"),
+                                        new AntPathRequestMatcher("/api/portfolio", "DELETE"),
+                                        new AntPathRequestMatcher("/api/portfolio/me")
+//                                        new AntPathRequestMatcher("/api/quotation/**")
+                                ).hasAuthority("planner")
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/api/user", "DELETE"),
+                                        new AntPathRequestMatcher("/api/user/info", "GET"),
+                                        new AntPathRequestMatcher("/api/user/profile-image", "POST"),
+                                        new AntPathRequestMatcher("/api/payment/**"),
+                                        new AntPathRequestMatcher("/api/favorite/**")
+                                ).authenticated()
+                                .anyRequest().permitAll()
         );
 
         return http.build();
