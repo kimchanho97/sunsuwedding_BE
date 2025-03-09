@@ -14,7 +14,7 @@ public class PortfolioItemJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_SQL = """
-                INSERT INTO portfolio_item (portfolio_id, item_title, item_price) 
+                INSERT INTO portfolio_item (portfolio_id, item_name, item_price) 
                 VALUES (?, ?, ?)
             """;
 
