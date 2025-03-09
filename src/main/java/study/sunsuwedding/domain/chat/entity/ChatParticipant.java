@@ -35,6 +35,8 @@ public class ChatParticipant extends BaseTimeEntity {
     private User user;
 
     private String lastReadMessageId; // 마지막으로 읽은 메시지 ID
+
+    @Column(nullable = false)
     private boolean isDeleted; // 채팅방 나가기 시 true로 변경
     private LocalDateTime leftAt; // 채팅방 나간 시간
 

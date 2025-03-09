@@ -60,6 +60,8 @@ public class Portfolio extends BaseTimeEntity {
     private Long totalPrice;
     private Long contractedCount;
     private Double averageRating;
+
+    @Column(nullable = false)
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
 
@@ -75,6 +77,7 @@ public class Portfolio extends BaseTimeEntity {
         this.totalPrice = totalPrice;
         this.contractedCount = contractedCount;
         this.averageRating = averageRating;
+        this.isDeleted = false;
     }
 
     public void update(String plannerName, String title, String description, String location, String career, String partnerCompany) {

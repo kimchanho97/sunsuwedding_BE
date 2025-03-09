@@ -14,14 +14,18 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
     Optional<Portfolio> findByPlanner(Planner planner);
 
-    @Query("SELECT p FROM Portfolio p " +
-            "LEFT JOIN FETCH p.items " +
-            "WHERE p.id = :portfolioId")
+    @Query("""
+            SELECT p FROM Portfolio p 
+            JOIN FETCH p.items 
+            WHERE p.id = :portfolioId
+            """)
     Optional<Portfolio> findWithItemsByPortfolioId(@Param("portfolioId") Long portfolioId);
 
-    @Query("SELECT p FROM Portfolio p " +
-            "LEFT JOIN FETCH p.items " +
-            "WHERE p.planner = :planner")
+    @Query("""
+            SELECT p FROM Portfolio p 
+            JOIN FETCH p.items 
+            WHERE p.planner = :planner
+            """)
     Optional<Portfolio> findWithItemsByPlanner(@Param("planner") Planner planner);
 
 }
