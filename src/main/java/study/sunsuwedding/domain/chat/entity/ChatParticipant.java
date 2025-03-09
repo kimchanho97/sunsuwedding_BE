@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.entity.User;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE chat_participant SET is_deleted = true, left_at = NOW() WHERE chat_participant_id = ?")
 @SQLRestriction("is_deleted = false")
-public class ChatParticipant {
+public class ChatParticipant extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

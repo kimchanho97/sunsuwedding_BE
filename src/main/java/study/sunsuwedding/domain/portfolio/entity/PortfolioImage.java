@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -12,7 +13,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "portfolio_image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PortfolioImage {
+public class PortfolioImage extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

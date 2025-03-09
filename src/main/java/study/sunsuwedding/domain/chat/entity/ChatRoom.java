@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.user.entity.Planner;
 import study.sunsuwedding.domain.user.entity.User;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE chat SET is_deleted = true, deleted_at = NOW() WHERE chat_id = ?")
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoom {
+public class ChatRoom extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

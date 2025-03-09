@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import study.sunsuwedding.common.entity.BaseTimeEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -11,7 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "portfolio_item")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PortfolioItem {
+public class PortfolioItem extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
