@@ -83,16 +83,21 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<Void>> updatePortfolio(
             @AuthenticationPrincipal Long userId,
             @RequestPart("portfolio") @Valid PortfolioRequest request,
-            @RequestPart("images") List<MultipartFile> images) {
-        // 이미지 유효성 검사(비어 있는지 확인)
-        if (images == null || images.isEmpty()) {
+            @RequestParam(value = "existingImages", required = false) List<String> existingImages,  // 기존 이미지 (S3 URL)
+            @RequestParam(value = "deletedImages", required = false) List<String> deletedImages, // 삭제할 이미지 (S3 URL)
+            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages) {  // 신규 이미지 파일
+        // 기존 + 새로운 이미지 개수 검증 (최대 5장 제한)
+        int totalImageCount =
+                (existingImages != null ? existingImages.size() : 0) +
+                        (newImages != null ? newImages.size() : 0);
+        if (totalImageCount == 0) {
             throw PortfolioException.portfolioImageEmpty();
         }
-        if (images.size() > 5) {
+        if (totalImageCount > 5) {
             throw PortfolioException.portfolioImageLimitExceeded();
         }
 
-        portfolioService.updatePortfolio(userId, request, images);
+        portfolioService.updatePortfolio(userId, request, existingImages, newImages, deletedImages);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

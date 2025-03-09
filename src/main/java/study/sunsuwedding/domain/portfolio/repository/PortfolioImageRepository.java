@@ -16,4 +16,13 @@ public interface PortfolioImageRepository extends JpaRepository<PortfolioImage, 
     void deleteByPortfolioId(@Param("portfolioId") Long portfolioId);
 
     List<PortfolioImage> findByPortfolio(Portfolio portfolio);
+
+    // fileUrl 리스트로 fileName 리스트 조회 (S3 삭제용)
+    @Query("SELECT p.fileName FROM PortfolioImage p WHERE p.fileUrl IN :fileUrls")
+    List<String> findFileNamesByUrls(@Param("fileUrls") List<String> fileUrls);
+
+    // fileName 리스트로 DB 삭제 (IN 절 사용)
+    @Modifying
+    @Query("DELETE FROM PortfolioImage p WHERE p.fileName IN :fileNames")
+    void deleteByFileNames(@Param("fileNames") List<String> fileNames);
 }

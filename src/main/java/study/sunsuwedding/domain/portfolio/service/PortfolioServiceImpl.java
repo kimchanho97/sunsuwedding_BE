@@ -47,13 +47,33 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     @Transactional
-    public void updatePortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images) {
+    public void updatePortfolio(Long userId, PortfolioRequest request, List<String> existingImages, List<MultipartFile> newImages, List<String> deletedImages) {
         Planner planner = getPlannerById(userId);
         Portfolio portfolio = getPortfolioByPlanner(planner);
-
-        deleteExistingPortfolioData(portfolio);
+        // 1. 포트폴리오 기본 정보 업데이트
         updatePortfolio(request, portfolio);
-        savePortfolioData(portfolio, request, images);
+
+        // 2. 삭제할 이미지 처리
+        if (deletedImages != null && !deletedImages.isEmpty()) {
+            List<String> fileNamesToDelete = portfolioImageRepository.findFileNamesByUrls(deletedImages);
+            if (!fileNamesToDelete.isEmpty()) {
+                s3ImageService.deleteImages(fileNamesToDelete); // S3에서 이미지 삭제
+                portfolioImageRepository.deleteByFileNames(fileNamesToDelete); // DB에서 이미지 삭제 (IN 절 사용)
+            }
+        }
+
+        // 3. 새로운 이미지 업로드 및 DB 저장
+        if (newImages != null && !newImages.isEmpty()) {
+            List<S3UploadResultDto> uploadResults = s3ImageService.uploadImages(newImages);
+            List<PortfolioImage> newPortfolioImages = uploadResults.stream()
+                    .map(result -> new PortfolioImage(portfolio, result.getFileName(), result.getFileUrl(), false))
+                    .toList();
+            portfolioImageJdbcRepository.batchInsert(newPortfolioImages);
+        }
+
+        // 4. 포트폴리오 아이템 업데이트 (기존 삭제 후 새로 저장)
+        portfolioItemRepository.deleteByPortfolioId(portfolio.getId());
+        portfolioItemJdbcRepository.batchInsert(request.toPortfolioItems(portfolio));
     }
 
     @Override

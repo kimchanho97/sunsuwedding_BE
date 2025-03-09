@@ -13,9 +13,9 @@ public interface PortfolioService {
 
     PortfolioResponse getPortfolio(Long userId, Long portfolioId);
 
-    void updatePortfolio(Long userId, PortfolioRequest request, List<MultipartFile> images);
-
     void deletePortfolio(Long userId);
 
     OwnPortfolioResponse getOwnPortfolio(Long userId);
+
+    void updatePortfolio(Long userId, PortfolioRequest request, List<String> existingImages, List<MultipartFile> newImages, List<String> deletedImages);
 }
