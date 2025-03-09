@@ -14,7 +14,7 @@ public enum UserErrorCode implements ErrorCode {
     INCORRECT_PASSWORD(HttpStatus.BAD_REQUEST, 2002, "비밀번호가 일치하지 않습니다."),
 
     // 회원가입
-    DELETED_USER(HttpStatus.BAD_REQUEST, 2003, "이미 탈퇴한 회원입니다. 계정을 복구하시겠습니까?"),
+    DELETED_USER(HttpStatus.BAD_REQUEST, 2003, "이미 탈퇴한 회원입니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 2004, "해당 이메일로 가입된 계정이 이미 존재합니다."),
     INVALID_ROLE(HttpStatus.BAD_REQUEST, 2005, "역할(Role)은 'PLANNER' 또는 'COUPLE'만 가능합니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 2006, "비밀번호와 비밀번호 확인 값이 일치해야 합니다."),
