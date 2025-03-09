@@ -67,7 +67,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public PortfolioResponse getPortfolio(Long userId, Long portfolioId) {
-        Portfolio portfolio = portfolioRepository.findPortfolioWithDetails(portfolioId)
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(PortfolioException::portfolioNotFound);
 
         if (userId == null) {
@@ -83,7 +83,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     public OwnPortfolioResponse getOwnPortfolio(Long userId) {
         Planner planner = getPlannerById(userId);
 
-        return portfolioRepository.findPortfolioWithDetailsByPlanner(planner)
+        return portfolioRepository.findByPlanner(planner)
                 .map(OwnPortfolioResponse::fromEntity)
                 .orElse(null); // 포트폴리오가 없으면 null 반환
     }
