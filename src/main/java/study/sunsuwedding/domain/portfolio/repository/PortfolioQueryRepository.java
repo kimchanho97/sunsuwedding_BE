@@ -80,7 +80,7 @@ public class PortfolioQueryRepository {
                                 .otherwise(false) // 좋아요 여부 계산
                 ))
                 .from(portfolio)
-                .leftJoin(portfolioImage)
+                .join(portfolioImage)
                 .on(portfolioImage.portfolio.eq(portfolio), portfolioImage.isThumbnail.isTrue())
                 .where(
                         nameContains(searchRequest.getName()),

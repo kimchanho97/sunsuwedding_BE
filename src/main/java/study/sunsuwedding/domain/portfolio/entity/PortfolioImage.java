@@ -38,4 +38,14 @@ public class PortfolioImage extends BaseTimeEntity {
         this.isThumbnail = isThumbnail;
     }
 
+    // 기존 썸네일 해제
+    public void clearThumbnail() {
+        this.isThumbnail = false;
+    }
+
+    // 새로운 썸네일 지정
+    public void setThumbnail() {
+        this.isThumbnail = true;
+    }
+
 }

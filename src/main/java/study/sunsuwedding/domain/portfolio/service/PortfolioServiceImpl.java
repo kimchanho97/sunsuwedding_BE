@@ -17,6 +17,7 @@ import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.infra.storage.S3ImageService;
 import study.sunsuwedding.infra.storage.S3UploadResultDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,15 +64,26 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
 
         // 3. 새로운 이미지 업로드 및 DB 저장
+        List<PortfolioImage> allImages = new ArrayList<>();
+        if (existingImages != null && !existingImages.isEmpty()) {
+            List<PortfolioImage> existingPortfolioImages = portfolioImageRepository.findByPortfolio(portfolio);
+            allImages.addAll(existingPortfolioImages);
+        }
+
         if (newImages != null && !newImages.isEmpty()) {
             List<S3UploadResultDto> uploadResults = s3ImageService.uploadImages(newImages);
             List<PortfolioImage> newPortfolioImages = uploadResults.stream()
                     .map(result -> new PortfolioImage(portfolio, result.getFileName(), result.getFileUrl(), false))
                     .toList();
             portfolioImageJdbcRepository.batchInsert(newPortfolioImages);
+            allImages.addAll(newPortfolioImages);
         }
 
-        // 4. 포트폴리오 아이템 업데이트 (기존 삭제 후 새로 저장)
+        // 4. 기존 섬네일 해제 + 새로운 섬네일 설정
+        allImages.forEach(PortfolioImage::clearThumbnail); // 기존 썸네일 해제
+        allImages.get(0).setThumbnail(); // 첫 번째 이미지 썸네일 지정
+
+        // 5. 포트폴리오 아이템 업데이트 (기존 삭제 후 새로 저장)
         portfolioItemRepository.deleteByPortfolioId(portfolio.getId());
         portfolioItemJdbcRepository.batchInsert(request.toPortfolioItems(portfolio));
     }
