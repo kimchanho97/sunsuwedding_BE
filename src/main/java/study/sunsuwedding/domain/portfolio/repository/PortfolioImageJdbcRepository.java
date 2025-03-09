@@ -15,7 +15,7 @@ public class PortfolioImageJdbcRepository {
 
     private static final String INSERT_SQL = """
                 INSERT INTO portfolio_image (portfolio_id, file_name, file_url, is_thumbnail) 
-                VALUES (?, ?)
+                VALUES (?, ?, ?, ?)
             """;
 
     public void batchInsert(List<PortfolioImage> portfolioImages) {

@@ -107,7 +107,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         // 2. 이미지 S3 업로드 후, 엔티티로 변환 후 배치 저장
         List<S3UploadResultDto> uploadResults = s3ImageService.uploadImages(images);
         List<PortfolioImage> portfolioImages = uploadResults.stream()
-                .map(result -> new PortfolioImage(portfolio, result.getFileUrl(), result.getFileName(), result.equals(uploadResults.get(0))))
+                .map(result -> new PortfolioImage(portfolio, result.getFileName(), result.getFileUrl(), result.equals(uploadResults.get(0))))
                 .toList();
         portfolioImageJdbcRepository.batchInsert(portfolioImages);
     }
