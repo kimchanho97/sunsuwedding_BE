@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void withdraw(Long userId) {
         User user = getUserById(userId);
+        deleteUserProfileImage(user);
         userRepository.delete(user);
     }
 
@@ -77,12 +78,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteProfileImage(Long userId) {
         User user = getUserById(userId);
-        if (user.getFileUrl() == null) {
-            throw UserException.noProfileImage();
-        }
+        deleteUserProfileImage(user);
+    }
 
-        s3ImageService.deleteImage(user.getFileName());
-        user.updateProfileImage(null, null);
+    private void deleteUserProfileImage(User user) {
+        if (user.getFileUrl() != null) {
+            s3ImageService.deleteImage(user.getFileName());
+            user.updateProfileImage(null, null);
+        }
     }
 
     private void validateDuplicateEmail(String email) {

@@ -40,7 +40,7 @@ public class UserController {
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("")
+    @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> withdraw(@AuthenticationPrincipal Long userId) {
         userService.withdraw(userId);
         return ResponseEntity.ok(ApiResponse.success(null));
