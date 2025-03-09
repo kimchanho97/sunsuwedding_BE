@@ -47,11 +47,21 @@ public class UserController {
     }
 
     /**
-     * 프로필 이미지 변경
+     * 프로필 이미지 등록
      */
-    @PutMapping("/profile-image")
+    @PostMapping("/profile-image")
     public ResponseEntity<ApiResponse<UserProfileImageResponse>> changeProfileImage(
             @AuthenticationPrincipal Long userId, @RequestParam MultipartFile profileImage) {
-        return ResponseEntity.ok(ApiResponse.success(userService.changeProfileImage(userId, profileImage)));
+        return ResponseEntity.ok(ApiResponse.success(userService.updateProfileImage(userId, profileImage)));
     }
+
+    /**
+     * 프로필 이미지 삭제
+     */
+    @DeleteMapping("/profile-image")
+    public ResponseEntity<ApiResponse<Void>> deleteProfileImage(@AuthenticationPrincipal Long userId) {
+        userService.deleteProfileImage(userId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
 }

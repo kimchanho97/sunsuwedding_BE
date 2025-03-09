@@ -13,5 +13,7 @@ public interface UserService {
 
     void withdraw(Long userId);
 
-    UserProfileImageResponse changeProfileImage(Long userId, MultipartFile profileImage);
+    UserProfileImageResponse updateProfileImage(Long userId, MultipartFile profileImage);
+
+    void deleteProfileImage(Long userId);
 }

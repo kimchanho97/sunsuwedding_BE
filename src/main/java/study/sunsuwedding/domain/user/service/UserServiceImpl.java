@@ -61,15 +61,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileImageResponse changeProfileImage(Long userId, MultipartFile profileImage) {
+    @Transactional
+    public UserProfileImageResponse updateProfileImage(Long userId, MultipartFile profileImage) {
         User user = getUserById(userId);
         if (user.getFileUrl() != null) {
             s3ImageService.deleteImage(user.getFileName());
         }
 
         S3UploadResultDto result = s3ImageService.uploadImage(profileImage);
-        user.changeProfileImage(result.getFileName(), result.getFileUrl());
+        user.updateProfileImage(result.getFileName(), result.getFileUrl());
         return new UserProfileImageResponse(result.getFileUrl());
+    }
+
+    @Override
+    @Transactional
+    public void deleteProfileImage(Long userId) {
+        User user = getUserById(userId);
+        if (user.getFileUrl() == null) {
+            throw UserException.noProfileImage();
+        }
+
+        s3ImageService.deleteImage(user.getFileName());
+        user.updateProfileImage(null, null);
     }
 
     private void validateDuplicateEmail(String email) {

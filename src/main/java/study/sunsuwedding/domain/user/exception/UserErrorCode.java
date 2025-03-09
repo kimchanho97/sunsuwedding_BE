@@ -20,7 +20,8 @@ public enum UserErrorCode implements ErrorCode {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 2006, "비밀번호와 비밀번호 확인 값이 일치해야 합니다."),
 
     // 유저 정보 조회
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 2007, "해당 사용자를 찾을 수 없습니다. 탈퇴했거나 존재하지 않는 계정입니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 2007, "해당 사용자를 찾을 수 없습니다. 탈퇴했거나 존재하지 않는 계정입니다."),
+    NO_PROFILE_IMAGE(HttpStatus.NOT_FOUND, 2008, "프로필 이미지가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;
