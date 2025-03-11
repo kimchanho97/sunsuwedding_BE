@@ -1,5 +1,5 @@
 # 1️⃣ Gradle 빌드 환경 설정 (빌드 전용)
-FROM gradle:8.4-jdk21 AS builder  # Java 21로 변경
+FROM gradle:8.4-jdk21 AS builder
 
 # 2️⃣ 작업 디렉토리 설정
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY --chown=gradle:gradle . .
 RUN ./gradlew build -x test --stacktrace  # --stacktrace 추가하여 상세 오류 확인
 
 # 5️⃣ 실행 환경 설정 (Slim JDK)
-FROM openjdk:21-jdk-slim  # Java 21로 변경
+FROM openjdk:21-jdk-slim
 
 # 6️⃣ 작업 디렉토리 설정
 WORKDIR /app
