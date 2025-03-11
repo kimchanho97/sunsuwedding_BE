@@ -44,6 +44,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # deploy.sh와 docker-compose.yml 파일을 EC2로 전송
+      - name: Transfer deploy script and docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "./deploy.sh, ./docker-compose.yml"
+          target: "~/sunsuwedding-deploy/"
+
       # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
       - name: Transfer .env to EC2
         uses: appleboy/scp-action@master
