@@ -43,11 +43,9 @@ jobs:
     needs: [ CI ]
     runs-on: ubuntu-latest
 
-
-
     steps:
       - name: list files
-        run: ls -al
+        run: ls -al $GITHUB_WORKSPACE
 
       # deploy.sh와 docker-compose.yml 파일을 EC2로 전송
       - name: Transfer deploy script and docker-compose.yml to EC2
