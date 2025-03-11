@@ -30,14 +30,14 @@ public class ChatParticipant extends BaseTimeEntity {
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String lastReadMessageId; // 마지막으로 읽은 메시지 ID
+    private Long lastReadMessageId; // 마지막으로 읽은 메시지 ID
 
     @Column(nullable = false)
-    private boolean isDeleted; // 채팅방 나가기 시 true로 변경
+    private Boolean isDeleted; // 채팅방 나가기 시 true로 변경
     private LocalDateTime leftAt; // 채팅방 나간 시간
 
     public ChatParticipant(ChatRoom chatRoom, User user) {

@@ -24,7 +24,7 @@ public class ChatRoom extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
+    @Column(name = "chat_room_id")
     private Long id;
 
     private LocalDateTime lastMessageAt; // 마지막 메시지 시간

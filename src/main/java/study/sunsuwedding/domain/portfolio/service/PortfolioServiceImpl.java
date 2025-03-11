@@ -3,6 +3,7 @@ package study.sunsuwedding.domain.portfolio.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
@@ -55,7 +56,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         updatePortfolio(request, portfolio);
 
         // 2. 삭제할 이미지 처리
-        if (deletedImages != null && !deletedImages.isEmpty()) {
+        if (!CollectionUtils.isEmpty(deletedImages)) {
             List<String> fileNamesToDelete = portfolioImageRepository.findFileNamesByUrls(deletedImages);
             if (!fileNamesToDelete.isEmpty()) {
                 s3ImageService.deleteImages(fileNamesToDelete); // S3에서 이미지 삭제
@@ -65,12 +66,12 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         // 3. 새로운 이미지 업로드 및 DB 저장
         List<PortfolioImage> allImages = new ArrayList<>();
-        if (existingImages != null && !existingImages.isEmpty()) {
+        if (!CollectionUtils.isEmpty(existingImages)) {
             List<PortfolioImage> existingPortfolioImages = portfolioImageRepository.findByPortfolio(portfolio);
             allImages.addAll(existingPortfolioImages);
         }
 
-        if (newImages != null && !newImages.isEmpty()) {
+        if (!CollectionUtils.isEmpty(newImages)) {
             List<S3UploadResultDto> uploadResults = s3ImageService.uploadImages(newImages);
             List<PortfolioImage> newPortfolioImages = uploadResults.stream()
                     .map(result -> new PortfolioImage(portfolio, result.getFileName(), result.getFileUrl(), false))
