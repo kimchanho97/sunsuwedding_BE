@@ -70,6 +70,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "./.env"
           target: "~/sunsuwedding-deploy/"
+          strip_components: 1
 
       # SSH Private Key를 사용하여 EC2에 로그인
       - name: Deploy on EC2
