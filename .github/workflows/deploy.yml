@@ -21,10 +21,7 @@ jobs:
       # PROD_ENV_FILE을 그대로 env 파일로 생성
       - name: Create .env file
         run: |
-          printf "%s" "${{ secrets.PROD_ENV_FILE }}" > .env
-
-      - name: Check .env content
-        run: cat .env
+          echo "${{ secrets.PROD_ENV_FILE }}" > .env
 
       # Docker Hub 로그인
       - name: Login to Docker Hub
