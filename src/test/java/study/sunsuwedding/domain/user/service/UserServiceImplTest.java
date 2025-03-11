@@ -84,7 +84,7 @@ class UserServiceImplTest {
         assertThat(response.getEmail()).isEqualTo(email);
         assertThat(response.getRole()).isEqualTo("couple");
         assertThat(response.getGrade()).isEqualTo("normal");
-        assertThat(response.getPayedAt()).isEqualTo("");
+        assertThat(response.getUpgradeAt()).isEqualTo("");
     }
 
     @Test

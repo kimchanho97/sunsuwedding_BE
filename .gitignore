@@ -191,5 +191,6 @@ gradle-app.setting
 # 설정 파일
 /src/main/resources/application-local.yml
 /src/test/resources/application-test.yml
+*.env
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,groovy,intellij
