@@ -58,7 +58,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./deploy/docker-compose.yml, ./deploy/deploy.sh"
+          source: "./deploy/*"
           target: "~/sunsuwedding-deploy/"
           strip_components: 1
 
