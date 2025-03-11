@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  session:
+    store-type: redis
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      timeout: 5000ms
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 배포에서는 update 또는 validate 권장
+    properties:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false  # OSIV 끄기 (실무에서 리소스 낭비 방지)
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+      cookie:
+        name: JSESSIONID
+
+payment:
+  toss:
+    secret: ${PAYMENT_TOSS_SECRET}
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ${AWS_S3_BUCKET}
