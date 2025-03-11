@@ -58,7 +58,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./deploy/*"
+          source: "./deploy/docker-compose.yml, ./deploy/deploy.sh"
           target: "~/sunsuwedding-deploy/"
 
       # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
@@ -68,7 +68,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./env"
+          source: "./.env"
           target: "~/sunsuwedding-deploy/"
 
       # SSH Private Key를 사용하여 EC2에 로그인
