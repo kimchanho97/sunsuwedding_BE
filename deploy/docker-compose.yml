@@ -1,6 +1,37 @@
 version: '3.8'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/certs:/etc/nginx/certs       # 인증서 저장 디렉토리
+      - ./nginx/vhost.d:/etc/nginx/vhost.d   # 가상 호스트 설정
+      - ./nginx/html:/usr/share/nginx/html   # 기본 정적 파일 경로
+    networks:
+      - app-network
+
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    container_name: letsencrypt
+    restart: always
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/html:/usr/share/nginx/html
+    environment:
+      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}  # 발급받을 인증서 관련 이메일 주소
+    networks:
+      - app-network
+
   app:
     image: ${DOCKER_USERNAME}/sunsuwedding:latest  # Docker Hub에서 가져옴
     container_name: sunsuwedding-app
@@ -8,6 +39,9 @@ services:
     ports:
       - "8080:8080"
     environment:
+      VIRTUAL_HOST: ${DOMAIN}            # nginx-proxy에서 도메인 기반 라우팅에 사용됨
+      LETSENCRYPT_HOST: ${DOMAIN}         # acme-companion에서 인증서 발급 대상 도메인
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
       DATASOURCE_URL: jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -19,6 +53,7 @@ services:
       AWS_S3_BUCKET: ${AWS_S3_BUCKET}
     depends_on:
       - redis
+      - nginx-proxy
     networks:
       - app-network
 
