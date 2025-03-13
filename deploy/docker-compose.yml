@@ -30,6 +30,7 @@ services:
       - ./nginx/html:/usr/share/nginx/html
     environment:
       - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}  # 발급받을 인증서 관련 이메일 주소
+      - NGINX_PROXY_CONTAINER=nginx-proxy  # nginx-proxy 컨테이너 ID 명시
     networks:
       - app-network
 
