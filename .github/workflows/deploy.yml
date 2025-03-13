@@ -69,7 +69,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./nginx/nginx.conf"
+          source: "./nginx"
           target: "~/sunsuwedding-deploy/"
 
       # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
