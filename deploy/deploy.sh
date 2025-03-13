@@ -6,22 +6,26 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-# 환경 변수 로드 (GitHub Secrets에서 주입)
-export $(cat .env | xargs)
+# 1. 기존 컨테이너 중지 및 정리
+docker-compose down
+docker volume prune -f
+docker network prune -f
 
-# 기존 컨테이너 중지 및 삭제
-docker-compose -f ~/sunsuwedding-deploy/docker-compose.yml down
+# 2. Nginx Proxy 먼저 실행
+docker-compose up -d nginx-proxy
+sleep 10  # Nginx 준비 시간 확보
 
-# 최신 이미지 가져오기
-docker-compose -f ~/sunsuwedding-deploy/docker-compose.yml pull
+# 3. Let's Encrypt 컨테이너 실행 (인증서 검증)
+docker-compose up -d letsencrypt
+sleep 5
 
-# 컨테이너 실행
-docker-compose -f ~/sunsuwedding-deploy/docker-compose.yml up -d
+# 4. 애플리케이션 실행
+docker-compose up -d app redis
 
-# 배포 후 컨테이너 실행 상태 확인
-sleep 10
+# 5. 인증서가 존재하는지 최종 확인
+if [ ! -f "./nginx/certs/sunsu-wedding-backend.shop/fullchain.pem" ]; then
+    echo "🚨 인증서가 존재하지 않습니다! letsencrypt 컨테이너 확인 필요"
+    exit 1
+fi
 
-# 실행 중인 컨테이너 목록 출력 (확인용)
-docker ps
-
-echo "✅ Deployment successful!"
+echo "✅ 배포 완료!"
