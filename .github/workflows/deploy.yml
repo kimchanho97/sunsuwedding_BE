@@ -62,12 +62,6 @@ jobs:
           target: "~/sunsuwedding-deploy/"
           strip_components: 1
 
-      - name: Fix nginx folder and file permissions
-        run: |
-          sudo chmod -R 755 ./nginx  # 폴더 + 내부 파일 권한을 755로 설정
-          sudo chown -R $(whoami):$(whoami) ./nginx  # 현재 사용자로 소유권 변경
-          sudo find ./nginx -type f -exec chmod 644 {} \;  # 내부 파일은 644 (rw-r--r--) 설정
-
       # nginx 폴더 전송
       - name: Transfer nginx folder to EC2
         uses: appleboy/scp-action@master
@@ -77,7 +71,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "./nginx"
           target: "~/sunsuwedding-deploy/"
-          tar_dereference: false
 
       # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
       - name: Transfer .env to EC2
