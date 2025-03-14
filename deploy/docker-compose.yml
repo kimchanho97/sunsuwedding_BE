@@ -14,6 +14,8 @@ services:
       - ./nginx/certs:/etc/nginx/certs       # 인증서 저장 디렉토리
       - ./nginx/vhost.d:/etc/nginx/vhost.d   # 가상 호스트 설정
       - ./nginx/html:/usr/share/nginx/html   # 기본 정적 파일 경로
+    environment:
+      - DISABLE_PROXY=1  # 🚀 `docker-gen` 자동 설정 비활성화
     networks:
       - app-network
 
