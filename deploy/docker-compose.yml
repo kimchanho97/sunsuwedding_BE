@@ -10,12 +10,10 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro  # 개별 서버 설정 추가
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # nginx.conf 명시적 마운트 추가
       - ./nginx/certs:/etc/nginx/certs       # 인증서 저장 디렉토리
       - ./nginx/vhost.d:/etc/nginx/vhost.d   # 가상 호스트 설정
       - ./nginx/html:/usr/share/nginx/html   # 기본 정적 파일 경로
-    environment:
-      - DISABLE_PROXY=1  # 🚀 `docker-gen` 자동 설정 비활성화
     networks:
       - app-network
 
