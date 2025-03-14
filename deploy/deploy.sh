@@ -15,9 +15,9 @@ echo "🟢 Nginx Proxy 실행 완료. 준비 대기 중..."
 sleep 10  # Nginx 준비 시간 확보
 
 # Let's Encrypt 컨테이너 실행 (인증서 발급)
-#docker-compose up -d letsencrypt
-#echo "🔒 SSL 인증서 발급 대기 중..."
-#sleep 5  # 인증서 검증 대기
+docker-compose up -d letsencrypt
+echo "🔒 SSL 인증서 발급 대기 중..."
+sleep 5  # 인증서 검증 대기
 
 # 애플리케이션 실행
 docker-compose up -d
