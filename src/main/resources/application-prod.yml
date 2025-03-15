@@ -62,7 +62,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus,health"
+        include: "*"
+
+  security:
+    enabled: false
 
   server:
     port: 8081
