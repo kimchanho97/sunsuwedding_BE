@@ -88,8 +88,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                                 authorize
                                         .requestMatchers(
-                                                new AntPathRequestMatcher("/test"),
-                                                new AntPathRequestMatcher("/actuator/**"),
                                                 new AntPathRequestMatcher("/api/auth/login"),
                                                 new AntPathRequestMatcher("/api/auth/logout"),
                                                 new AntPathRequestMatcher("/api/user/signup"),

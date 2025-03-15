@@ -58,7 +58,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "prometheus,health"
 
   prometheus:
     metrics:
@@ -68,4 +68,4 @@ management:
   # /actuator/health 정보를 더 자세히 보기 위해 설정(상태값만 출력)
   endpoint:
     health:
-      show-components: always
+      show-details: always
