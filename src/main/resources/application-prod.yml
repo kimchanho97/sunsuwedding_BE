@@ -62,7 +62,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,prometheus"
 
   # /actuator/health 정보를 더 자세히 보기 위해 설정(상태값만 출력)
   endpoint:
