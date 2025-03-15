@@ -44,6 +44,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/sunsuwedding:latest
 
+      # 빌드된 Docker 이미지 내부 JAR 파일 확인
+      - name: Check if Actuator is included in Docker image
+        run: |
+          docker run --rm ${{ secrets.DOCKER_USERNAME }}/sunsuwedding:latest \
+          sh -c "ls -lh /app/app.jar && jar tf /app/app.jar | grep actuator || echo '❌ Actuator not found in Docker image'"
+
   CD:
     needs: [ CI ]
     runs-on: ubuntu-latest
