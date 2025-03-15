@@ -24,6 +24,10 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false  # OSIV 끄기 (실무에서 리소스 낭비 방지)
 
+  web:
+    resources:
+      add-mappings: false
+
 server:
   servlet:
     session:
@@ -52,13 +56,13 @@ cloud:
     s3:
       bucket: ${AWS_S3_BUCKET}
 
-# 모든 엔드포인트를 웹에 노출
+# 모든 엔드포인트를 웹에 노출 -> "*"
 management:
   # 일반적으로 모든 엔드포인트를 노출하지 않음
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "prometheus,health"
 
   prometheus:
     metrics:
