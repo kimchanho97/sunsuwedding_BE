@@ -9,6 +9,9 @@ fi
 # 기존 컨테이너 중지 및 제거
 docker-compose down
 
+# 최신 이미지 강제 다운로드
+docker-compose pull
+
 # Nginx Proxy 먼저 실행 (필요한 네트워크 자동 생성됨)
 docker-compose up -d nginx-proxy
 echo "🟢 Nginx Proxy 실행 완료. 준비 대기 중..."
