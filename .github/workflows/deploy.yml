@@ -18,6 +18,12 @@ jobs:
       - name: Print build.gradle content
         run: cat build.gradle
 
+      - name: Print application.yml
+        run: cat src/main/resources/application.yml || echo "❌ application.yml not found"
+
+      - name: Print application-prod.yml
+        run: cat src/main/resources/application-prod.yml || echo "❌ application-prod.yml not found"
+
       # Docker Buildx 설정(빌드 최적화)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
