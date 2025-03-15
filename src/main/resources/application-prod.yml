@@ -60,6 +60,11 @@ management:
       exposure:
         include: "prometheus"
 
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
   # /actuator/health 정보를 더 자세히 보기 위해 설정(상태값만 출력)
   endpoint:
     health:
