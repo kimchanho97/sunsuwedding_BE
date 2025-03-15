@@ -31,6 +31,11 @@ server:
       cookie:
         name: JSESSIONID
 
+  # 톰캣의 스레드 풀 개수, 사용 스레드 수, 대기 큐 사이즈 등을 모니터링하기 위해 설정
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
 payment:
   toss:
     secret: ${PAYMENT_TOSS_SECRET}
@@ -46,3 +51,16 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: ${AWS_S3_BUCKET}
+
+# 모든 엔드포인트를 웹에 노출
+management:
+  # 일반적으로 모든 엔드포인트를 노출하지 않음
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+
+  # /actuator/health 정보를 더 자세히 보기 위해 설정(상태값만 출력)
+  endpoint:
+    health:
+      show-components: always

@@ -35,6 +35,12 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Spring Boot Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // 마이크로미터 프로메테우스 구현체
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
     // Netty가 MacOS에서 네이티브 DNS 리졸버를 사용할 수 있도록 지원
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64")
     // 스프링 시큐리티
