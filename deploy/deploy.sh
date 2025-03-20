@@ -23,14 +23,14 @@ echo "🔒 SSL 인증서 발급 대기 중..."
 sleep 5  # 인증서 검증 대기
 
 # 애플리케이션 실행
-docker-compose up -d
+docker-compose up -d app redis
 echo "🚀 애플리케이션 실행 완료"
 
 # 인증서 존재 여부 확인
-CERT_PATH="./nginx/certs/sunsu-wedding-backend.shop/fullchain.pem"
-if [ ! -f "$CERT_PATH" ]; then
-    echo "🚨 인증서가 존재하지 않습니다! letsencrypt 컨테이너 확인 필요"
-    exit 1
-fi
+#CERT_PATH="./nginx/certs/sunsu-wedding-backend.shop/fullchain.pem"
+#if [ ! -f "$CERT_PATH" ]; then
+#    echo "🚨 인증서가 존재하지 않습니다! letsencrypt 컨테이너 확인 필요"
+#    exit 1
+#fi
 
 echo "✅ 배포 완료!"
