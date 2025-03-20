@@ -14,16 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # build.gradle 내용 확인
-      - name: Print build.gradle content
-        run: cat build.gradle
-
-      - name: Print application.yml
-        run: cat src/main/resources/application.yml || echo "❌ application.yml not found"
-
-      - name: Print application-prod.yml
-        run: cat src/main/resources/application-prod.yml || echo "❌ application-prod.yml not found"
-
       # Docker Buildx 설정(빌드 최적화)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -43,12 +33,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/sunsuwedding:latest
-
-      # 빌드된 Docker 이미지 내부 JAR 파일 확인
-      - name: Check if Actuator is included in Docker image
-        run: |
-          docker run --rm ${{ secrets.DOCKER_USERNAME }}/sunsuwedding:latest \
-          sh -c "ls -lh /app/app.jar && jar tf /app/app.jar | grep actuator || echo '❌ Actuator not found in Docker image'"
 
   CD:
     needs: [ CI ]
