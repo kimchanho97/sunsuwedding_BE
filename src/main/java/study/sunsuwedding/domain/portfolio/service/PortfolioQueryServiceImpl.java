@@ -13,6 +13,7 @@ import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
 import study.sunsuwedding.domain.portfolio.entity.PortfolioImage;
 import study.sunsuwedding.domain.portfolio.repository.PortfolioQueryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -60,8 +61,9 @@ public class PortfolioQueryServiceImpl implements PortfolioQueryService {
         Slice<PortfolioListResponse> slice = portfolioQueryRepository.findPortfoliosByCursor(userId, searchRequest, cursor, pageable);
 
         // 다음 페이지 커서 계산 (다음 페이지가 없으면 null) -> 현재 content는 size + 1
-        Long nextCursor = slice.hasNext() ? slice.getContent().removeLast().getPortfolioId() : null;
-        return new CursorPaginationResponse<>(slice, nextCursor);
+        List<PortfolioListResponse> content = new ArrayList<>(slice.getContent());
+        Long nextCursor = slice.hasNext() ? content.removeLast().getPortfolioId() : null;
+        return new CursorPaginationResponse<>(content, nextCursor);
     }
 
     /**
