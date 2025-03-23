@@ -82,7 +82,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         // 4. 기존 섬네일 해제 + 새로운 섬네일 설정
         allImages.forEach(PortfolioImage::clearThumbnail); // 기존 썸네일 해제
-        allImages.get(0).setThumbnail(); // 첫 번째 이미지 썸네일 지정
+        allImages.getFirst().setThumbnail(); // 첫 번째 이미지 썸네일 지정
 
         // 5. 포트폴리오 아이템 업데이트 (기존 삭제 후 새로 저장)
         portfolioItemRepository.deleteByPortfolioId(portfolio.getId());
