@@ -16,6 +16,7 @@ import study.sunsuwedding.domain.portfolio.repository.PortfolioQueryRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class PortfolioQueryServiceImpl implements PortfolioQueryService {
         List<PortfolioListResponse> content = portfolioImages.stream()
                 .map(portfolioImage ->
                         PortfolioListResponse.fromEntity(portfolioImage, favoritePortfolioIds))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
 
         boolean hasNext = content.size() > pageable.getPageSize();
         if (hasNext) {
