@@ -42,7 +42,7 @@ public class PortfolioQueryRepository {
                         locationEq(searchRequest.getLocation()),
                         priceBetween(searchRequest.getMinPrice(), searchRequest.getMaxPrice())
                 )
-                .orderBy(portfolio.createdAt.desc())
+                .orderBy(portfolio.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -87,7 +87,7 @@ public class PortfolioQueryRepository {
                         locationEq(searchRequest.getLocation()),
                         priceBetween(searchRequest.getMinPrice(), searchRequest.getMaxPrice())
                 )
-                .orderBy(portfolio.createdAt.desc())
+                .orderBy(portfolio.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1) // `limit + 1` 개 조회하여 다음 페이지가 있는지 확인
                 .fetch();
