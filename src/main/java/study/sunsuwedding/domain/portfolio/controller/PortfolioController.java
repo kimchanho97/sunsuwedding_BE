@@ -55,6 +55,15 @@ public class PortfolioController {
         return ResponseEntity.ok(ApiResponse.success(portfolioQueryService.getPortfoliosV3DtoCursorPaging(userId, searchRequest, cursor, pageable)));
     }
 
+    @GetMapping("/v4")
+    public ResponseEntity<ApiResponse<CursorPaginationResponse<PortfolioListResponse>>> getPortfoliosV4DtoCursorPaging(
+            @AuthenticationPrincipal Long userId,
+            @ModelAttribute PortfolioSearchRequest searchRequest,
+            @RequestParam(required = false) Long cursor,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(portfolioQueryService.getPortfoliosV4CursorCaching(userId, searchRequest, cursor, pageable)));
+    }
+
     @GetMapping("/{portfolioId}")
     public ResponseEntity<ApiResponse<PortfolioResponse>> getPortfolio(
             @AuthenticationPrincipal Long userId,

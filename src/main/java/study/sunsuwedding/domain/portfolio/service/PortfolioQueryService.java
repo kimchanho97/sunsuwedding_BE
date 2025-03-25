@@ -14,4 +14,6 @@ public interface PortfolioQueryService {
 
     CursorPaginationResponse<PortfolioListResponse> getPortfoliosV3DtoCursorPaging(Long userId, PortfolioSearchRequest searchRequest, Long cursor, Pageable pageable);
 
+    CursorPaginationResponse<PortfolioListResponse> getPortfoliosV4CursorCaching(Long userId, PortfolioSearchRequest searchRequest, Long cursor, Pageable pageable);
+
 }
