@@ -34,6 +34,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioItemJdbcRepository portfolioItemJdbcRepository;
     private final PortfolioImageJdbcRepository portfolioImageJdbcRepository;
     private final S3ImageService s3ImageService;
+    private final PortfolioCacheService portfolioCacheService;
 
     @Override
     @Transactional
@@ -87,6 +88,9 @@ public class PortfolioServiceImpl implements PortfolioService {
         // 5. 포트폴리오 아이템 업데이트 (기존 삭제 후 새로 저장)
         portfolioItemRepository.deleteByPortfolioId(portfolio.getId());
         portfolioItemJdbcRepository.batchInsert(request.toPortfolioItems(portfolio));
+
+        // 6. 캐시 전체 무효화
+        portfolioCacheService.evictAll();
     }
 
     @Override
@@ -96,6 +100,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Portfolio portfolio = getPortfolioByPlanner(planner);
         deleteExistingPortfolioData(portfolio);
         portfolioRepository.delete(portfolio);
+        portfolioCacheService.evictAll(); // 캐시 전체 무효화
     }
 
     @Override
