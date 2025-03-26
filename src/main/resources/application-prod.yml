@@ -6,13 +6,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   session:
-    store-type: redis
+    store-type: redis # 세션 저장소를 Redis로 설정 (Session 기반 인증)
 
   data:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
-      timeout: 5000ms
+      timeout: 3000ms # Redis timeout
 
   jpa:
     hibernate:
@@ -20,20 +20,19 @@ spring:
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
-        format_sql: true
         default_batch_fetch_size: 100
     open-in-view: false  # OSIV 끄기 (실무에서 리소스 낭비 방지)
 
   web:
     resources:
-      add-mappings: false
+      add-mappings: false # Spring WebMVC의 정적 리소스 경로 매핑 비활성화
 
 server:
   servlet:
     session:
       tracking-modes: cookie
       cookie:
-        name: JSESSIONID
+        name: JSESSIONID # 세션 쿠키 이름 설정
 
   # 톰캣의 스레드 풀 개수, 사용 스레드 수, 대기 큐 사이즈 등을 모니터링하기 위해 설정
   tomcat:
