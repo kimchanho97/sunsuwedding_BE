@@ -18,7 +18,7 @@ public class PortfolioCacheService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private static final Duration TTL = Duration.ofMinutes(3);
+    private static final Duration TTL = Duration.ofMinutes(10);
 
     public void save(String key, CursorPaginationResponse<PortfolioListResponse> value) {
         redisTemplate.opsForValue().set(key, value, TTL);
