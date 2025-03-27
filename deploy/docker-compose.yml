@@ -30,8 +30,6 @@ services:
       - ./nginx/html:/usr/share/nginx/html
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
-      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}
-      - LETSENCRYPT_HOST=${DOMAIN}
     networks:
       - app-network
 
