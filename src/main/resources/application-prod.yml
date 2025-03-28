@@ -43,7 +43,7 @@ server:
     mbeanregistry:
       enabled: true
     threads:
-      max: 40 # [기본값: 200] 동시에 처리할 최대 스레드 수
+      max: 45 # [기본값: 200] 동시에 처리할 최대 스레드 수
       min-spare: 10 # [기본값: 10] 초기 생성 및 유휴 상태로 유지할 최소 스레드 수
     accept-count: 100 # [기본값: 100] 대기 큐 사이즈
     max-connections: 10000  # [기본값: 10000] 동시에 유지 가능한 커넥션 수 (Http keep-alive 포함)
