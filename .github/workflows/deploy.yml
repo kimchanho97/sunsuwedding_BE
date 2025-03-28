@@ -39,56 +39,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 저장소 코드 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # PROD_ENV_FILE을 그대로 env 파일로 생성
       - name: Create .env file
         run: |
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
 
-      - name: 디버깅 - Deploy 디렉토리 확인
-        run: |
-          echo "[DEBUG] deploy 경로 확인:"
-          ls -al ./deploy
-          echo "[DEBUG] nginx 경로 확인:"
-          ls -al ./nginx
-          echo "[DEBUG] .env 확인:"
-          ls -al ./.env
-
-      # nginx 폴더 전송
-      - name: Transfer nginx folder to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # deploy 디렉토리 내부 파일만 전송
+      - name: Rsync deploy folder to EC2
+        uses: burnett01/rsync-deployments@5.2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./nginx"
-          target: "~/sunsuwedding-deploy/"
+          switches: -avzr --delete
+          path: ./deploy/                      # 내부 파일만 전송
+          remote_path: /home/ubuntu/sunsuwedding-deploy/
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
 
-      # deploy.sh와 docker-compose.yml 파일을 EC2로 전송
-      - name: Transfer deploy script and docker-compose.yml to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # nginx 폴더 전체 전송
+      - name: Rsync nginx folder to EC2
+        uses: burnett01/rsync-deployments@5.2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./deploy/*"
-          target: "~/sunsuwedding-deploy/"
-          strip_components: 1
+          switches: -avzr --delete
+          path: ./nginx                        # 폴더 자체 포함 전송
+          remote_path: /home/ubuntu/sunsuwedding-deploy/
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
 
-      # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
-      - name: Transfer .env to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # .env 단일 파일 전송
+      - name: Rsync .env file to EC2
+        uses: burnett01/rsync-deployments@5.2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./.env"
-          target: "~/sunsuwedding-deploy/"
+          switches: -avz
+          path: ./.env
+          remote_path: /home/ubuntu/sunsuwedding-deploy/
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
 
-      # SSH Private Key를 사용하여 EC2에 로그인
+      # EC2 내부에서 배포 스크립트 실행
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
