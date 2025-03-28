@@ -6,10 +6,17 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-# 기존 컨테이너 중지 및 제거
-docker-compose down
+echo "🧼 기존 Docker 리소스 정리 중..."
 
-# 최신 이미지 강제 다운로드
+# 컨테이너, 네트워크, 볼륨 중지 및 제거
+docker-compose down -v --remove-orphans
+
+# 사용되지 않는 이미지, 볼륨 등 정리
+docker system prune -a --volumes -f
+
+echo "✅ Docker 정리 완료"
+
+# 최신 이미지 강제 pull
 docker-compose pull
 
 # 애플리케이션 실행
