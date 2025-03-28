@@ -48,6 +48,15 @@ jobs:
         run: |
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
 
+      - name: 디버깅 - Deploy 디렉토리 확인
+        run: |
+          echo "[DEBUG] deploy 경로 확인:"
+          ls -al ./deploy
+          echo "[DEBUG] nginx 경로 확인:"
+          ls -al ./nginx
+          echo "[DEBUG] .env 확인:"
+          ls -al ./.env
+
       # nginx 폴더 전송
       - name: Transfer nginx folder to EC2
         uses: appleboy/scp-action@v0.1.7
