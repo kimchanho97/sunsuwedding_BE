@@ -50,7 +50,7 @@ jobs:
 
       # nginx 폴더 전송
       - name: Transfer nginx folder to EC2
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
@@ -60,7 +60,7 @@ jobs:
 
       # deploy.sh와 docker-compose.yml 파일을 EC2로 전송
       - name: Transfer deploy script and docker-compose.yml to EC2
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
@@ -71,7 +71,7 @@ jobs:
 
       # SSH Private Key를 사용하여 EC2에 로그인 후 .env 파일 전송
       - name: Transfer .env to EC2
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
@@ -81,7 +81,7 @@ jobs:
 
       # SSH Private Key를 사용하여 EC2에 로그인
       - name: Deploy on EC2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
