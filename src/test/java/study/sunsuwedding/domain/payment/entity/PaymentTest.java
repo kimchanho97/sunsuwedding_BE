@@ -27,23 +27,6 @@ class PaymentTest {
     }
 
     @Test
-    @DisplayName("결제 정보 업데이트 테스트")
-    void updatePayment() {
-        // given
-        User user = new Couple("test", "email", "password");
-        Payment payment = new Payment(user, "order-123", 50000L);
-        String newOrderId = "order-456";
-        Long newAmount = 70000L;
-
-        // when
-        payment.update(newOrderId, newAmount);
-
-        // then
-        assertThat(payment.getOrderId()).isEqualTo(newOrderId);
-        assertThat(payment.getPaidAmount()).isEqualTo(newAmount);
-    }
-
-    @Test
     @DisplayName("결제 승인 테스트")
     void markAsApproved() {
         // given

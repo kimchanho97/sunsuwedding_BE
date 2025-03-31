@@ -25,21 +25,14 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public void save(Long userId, PaymentSaveRequest request) {
         User user = getValidatedUser(userId);
-
-        // 결제 정보가 이미 존재하는 경우 업데이트, 아닌 경우 새로 저장
-        paymentRepository
-                .findByUserId(userId)
-                .ifPresentOrElse(
-                        payment -> payment.update(request.getOrderId(), request.getAmount()), // 기존 결제 정보 업데이트
-                        () -> paymentRepository.save(new Payment(user, request.getOrderId(), request.getAmount())) // 새로운 결제 정보 저장
-                );
+        paymentRepository.save(new Payment(user, request.getOrderId(), request.getAmount()));
     }
 
     @Override
     @Transactional
     public void approvePaymentAndUpgradeUser(Long userId, PaymentApproveRequest request) {
         User user = getValidatedUser(userId);
-        Payment payment = getPaymentByUserId(userId);
+        Payment payment = getPaymentByOrderId(request.getOrderId());
 
         // 1. 검증: 결제 정보와 요청이 일치하는지 확인
         validatePaymentRequest(payment, request);
@@ -57,8 +50,8 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    private Payment getPaymentByUserId(Long userId) {
-        return paymentRepository.findByUserId(userId)
+    private Payment getPaymentByOrderId(String orderId) {
+        return paymentRepository.findByOrderId(orderId)
                 .orElseThrow(PaymentException::paymentNotFound);
     }
 

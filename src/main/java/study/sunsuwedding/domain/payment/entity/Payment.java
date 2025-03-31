@@ -22,11 +22,11 @@ public class Payment extends BaseTimeEntity {
     @Column(name = "payment_id")
     private Long id;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String orderId;
 
     @Column(nullable = false)
@@ -39,11 +39,6 @@ public class Payment extends BaseTimeEntity {
         this.user = user;
         this.orderId = orderId;
         this.paidAmount = paidAmount;
-    }
-
-    public void update(String orderId, Long amount) {
-        this.orderId = orderId;
-        this.paidAmount = amount;
     }
 
     public void markAsApproved(String paymentKey) {

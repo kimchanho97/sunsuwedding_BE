@@ -52,7 +52,6 @@ class PaymentServiceImplTest {
         // given
         PaymentSaveRequest request = new PaymentSaveRequest("order-123", 50000L);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user)); // user 객체 반환
-        when(paymentRepository.findByUserId(anyLong())).thenReturn(Optional.empty()); // 결제 정보 없음
 
         // when
         paymentService.save(1L, request);
@@ -62,28 +61,12 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    @DisplayName("결제 정보 저장 테스트 - 기존 결제 업데이트")
-    void updateExistingPayment() {
-        // given
-        PaymentSaveRequest request = new PaymentSaveRequest("order-456", 70000L);
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(paymentRepository.findByUserId(anyLong())).thenReturn(Optional.of(payment)); // 결제 정보 존재
-
-        // when
-        paymentService.save(1L, request);
-
-        // then
-        assertThat(payment.getOrderId()).isEqualTo("order-456");
-        assertThat(payment.getPaidAmount()).isEqualTo(70000L);
-    }
-
-    @Test
     @DisplayName("결제 승인 및 유저 업그레이드 테스트")
     void approvePaymentAndUpgradeUser() {
         // given
         PaymentApproveRequest request = new PaymentApproveRequest("order-123", "payment-key-123", 50000L);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(paymentRepository.findByUserId(anyLong())).thenReturn(Optional.of(payment));
+        when(paymentRepository.findByOrderId(anyString())).thenReturn(Optional.of(payment));
         doNothing().when(paymentApprovalClient).approve(request);
 
         // when
@@ -101,7 +84,7 @@ class PaymentServiceImplTest {
         // given
         PaymentApproveRequest request = new PaymentApproveRequest("wrong-order", "payment-key-123", 50000L);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(paymentRepository.findByUserId(anyLong())).thenReturn(Optional.of(payment));
+        when(paymentRepository.findByOrderId(anyString())).thenReturn(Optional.of(payment));
 
         // when & then
         assertThatThrownBy(() -> paymentService.approvePaymentAndUpgradeUser(1L, request))
