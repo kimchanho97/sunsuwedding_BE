@@ -68,7 +68,7 @@
 
 ### 🔗 링크 모음
 
-- **서비스 배포 주소**: [https://sunsu-wedding.shop/](https://sunsu-wedding.shop/)
+- **서비스 배포 주소**: [https://sunsu-wedding.shop](https://sunsu-wedding.shop/)
 - **프로젝트 문서(Notion)**: [순수웨딩 2.0 프로젝트 문서 바로가기](https://kimchanho.notion.site/2-0-1a0a1b1b0041809f8f31fa9314b10a34)
 
 > **현재 서비스는 배포되어 접속 가능한 상태이며,**  
