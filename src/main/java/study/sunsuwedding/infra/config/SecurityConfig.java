@@ -122,8 +122,7 @@ public class SecurityConfig {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 
-//        configuration.addAllowedOriginPattern("http://localhost:3000");
-
+        //configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.setAllowedOriginPatterns(Collections.singletonList("*"));  // 모든 Origin 허용
         configuration.setAllowCredentials(true);  // 쿠키 포함 요청 허용 (세션 기반 인증 필요)
 
