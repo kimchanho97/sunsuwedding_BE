@@ -148,7 +148,7 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 - **Monitoring**: Spring Boot Actuator, Micrometer, Prometheus, Grafana
 - **Infra & DevOps**: Docker, Docker Compose, Nginx
 - **Deployment**: GitHub Actions, SSL(Let's Encrypt)
-- **Test**: JUnit 5
+- **Test**: JUnit5
 
 <br>
 
@@ -247,5 +247,4 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/1a03508c-5e5a-43c1-a367-3a8a82f92dcb"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/452e1f91-7115-46f2-83de-7e0e007fce99"> |
 |                                           • Toss Payments 연동 <br> • 결제 완료 시 유저 등급 업그레이드                                           |                                       • 관심 플래너를 찜하기 등록/해제 가능 <br> • 마이페이지에서 찜한 플래너 목록 조회 가능                                       |
 
-<br>
 <br>
