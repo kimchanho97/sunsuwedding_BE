@@ -146,8 +146,8 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 - **Persistence**: Spring Data JPA, QueryDSL, MySQL, Redis
 - **Security**: Spring Security, Spring Session
 - **Monitoring**: Spring Boot Actuator, Micrometer, Prometheus, Grafana
-- **Infra & DevOps**: Docker, Docker Compose
-- **Deployment**: GitHub Actions, nginx, SSL(Let's Encrypt)
+- **Infra & DevOps**: Docker, Docker Compose, Nginx
+- **Deployment**: GitHub Actions, SSL(Let's Encrypt)
 - **Test**: JUnit 5
 
 <br>
