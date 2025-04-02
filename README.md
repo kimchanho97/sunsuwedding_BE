@@ -147,7 +147,7 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 - **Security**: Spring Security, Spring Session
 - **Monitoring**: Spring Boot Actuator, Micrometer, Prometheus, Grafana
 - **Infra & DevOps**: Docker, Docker Compose
-- **Deployment**: GitHub Actions, nginx + SSL(Let's Encrypt)
+- **Deployment**: GitHub Actions, nginx, SSL(Let's Encrypt)
 - **Test**: JUnit 5
 
 <br>
@@ -166,7 +166,8 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 | **DNS 관리**         | Route 53                       | 백엔드/프론트 도메인 연결 및 SSL 인증 설정                 |
 | **모니터링 서버**        | Azure VM (`Standard B2ats v2`) | Prometheus + Grafana 운영, 시스템 성능 모니터링 전용 서버 |
 
-> **💡 전체 인프라는 AWS를 기반으로 구성하되, 모니터링 서버는 비용 효율성과 리소스 분산을 고려해 Azure 환경에 별도 구축하였습니다.**
+> **💡 전체 인프라는 AWS를 기반으로 구성하되,  
+> 모니터링 서버는 비용 효율성과 리소스 분산을 고려해 Azure 환경에 별도 구축하였습니다.**
 
 <br>
 
@@ -201,14 +202,19 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 **✅ 1. 도메인 모델 패턴 기반 설계**
 
 - 단순한 트랜잭션 스크립트 방식이 아닌, **도메인 객체 중심의 책임 분산 설계**
+
 - **핵심 비즈니스 규칙과 상태 변경 로직은 엔티티 또는 도메인 서비스 내부에 위치**  
   → 서비스 계층은 흐름만 조율하고, 실제 책임은 **도메인 스스로 처리**하는 구조
+
 - 이를 통해 도메인 객체 간 협력이 명확해지고, **응집도 높은 비즈니스 로직 구현이 가능**
 
 **✅ 2. 수직형 레이어드 아키텍처 (Vertical Layered Architecture)**
 
-- 전통적인 `controller/service/repository`를 수평으로 나누는 방식이 아니라, **도메인 단위로 각 계층을 하나의 폴더에 모아 관리**
-    - 예를 들어 `portfolio` 도메인 안에 관련 `controller, service, repository, exception` 객체가 모두 포함됨
+- 전통적인 `controller/service/repository`를 수평으로 나누는 방식이 아니라,  
+  **도메인 단위로 각 계층을 하나의 폴더에 모아 관리**
+
+- 예를 들어 `portfolio` 도메인 안에 관련 `controller, service, repository, exception` 객체가 모두 포함됨
+
 - 덕분에 **한 도메인 폴더만 보면 API 흐름부터 내부 로직까지 한눈에 파악 가능**  
   → 관심사를 도메인 단위로 분리해 **가독성과 유지보수성**을 높인 구조
 
@@ -218,27 +224,27 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 
 |                                                             포트폴리오 탐색                                                              |                                                             검색 및 필터링                                                              |
 |:---------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/18e4e9cc-87ed-4053-bec3-fd25e48fda29"> | <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/a52c056e-9912-4062-b926-b1c64eb78eb9"> |
+| <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/18e4e9cc-87ed-4053-bec3-fd25e48fda29"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/a52c056e-9912-4062-b926-b1c64eb78eb9"> |
 |                             • 플래너 소개, 포트폴리오 이미지, 리뷰 확인 <br> • 멤버십 가입 시 실제 계약 이력(가격, 업체 등) 열람 가능 <br>                              |                                              • 지역, 가격 등 조건 설정 <br> • 플래너 이름 검색 기능 지원                                              |
 
 |                                                      메시지 & 이미지 전송                                                      |                                                             채팅 응답 기능                                                              |
 |:----------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="400" src="https://github.com/kimchanho97/algorithm/assets/104095041/d3b0faf7-d20c-4e83-9d66-00d2c38253c6"> | <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/0863820b-a151-4551-8c01-c8478e3a49ad"> |
+| <img width="380" src="https://github.com/kimchanho97/algorithm/assets/104095041/d3b0faf7-d20c-4e83-9d66-00d2c38253c6"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/0863820b-a151-4551-8c01-c8478e3a49ad"> |
 |                                         • 텍스트 및 이미지 전송 가능 <br> • 실시간 채팅 상담 제공                                          |                                           • 메시지 읽음 표시 <br> • 안 읽은 메시지 개수 표시로 사용자 편의성 강화                                           |
 
 |                                                           포트폴리오 작성 / 수정                                                           |                                                            견적서 작성 / 수정                                                            |
 |:---------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/2474a94c-6a19-4e02-b047-500b80b307a6"> | <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/7c2c1e74-4bb1-4682-b26f-51fb07015f1a"> |
+| <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/2474a94c-6a19-4e02-b047-500b80b307a6"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/7c2c1e74-4bb1-4682-b26f-51fb07015f1a"> |
 |                                    • 플래너 자기소개, 예상 가격 등 정보 등록 및 수정 <br> • 이미지 업로드 및 포트폴리오 삭제 가능                                    |                                     • 채팅 내 견적서 작성 및 수정 가능 <br> • 업체명, 가격, 진행 상태 등 명확하게 기록 가능                                      |
 
 |                                                            리뷰 작성 / 수정                                                             |                                                               리뷰 조회                                                               |
 |:---------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/aed20cd4-a50d-4084-ba63-99c00e160de7"> | <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/4997bb5f-aa6e-47d5-a60c-aea1d166f75c"> |
+| <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/aed20cd4-a50d-4084-ba63-99c00e160de7"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/4997bb5f-aa6e-47d5-a60c-aea1d166f75c"> |
 |                                           • 별점 및 후기를 작성, 수정, 삭제 가능 <br> • 실제 계약 후 작성 가능                                           |                                                          • 플래너별 리뷰 확인 가능                                                          |
 
 |                                                                결제                                                                 |                                                                찜하기                                                                |
 |:---------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/1a03508c-5e5a-43c1-a367-3a8a82f92dcb"> | <img width="400" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/452e1f91-7115-46f2-83de-7e0e007fce99"> |
+| <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/1a03508c-5e5a-43c1-a367-3a8a82f92dcb"> | <img width="380" src="https://github.com/Step3-kakao-tech-campus/Team5_FE/assets/104095041/452e1f91-7115-46f2-83de-7e0e007fce99"> |
 |                                           • Toss Payments 연동 <br> • 결제 완료 시 유저 등급 업그레이드                                           |                                       • 관심 플래너를 찜하기 등록/해제 가능 <br> • 마이페이지에서 찜한 플래너 목록 조회 가능                                       |
 
 <br>
