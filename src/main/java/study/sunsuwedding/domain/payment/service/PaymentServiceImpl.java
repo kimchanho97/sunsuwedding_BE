@@ -34,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
         User user = getValidatedUser(userId);
         Payment payment = getPaymentByOrderId(request.getOrderId());
 
-        // 1. 검증: 결제 정보와 요청이 일치하는지 확인
+        // 1. 검증: 결제 정보와 요청이 일치하는지 & 이전에 승인된 결제인지
         validatePaymentRequest(payment, request);
         // 2. 토스 페이먼츠 승인 요청
         paymentApprovalClient.approve(request);
@@ -45,6 +45,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void validatePaymentRequest(Payment payment, PaymentApproveRequest request) {
+        if (payment.getPaymentKey() != null && payment.getPaidAt() != null) {
+            throw PaymentException.alreadyApproved();
+        }
         if (!payment.matches(request.getOrderId(), request.getAmount())) {
             throw PaymentException.paymentMismatch();
         }

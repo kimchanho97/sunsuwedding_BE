@@ -26,4 +26,8 @@ public class PaymentException extends BusinessException {
     public static PaymentException paymentApprovalFailed() {
         return new PaymentException(PAYMENT_APPROVAL_FAILED);
     }
+
+    public static PaymentException alreadyApproved() {
+        return new PaymentException(ALREADY_APPROVED);
+    }
 }
