@@ -30,21 +30,18 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     @Transactional
     public void addFavorite(Long userId, Long portfolioId) {
+        // 좋아요 누른 적 있는지 확인
+        checkIfAlreadyFavorited(userId, portfolioId);
+
         User user = getUserById(userId);
         Portfolio portfolio = getPortfolioById(portfolioId);
-
-        // 좋아요 누른 적 있는지 확인
-        checkIfAlreadyFavorited(user, portfolio);
         favoriteRepository.save(new Favorite(user, portfolio));
     }
 
     @Override
     @Transactional
     public void removeFavorite(Long userId, Long portfolioId) {
-        User user = getUserById(userId);
-        Portfolio portfolio = getPortfolioById(portfolioId);
-
-        Favorite favorite = favoriteRepository.findByUserAndPortfolio(user, portfolio)
+        Favorite favorite = favoriteRepository.findByUserIdAndPortfolioId(userId, portfolioId)
                 .orElseThrow(FavoriteException::favoriteNotFound);
 
         favoriteRepository.delete(favorite);
@@ -65,8 +62,8 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .orElseThrow(PortfolioException::portfolioNotFound);
     }
 
-    private void checkIfAlreadyFavorited(User user, Portfolio portfolio) {
-        boolean alreadyFavorited = favoriteRepository.existsByUserAndPortfolio(user, portfolio);
+    private void checkIfAlreadyFavorited(Long userId, Long portfolioId) {
+        boolean alreadyFavorited = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
         if (alreadyFavorited) {
             throw FavoriteException.favoriteAlreadyExists();
         }
