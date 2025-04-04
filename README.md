@@ -136,7 +136,7 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
   → *805 TPS 고정 조건에서의 성능 비교 (constant TPS 시나리오)*
 
 📂 [테스트 환경 및 트래픽 시나리오 설계 보기(Notion)](https://kimchanho.notion.site/API-1c8a1b1b0041809ba00cd1f263ee6a8a)  
-📂 [버전별 성능 비교 및 튜닝 결과 보기(Notion)](https://kimchanho.notion.site/API-1c7a1b1b004180e5a6a9e7b61ceec67e)
+📂 [최종 성능 목표 달성까지의 튜닝 히스토리 보기(Notion)](https://kimchanho.notion.site/API-1c7a1b1b004180e5a6a9e7b61ceec67e)
 
 <br>
 
