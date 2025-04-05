@@ -88,7 +88,7 @@
 - GitHub Secrets를 통해 **민감 정보 안전하게 관리**
 - 모든 과정은 스크립트 기반으로 자동화되어 **반복 배포에도 완전한 재현성 확보**
 
-📂 [CI/CD 구축 상세 보기(Notion)](https://kimchanho.notion.site/GitHub-Actions-CI-CD-1c8a1b1b004180f586d4f8026b0dccb2?pvs=4)
+📂 [GitHub Actions 기반 CI/CD 파이프라인 구축 보기(Notion)](https://kimchanho.notion.site/GitHub-Actions-CI-CD-1c8a1b1b004180f586d4f8026b0dccb2?pvs=4)
 
 <br>
 
@@ -104,7 +104,7 @@
 
 결과적으로 **SRP, OCP, IoC, DI 원칙을 적용하여 유지보수와 테스트가 용이한 결제 아키텍처로 개선**하였습니다.
 
-📂 [외부 API 추상화 리팩토링 상세 보기(Notion)](https://kimchanho.notion.site/Spring-DI-API-1c8a1b1b004180cbaf07d587477678d3)
+📂 [Spring DI로 외부 결제 API 추상화한 구조 설계 보기(Notion)](https://kimchanho.notion.site/Spring-DI-API-1c8a1b1b004180cbaf07d587477678d3)
 
 <br>
 
@@ -120,7 +120,7 @@
 
 이 구조를 통해 **보안적 신뢰성과 비즈니스 일관성을 모두 확보한 결제 시스템**을 완성했습니다.
 
-📂 [결제 시스템 리팩토링 상세 보기(Notion)](https://kimchanho.notion.site/1c7a1b1b004180f1b65ffaaadd572f4a)
+📂 [무결성과 일관성을 고려한 결제 시스템 리팩토링 보기(Notion)](https://kimchanho.notion.site/1c7a1b1b004180f1b65ffaaadd572f4a)
 
 <br>
 
