@@ -1,26 +1,31 @@
 #!/bin/bash
 
-# .env 파일이 존재하는지 확인
+set -e  # 에러 발생 시 즉시 종료
+
+echo "🔍 .env 파일 존재 여부 확인 중..."
 if [ ! -f .env ]; then
   echo "❌ .env 파일이 없습니다. 환경 변수를 확인하세요."
   exit 1
 fi
 
-echo "🧼 기존 Docker 리소스 정리 중..."
+# .env 파일 로드 (환경변수 사용을 위해)
+export $(grep -v '^#' .env | xargs)
 
-# 컨테이너, 네트워크, 볼륨 중지 및 제거
+APP_IMAGE="${DOCKER_USERNAME}/sunsuwedding:latest"
+
+echo "🧼 기존 컨테이너 정리 중..."
 docker-compose down -v --remove-orphans
 
-# 사용되지 않는 이미지, 볼륨 등 정리
-docker system prune -a --volumes -f
+echo "🗑 기존 앱 이미지 전체 삭제 중..."
+docker images "$APP_IMAGE" --format "{{.ID}}" | xargs -r docker rmi
 
-echo "✅ Docker 정리 완료"
+echo "🧹 dangling 이미지 정리 중..."
+docker image prune -f
 
-# 최신 이미지 강제 pull
-docker-compose pull
+echo "📦 앱 이미지 최신 pull 중..."
+docker-compose pull app
 
-# 애플리케이션 실행
-docker-compose up -d nginx-proxy app redis
-echo "🚀 애플리케이션 실행 완료"
+echo "🚀 컨테이너 재시작 중..."
+docker-compose up -d nginx-proxy redis app
 
 echo "✅ 배포 완료!"
