@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import study.sunsuwedding.domain.payment.dto.PaymentApproveRequest;
+import study.sunsuwedding.domain.payment.dto.TossPaymentResponse;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
 
 import java.util.Base64;
@@ -26,7 +27,7 @@ public class TossPaymentApprovalClient implements PaymentApprovalClient {
             .build();
 
     @Override
-    public void approve(PaymentApproveRequest request) {
+    public TossPaymentResponse approve(PaymentApproveRequest request) {
         String basicAuth = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
 
         Map<String, Object> requestBody = Map.of(
@@ -35,7 +36,7 @@ public class TossPaymentApprovalClient implements PaymentApprovalClient {
                 "amount", request.getAmount()
         );
 
-        webClient.post()
+        return webClient.post()
                 .uri("/v1/payments/confirm")
                 .headers(headers -> {
                     headers.add(HttpHeaders.AUTHORIZATION, basicAuth);
@@ -44,7 +45,20 @@ public class TossPaymentApprovalClient implements PaymentApprovalClient {
                 .bodyValue(requestBody)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response -> Mono.error(PaymentException.paymentApprovalFailed()))
-                .toBodilessEntity() // 상태 코드만 확인하고 응답 바디를 사용하지 않음
+                .bodyToMono(TossPaymentResponse.class)
+                .block();
+    }
+
+    @Override
+    public TossPaymentResponse getPaymentStatusByOrderId(String orderId) {
+        String basicAuth = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
+
+        return webClient.get()
+                .uri("/v1/payments/orders/{orderId}", orderId)
+                .headers(headers -> headers.add(HttpHeaders.AUTHORIZATION, basicAuth))
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, response -> Mono.error(PaymentException.statusQueryFailed()))
+                .bodyToMono(TossPaymentResponse.class)
                 .block();
     }
 

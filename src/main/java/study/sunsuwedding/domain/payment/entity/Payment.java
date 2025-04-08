@@ -46,7 +46,11 @@ public class Payment extends BaseTimeEntity {
         this.paidAt = LocalDateTime.now();
     }
 
-    public boolean matches(String orderId, Long amount) {
-        return this.orderId.equals(orderId) && this.paidAmount.equals(amount);
+    public boolean matches(Long amount) {
+        return this.paidAmount.equals(amount);
+    }
+
+    public boolean isApproved() {
+        return this.paidAt != null && this.paymentKey != null;
     }
 }

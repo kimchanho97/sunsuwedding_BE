@@ -30,4 +30,17 @@ public class PaymentException extends BusinessException {
     public static PaymentException alreadyApproved() {
         return new PaymentException(ALREADY_APPROVED);
     }
+
+    public static PaymentException statusQueryFailed() {
+        return new PaymentException(PAYMENT_STATUS_QUERY_FAILED);
+    }
+
+    public static PaymentException statusNotConfirmedYet() {
+        return new PaymentException(PAYMENT_STATUS_NOT_CONFIRMED_YET);
+    }
+
+    public static PaymentException internalProcessingFailed() {
+        return new PaymentException(INTERNAL_PROCESSING_FAILED);
+    }
+
 }

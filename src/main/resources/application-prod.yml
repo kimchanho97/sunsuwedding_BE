@@ -76,3 +76,11 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    root: info
+  file:
+    name: logs/app.log # 로그 파일 이름
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
