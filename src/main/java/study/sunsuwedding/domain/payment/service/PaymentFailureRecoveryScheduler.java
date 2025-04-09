@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PaymentFailureRecoveryService {
+public class PaymentFailureRecoveryScheduler {
 
     private final PaymentFailureLogRepository failureLogRepository;
     private final PaymentRepository paymentRepository;
