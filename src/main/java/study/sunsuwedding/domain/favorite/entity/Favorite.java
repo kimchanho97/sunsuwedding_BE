@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import study.sunsuwedding.common.entity.BaseTimeEntity;
 import study.sunsuwedding.domain.portfolio.entity.Portfolio;
 import study.sunsuwedding.domain.user.entity.User;
@@ -11,8 +12,10 @@ import study.sunsuwedding.domain.user.entity.User;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "favorite")
+@Table(name = "favorite",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "portfolio_id"}))
 @Getter
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Favorite extends BaseTimeEntity {
 
@@ -29,8 +32,7 @@ public class Favorite extends BaseTimeEntity {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    public Favorite(User user, Portfolio portfolio) {
-        this.user = user;
-        this.portfolio = portfolio;
-    }
+    @Column(nullable = false)
+    private boolean isDeleted;
+
 }
