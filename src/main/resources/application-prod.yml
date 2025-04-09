@@ -20,7 +20,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # 배포에서는 update 또는 validate 권장
+      ddl-auto: create  # 배포에서는 update 또는 validate 권장
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
