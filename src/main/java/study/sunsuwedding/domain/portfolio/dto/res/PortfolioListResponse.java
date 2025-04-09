@@ -35,6 +35,18 @@ public class PortfolioListResponse {
         this.isFavorited = isFavorited;
     }
 
+    public PortfolioListResponse(PortfolioListResponse source) {
+        this.portfolioId = source.portfolioId;
+        this.thumbnail = source.thumbnail;
+        this.title = source.title;
+        this.plannerName = source.plannerName;
+        this.totalPrice = source.totalPrice;
+        this.location = source.location;
+        this.contractedCount = source.contractedCount;
+        this.averageRating = source.averageRating;
+        this.isFavorited = source.isFavorited;
+    }
+
     public static PortfolioListResponse fromEntity(PortfolioImage portfolioImage, Set<Long> favoritePortfolioIds) {
         Portfolio portfolio = portfolioImage.getPortfolio(); // PortfolioImage에서 Portfolio 가져오기
         return new PortfolioListResponse(
@@ -48,5 +60,9 @@ public class PortfolioListResponse {
                 portfolio.getAverageRating(),
                 favoritePortfolioIds.contains(portfolio.getId())
         );
+    }
+
+    public void setFavorited(boolean isFavorited) {
+        this.isFavorited = isFavorited;
     }
 }
