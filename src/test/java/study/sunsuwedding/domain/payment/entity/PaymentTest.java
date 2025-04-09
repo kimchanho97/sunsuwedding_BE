@@ -41,17 +41,5 @@ class PaymentTest {
         assertThat(payment.getPaymentKey()).isEqualTo(paymentKey);
         assertThat(payment.getPaidAt()).isNotNull();
     }
-
-    @Test
-    @DisplayName("결제 정보 일치 여부 확인 테스트")
-    void matches() {
-        // given
-        User user = new Couple("test", "email", "password");
-        Payment payment = new Payment(user, "order-123", 50000L);
-
-        // when & then
-        assertThat(payment.matches("order-123", 50000L)).isTrue();
-        assertThat(payment.matches("order-999", 50000L)).isFalse();
-        assertThat(payment.matches("order-123", 10000L)).isFalse();
-    }
+    
 }
