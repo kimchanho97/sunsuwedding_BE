@@ -14,8 +14,8 @@ public class PortfolioItemJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_SQL = """
-                INSERT INTO portfolio_item (portfolio_id, item_name, item_price) 
-                VALUES (?, ?, ?)
+                INSERT INTO portfolio_item (portfolio_id, item_name, item_price, created_at, last_modified_at) 
+                VALUES (?, ?, ?, NOW(), NOW())
             """;
 
     public void batchInsert(List<PortfolioItem> portfolioItems) {
