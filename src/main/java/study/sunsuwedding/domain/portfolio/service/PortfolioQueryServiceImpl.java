@@ -10,6 +10,9 @@ import org.springframework.util.StringUtils;
 import study.sunsuwedding.common.response.CursorPaginationResponse;
 import study.sunsuwedding.common.response.OffsetPaginationResponse;
 import study.sunsuwedding.common.util.RedisKeyUtil;
+import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
+import study.sunsuwedding.domain.favorite.service.FavoriteCacheService;
+import study.sunsuwedding.domain.favorite.service.FavoriteService;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
 import study.sunsuwedding.domain.portfolio.entity.PortfolioImage;
@@ -26,8 +29,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PortfolioQueryServiceImpl implements PortfolioQueryService {
 
+    private final FavoriteRepository favoriteRepository;
+    private final FavoriteCacheService favoriteCacheService;
     private final PortfolioQueryRepository portfolioQueryRepository;
     private final PortfolioCacheService portfolioCacheService;
+    private final FavoriteService favoriteService;
 
     /**
      * V1: 엔티티 조회 후 DTO 변환 + 오프셋 기반 페이징
@@ -71,35 +77,57 @@ public class PortfolioQueryServiceImpl implements PortfolioQueryService {
         return new CursorPaginationResponse<>(content, nextCursor);
     }
 
-    /**
-     * V4: V3 + Redis 캐싱
-     */
     @Override
     public CursorPaginationResponse<PortfolioListResponse> getPortfoliosV4CursorCaching(
             Long userId, PortfolioSearchRequest searchRequest, Long cursor, Pageable pageable) {
 
-        Optional<String> cacheKeyOpt = resolveCacheKey(userId, searchRequest, cursor);
+        Optional<String> cacheKeyOpt = generateCacheKeyIfApplicable(searchRequest, cursor);
+
         // 1. 캐시 조회
         if (cacheKeyOpt.isPresent()) {
             String cacheKey = cacheKeyOpt.get();
             CursorPaginationResponse<PortfolioListResponse> cached = portfolioCacheService.get(cacheKey);
-            if (cached != null) return cached;
+            if (cached != null) {
+                if (userId == null) {
+                    return cached; // 비회원은 개인화 필요 없음
+                }
+                List<PortfolioListResponse> personalized = personalizeFavoriteStatus(cached.getData(), userId);
+                return new CursorPaginationResponse<>(personalized, cached.getNextCursor());
+            }
         }
 
-        // 2. DB 조회
-        Slice<PortfolioListResponse> slice = portfolioQueryRepository.findPortfoliosByCursor(userId, searchRequest, cursor, pageable);
-        List<PortfolioListResponse> content = new ArrayList<>(slice.getContent());
-        Long nextCursor = slice.hasNext() ? content.removeLast().getPortfolioId() : null;
-        CursorPaginationResponse<PortfolioListResponse> response = new CursorPaginationResponse<>(content, nextCursor);
+        // 2. DB 조회 (userId = null → 비개인화된 기본 쿼리)
+        Slice<PortfolioListResponse> slice = portfolioQueryRepository.findPortfoliosByCursor(null, searchRequest, cursor, pageable);
+        List<PortfolioListResponse> rawContent = new ArrayList<>(slice.getContent());
+        Long nextCursor = slice.hasNext() ? rawContent.removeLast().getPortfolioId() : null;
 
-        // 3. 캐시 저장
+        CursorPaginationResponse<PortfolioListResponse> response = new CursorPaginationResponse<>(rawContent, nextCursor);
+
+        // 3. 캐시 저장 (비로그인 유저 기준)
         cacheKeyOpt.ifPresent(key -> portfolioCacheService.save(key, response));
-        return response;
+
+        // 4. 개인화 처리 (로그인 유저만)
+        if (userId == null) return response;
+        List<PortfolioListResponse> personalized = personalizeFavoriteStatus(rawContent, userId);
+        return new CursorPaginationResponse<>(personalized, nextCursor);
     }
 
-    private Optional<String> resolveCacheKey(Long userId, PortfolioSearchRequest request, Long cursor) {
-        if (userId != null || cursor == null) {
-            return Optional.empty(); // 로그인 유저 or 첫 페이지는 캐싱 X
+    private List<PortfolioListResponse> personalizeFavoriteStatus(List<PortfolioListResponse> list, Long userId) {
+        Set<Long> favoriteIds = favoriteService.getCurrentFavoritePortfolioIds(userId);
+
+        // 캐시 원본을 건드리지 않기 위해 깊은 복사
+        return list.stream()
+                .map(p -> {
+                    PortfolioListResponse copy = new PortfolioListResponse(p); // 복사 생성자 or 수동 복사
+                    copy.setFavorited(favoriteIds.contains(p.getPortfolioId()));
+                    return copy;
+                })
+                .toList();
+    }
+
+    private Optional<String> generateCacheKeyIfApplicable(PortfolioSearchRequest request, Long cursor) {
+        if (cursor == null) {
+            return Optional.empty(); // 첫 페이지 → 캐싱 X
         }
         if (isDefaultSearch(request)) {
             return Optional.of(RedisKeyUtil.portfolioCursorDefaultKey(cursor));
@@ -107,7 +135,7 @@ public class PortfolioQueryServiceImpl implements PortfolioQueryService {
         if (isLocationOnly(request)) {
             return Optional.of(RedisKeyUtil.portfolioCursorByLocationKey(request.getLocation(), cursor));
         }
-        return Optional.empty(); // 이름/가격 조건 포함 → 캐싱 X
+        return Optional.empty(); // 기타 조건 포함 시 캐싱 X
     }
 
     private boolean isDefaultSearch(PortfolioSearchRequest request) {

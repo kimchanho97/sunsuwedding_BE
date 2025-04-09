@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
+import study.sunsuwedding.domain.favorite.service.FavoriteService;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.OwnPortfolioResponse;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioResponse;
@@ -20,6 +20,7 @@ import study.sunsuwedding.infra.storage.S3UploadResultDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +29,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
     private final PlannerRepository plannerRepository;
-    private final FavoriteRepository favoriteRepository;
+    private final FavoriteService favoriteService;
     private final PortfolioImageRepository portfolioImageRepository;
     private final PortfolioItemRepository portfolioItemRepository;
     private final PortfolioItemJdbcRepository portfolioItemJdbcRepository;
@@ -109,12 +110,11 @@ public class PortfolioServiceImpl implements PortfolioService {
         Portfolio portfolio = portfolioRepository.findWithItemsByPortfolioId(portfolioId)
                 .orElseThrow(PortfolioException::portfolioNotFound);
 
-        if (userId == null) {
-            return PortfolioResponse.fromEntity(portfolio, false);
+        boolean isFavorited = false;
+        if (userId != null) {
+            Set<Long> favoriteIds = favoriteService.getCurrentFavoritePortfolioIds(userId);
+            isFavorited = favoriteIds.contains(portfolioId);
         }
-
-        // 찜 여부 확인
-        boolean isFavorited = favoriteRepository.existsByUserIdAndPortfolioId(userId, portfolioId);
         return PortfolioResponse.fromEntity(portfolio, isFavorited);
     }
 
