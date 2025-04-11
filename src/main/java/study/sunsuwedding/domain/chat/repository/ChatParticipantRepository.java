@@ -9,9 +9,11 @@ public interface ChatParticipantRepository extends JpaRepository<ChatParticipant
 
     @Query("""
                 SELECT COUNT(cp) > 0 
-                FROM ChatParticipant cp 
-                WHERE cp.chatRoom.id = :chatRoomId 
-                AND cp.user.id = :userId
+                FROM ChatParticipant cp
+                JOIN cp.chatRoom cr
+                JOIN cp.user u
+                WHERE cr.chatRoomCode = :chatRoomCode
+                  AND u.id = :userId
             """)
-    boolean existsByChatRoomIdAndUserId(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
+    boolean existsByChatRoomCodeAndUserId(@Param("chatRoomCode") String chatRoomCode, @Param("userId") Long userId);
 }

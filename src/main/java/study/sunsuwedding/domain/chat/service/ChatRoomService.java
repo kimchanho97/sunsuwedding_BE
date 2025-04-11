@@ -6,5 +6,5 @@ public interface ChatRoomService {
 
     ChatRoomCreateResponse createChatRoom(Long userId, Long plannerId);
 
-    boolean validateChatRoom(Long chatRoomId, Long userId);
+    boolean validateChatRoom(String chatRoomCode, Long userId);
 }

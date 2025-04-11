@@ -25,8 +25,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final PlannerRepository plannerRepository;
 
     @Override
-    public boolean validateChatRoom(Long chatRoomId, Long userId) {
-        return chatParticipantRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+    public boolean validateChatRoom(String chatRoomCode, Long userId) {
+        return chatParticipantRepository.existsByChatRoomCodeAndUserId(chatRoomCode, userId);
     }
 
     @Override
