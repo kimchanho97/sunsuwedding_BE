@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatRoomValidationRequest {
 
-    private String chatRoomId;
+    private String chatRoomCode;
     private Long userId;
 }

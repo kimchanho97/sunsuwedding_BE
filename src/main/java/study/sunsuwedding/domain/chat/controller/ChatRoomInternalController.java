@@ -26,7 +26,7 @@ public class ChatRoomInternalController {
 
     @PostMapping("/validate")
     public ResponseEntity<Boolean> validateInternal(@RequestBody ChatRoomValidationRequest request) {
-        boolean isValid = chatRoomService.validateChatRoom(request.getChatRoomId(), request.getUserId());
+        boolean isValid = chatRoomService.validateChatRoom(request.getChatRoomCode(), request.getUserId());
         return ResponseEntity.ok(isValid);
     }
 

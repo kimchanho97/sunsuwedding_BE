@@ -8,7 +8,7 @@ import study.sunsuwedding.domain.chat.entity.ChatRoom;
 @RequiredArgsConstructor
 public class ChatRoomCreateResponse {
 
-    private final String chatRoomId;
+    private final String chatRoomCode;
 
     public static ChatRoomCreateResponse fromEntity(ChatRoom chatRoom) {
         return new ChatRoomCreateResponse(chatRoom.getChatRoomCode());
