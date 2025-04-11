@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.sunsuwedding.domain.chat.dto.ChatRoomCreateRequest;
 import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
+import study.sunsuwedding.domain.chat.dto.ChatRoomValidationRequest;
 import study.sunsuwedding.domain.chat.service.ChatRoomService;
 
 @RestController
@@ -22,5 +23,12 @@ public class ChatRoomInternalController {
         ChatRoomCreateResponse response = chatRoomService.createChatRoom(request.getUserId(), request.getPlannerId());
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Boolean> validateInternal(@RequestBody ChatRoomValidationRequest request) {
+        boolean isValid = chatRoomService.validateChatRoom(request.getChatRoomId(), request.getUserId());
+        return ResponseEntity.ok(isValid);
+    }
+
 }
 

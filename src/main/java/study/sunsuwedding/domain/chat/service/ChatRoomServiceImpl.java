@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
 import study.sunsuwedding.domain.chat.entity.ChatRoom;
+import study.sunsuwedding.domain.chat.repository.ChatParticipantRepository;
 import study.sunsuwedding.domain.chat.repository.ChatRoomRepository;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
 import study.sunsuwedding.domain.user.entity.Planner;
@@ -19,8 +20,14 @@ import study.sunsuwedding.domain.user.repository.UserRepository;
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatParticipantRepository chatParticipantRepository;
     private final UserRepository userRepository;
     private final PlannerRepository plannerRepository;
+
+    @Override
+    public boolean validateChatRoom(Long chatRoomId, Long userId) {
+        return chatParticipantRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+    }
 
     @Override
     @Transactional

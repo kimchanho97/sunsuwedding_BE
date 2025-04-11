@@ -5,4 +5,6 @@ import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
 public interface ChatRoomService {
 
     ChatRoomCreateResponse createChatRoom(Long userId, Long plannerId);
+
+    boolean validateChatRoom(Long chatRoomId, Long userId);
 }
