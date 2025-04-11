@@ -13,6 +13,7 @@ import study.sunsuwedding.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -34,11 +35,15 @@ public class ChatRoom extends BaseTimeEntity {
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
 
+    @Column(name = "chat_room_code", unique = true, nullable = false, updatable = false)
+    private String chatRoomCode;
+
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatParticipant> participants = new ArrayList<>();
 
     public static ChatRoom create(User user, Planner planner) {
         ChatRoom chatRoom = new ChatRoom();
+        chatRoom.chatRoomCode = UUID.randomUUID().toString();
         chatRoom.participants.add(new ChatParticipant(chatRoom, user));
         chatRoom.participants.add(new ChatParticipant(chatRoom, planner));
         return chatRoom;

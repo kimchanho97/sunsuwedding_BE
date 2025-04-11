@@ -13,8 +13,6 @@ import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,16 +28,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         User user = getUserById(userId);
         Planner planner = getPlannerById(plannerId);
 
-        // 기존 채팅방 존재 여부 확인
-        Optional<ChatRoom> existingChatRoom = chatRoomRepository.findExistingChatRoom(userId, plannerId);
-        if (existingChatRoom.isPresent()) {
-            return ChatRoomCreateResponse.fromEntity(existingChatRoom.get());
-        }
-
-        // 채팅방 생성 (엔티티가 직접 생성 책임을 가짐)
-        ChatRoom chatRoom = ChatRoom.create(user, planner);
-        chatRoomRepository.save(chatRoom);
-        return ChatRoomCreateResponse.fromEntity(chatRoom);
+        return chatRoomRepository.findExistingChatRoom(userId, plannerId)
+                .map(ChatRoomCreateResponse::fromEntity)
+                .orElseGet(() -> {
+                    ChatRoom chatRoom = ChatRoom.create(user, planner);
+                    chatRoomRepository.save(chatRoom);
+                    return ChatRoomCreateResponse.fromEntity(chatRoom);
+                });
     }
 
     private User getUserById(Long userId) {
@@ -47,8 +42,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .orElseThrow(UserException::userNotFound);
     }
 
-    private Planner getPlannerById(Long userId) {
-        return plannerRepository.findById(userId)
+    private Planner getPlannerById(Long plannerId) {
+        return plannerRepository.findById(plannerId)
                 .orElseThrow(PortfolioException::plannerNotFound);
     }
 }

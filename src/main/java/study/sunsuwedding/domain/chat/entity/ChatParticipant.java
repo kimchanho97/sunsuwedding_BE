@@ -17,8 +17,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "chat_participant")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE chat_participant SET is_deleted = true, left_at = NOW() WHERE chat_participant_id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE chat_participant SET is_lefted = true, left_at = NOW() WHERE chat_participant_id = ?")
+@SQLRestriction("is_lefted = false")
 public class ChatParticipant extends BaseTimeEntity {
 
     @Id
@@ -37,7 +37,7 @@ public class ChatParticipant extends BaseTimeEntity {
     private Long lastReadMessageId; // 마지막으로 읽은 메시지 ID
 
     @Column(nullable = false)
-    private Boolean isDeleted; // 채팅방 나가기 시 true로 변경
+    private Boolean isLefted; // 채팅방 나가기 시 true로 변경
     private LocalDateTime leftAt; // 채팅방 나간 시간
 
     public ChatParticipant(ChatRoom chatRoom, User user) {
