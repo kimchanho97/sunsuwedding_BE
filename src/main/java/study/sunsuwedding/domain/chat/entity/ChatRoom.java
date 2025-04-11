@@ -42,10 +42,14 @@ public class ChatRoom extends BaseTimeEntity {
     private List<ChatParticipant> participants = new ArrayList<>();
 
     public static ChatRoom create(User user, Planner planner) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.chatRoomCode = UUID.randomUUID().toString();
+        ChatRoom chatRoom = new ChatRoom(false);
         chatRoom.participants.add(new ChatParticipant(chatRoom, user));
         chatRoom.participants.add(new ChatParticipant(chatRoom, planner));
         return chatRoom;
+    }
+
+    private ChatRoom(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+        this.chatRoomCode = UUID.randomUUID().toString();
     }
 }

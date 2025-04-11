@@ -43,5 +43,6 @@ public class ChatParticipant extends BaseTimeEntity {
     public ChatParticipant(ChatRoom chatRoom, User user) {
         this.chatRoom = chatRoom;
         this.user = user;
+        this.isLefted = false;
     }
 }
