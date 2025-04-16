@@ -10,8 +10,6 @@ import org.springframework.util.StringUtils;
 import study.sunsuwedding.common.response.CursorPaginationResponse;
 import study.sunsuwedding.common.response.OffsetPaginationResponse;
 import study.sunsuwedding.common.util.RedisKeyUtil;
-import study.sunsuwedding.domain.favorite.repository.FavoriteRepository;
-import study.sunsuwedding.domain.favorite.service.FavoriteCacheService;
 import study.sunsuwedding.domain.favorite.service.FavoriteService;
 import study.sunsuwedding.domain.portfolio.dto.req.PortfolioSearchRequest;
 import study.sunsuwedding.domain.portfolio.dto.res.PortfolioListResponse;
@@ -29,8 +27,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PortfolioQueryServiceImpl implements PortfolioQueryService {
 
-    private final FavoriteRepository favoriteRepository;
-    private final FavoriteCacheService favoriteCacheService;
     private final PortfolioQueryRepository portfolioQueryRepository;
     private final PortfolioCacheService portfolioCacheService;
     private final FavoriteService favoriteService;

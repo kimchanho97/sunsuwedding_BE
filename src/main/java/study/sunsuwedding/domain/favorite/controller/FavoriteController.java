@@ -3,7 +3,6 @@ package study.sunsuwedding.domain.favorite.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.sunsuwedding.common.response.ApiResponse;
@@ -19,22 +18,21 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
     @PostMapping("/{portfolioId}")
-    public ResponseEntity<ApiResponse<Void>> addFavorite(@AuthenticationPrincipal Long userId, @PathVariable Long portfolioId) {
+    public ApiResponse<Void> addFavorite(@AuthenticationPrincipal Long userId, @PathVariable Long portfolioId) {
         favoriteService.addFavorite(userId, portfolioId);
-        return ResponseEntity.ok(ApiResponse.success(null));
+        return ApiResponse.success(null);
     }
 
     @DeleteMapping("/{portfolioId}")
-    public ResponseEntity<ApiResponse<Void>> removeFavorite(@AuthenticationPrincipal Long userId, @PathVariable Long portfolioId) {
+    public ApiResponse<Void> removeFavorite(@AuthenticationPrincipal Long userId, @PathVariable Long portfolioId) {
         favoriteService.removeFavorite(userId, portfolioId);
-        return ResponseEntity.ok(ApiResponse.success(null));
+        return ApiResponse.success(null);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<OffsetPaginationResponse<PortfolioListResponse>>> getUserFavoritePortfolios(
+    public OffsetPaginationResponse<PortfolioListResponse> getUserFavoritePortfolios(
             @AuthenticationPrincipal Long userId, @PageableDefault(size = 10) Pageable pageable) {
-        OffsetPaginationResponse<PortfolioListResponse> response = new OffsetPaginationResponse<>(favoriteService.getUserFavoritePortfolios(userId, pageable));
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return new OffsetPaginationResponse<>(favoriteService.getUserFavoritePortfolios(userId, pageable));
     }
 
 }
