@@ -14,6 +14,8 @@ import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -42,6 +44,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     chatRoomRepository.save(chatRoom);
                     return ChatRoomCreateResponse.fromEntity(chatRoom);
                 });
+    }
+
+    @Override
+    public List<Long> getParticipantUserIds(String chatRoomCode) {
+        return chatParticipantRepository.findUserIdsByChatRoomCode(chatRoomCode);
     }
 
     private User getUserById(Long userId) {
