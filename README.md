@@ -219,15 +219,13 @@ DTO Projection, 커서 기반 페이지네이션, Redis 캐싱, Connection/Threa
 
 ```java
 CursorPaginationResponse<PortfolioListResponse> cached = portfolioCacheService.get(cacheKey);
-if(cached !=null){
-        if(userId ==null){
+if (cached != null) {
+    if (userId == null) {
         return cached; // 비회원은 개인화 필요 없음
     }
-List<PortfolioListResponse> personalized = personalizeFavoriteStatus(cached.getData(), userId);
-    return new CursorPaginationResponse<>(personalized,cached.
-
-getNextCursor());
-        }
+    List<PortfolioListResponse> personalized = personalizeFavoriteStatus(cached.getData(), userId);
+    return new CursorPaginationResponse<>(personalized, cached.getNextCursor());
+}
 ```
 
 <br>
