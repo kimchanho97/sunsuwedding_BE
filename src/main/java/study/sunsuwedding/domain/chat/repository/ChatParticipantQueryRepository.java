@@ -7,7 +7,9 @@ import study.sunsuwedding.domain.chat.dto.ChatRoomPartnerProfileResponse;
 import study.sunsuwedding.domain.chat.dto.QChatRoomPartnerProfileResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static study.sunsuwedding.domain.chat.entity.QChatParticipant.chatParticipant;
 import static study.sunsuwedding.domain.chat.entity.QChatRoom.chatRoom;
@@ -54,6 +56,22 @@ public class ChatParticipantQueryRepository {
                 .fetchOne();
 
         return Optional.ofNullable(result);
+    }
+
+    public Map<Long, Long> findUserReadSeqMapByChatRoomCode(String chatRoomCode) {
+        return queryFactory
+                .select(chatParticipant.user.id, chatParticipant.lastReadSeqId)
+                .from(chatParticipant)
+                .join(chatParticipant.chatRoom, chatRoom)
+                .join(chatParticipant.user, user)
+                .where(chatRoom.chatRoomCode.eq(chatRoomCode))
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(chatParticipant.user.id),
+                        tuple -> tuple.get(chatParticipant.lastReadSeqId)
+                ));
+
     }
 
 }

@@ -34,7 +34,7 @@ public class ChatParticipant extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Long lastReadMessageId; // 마지막으로 읽은 메시지 ID
+    private Long lastReadSeqId; // 마지막으로 읽은 메시지 시퀀스 ID
 
     @Column(nullable = false)
     private Boolean isLefted; // 채팅방 나가기 시 true로 변경
