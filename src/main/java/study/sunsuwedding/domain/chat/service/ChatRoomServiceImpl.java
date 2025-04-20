@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
+import study.sunsuwedding.domain.chat.dto.ChatRoomPartnerProfileRequest;
+import study.sunsuwedding.domain.chat.dto.ChatRoomPartnerProfileResponse;
 import study.sunsuwedding.domain.chat.entity.ChatRoom;
+import study.sunsuwedding.domain.chat.repository.ChatParticipantQueryRepository;
 import study.sunsuwedding.domain.chat.repository.ChatParticipantRepository;
 import study.sunsuwedding.domain.chat.repository.ChatRoomRepository;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
@@ -25,6 +28,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatParticipantRepository chatParticipantRepository;
     private final UserRepository userRepository;
     private final PlannerRepository plannerRepository;
+    private final ChatParticipantQueryRepository chatParticipantQueryRepository;
 
     @Override
     public boolean validateChatRoom(String chatRoomCode, Long userId) {
@@ -49,6 +53,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public List<Long> getParticipantUserIds(String chatRoomCode) {
         return chatParticipantRepository.findUserIdsByChatRoomCode(chatRoomCode);
+    }
+
+    @Override
+    public List<ChatRoomPartnerProfileResponse> findPartnerProfiles(ChatRoomPartnerProfileRequest request) {
+        return chatParticipantQueryRepository.findPartners(request.chatRoomCodes(), request.requesterId());
+    }
+
+    @Override
+    public ChatRoomPartnerProfileResponse findPartnerProfile(String chatRoomCode, Long requesterId) {
+        return chatParticipantQueryRepository.findPartner(chatRoomCode, requesterId)
+                .orElseThrow(UserException::userNotFound);
     }
 
     private User getUserById(Long userId) {

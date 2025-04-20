@@ -3,10 +3,7 @@ package study.sunsuwedding.domain.chat.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.sunsuwedding.domain.chat.dto.ChatRoomCreateRequest;
-import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
-import study.sunsuwedding.domain.chat.dto.ChatRoomParticipantsResponse;
-import study.sunsuwedding.domain.chat.dto.ChatRoomValidationRequest;
+import study.sunsuwedding.domain.chat.dto.*;
 import study.sunsuwedding.domain.chat.service.ChatRoomService;
 
 import java.util.List;
@@ -34,6 +31,12 @@ public class ChatRoomInternalController {
     public ResponseEntity<ChatRoomParticipantsResponse> getParticipants(@PathVariable String chatRoomCode) {
         List<Long> participantUserIds = chatRoomService.getParticipantUserIds(chatRoomCode);
         return ResponseEntity.ok(new ChatRoomParticipantsResponse(participantUserIds));
+    }
+
+    @PostMapping("/partners")
+    public ResponseEntity<List<ChatRoomPartnerProfileResponse>> getPartnerProfiles(@RequestBody ChatRoomPartnerProfileRequest request) {
+        List<ChatRoomPartnerProfileResponse> response = chatRoomService.findPartnerProfiles(request);
+        return ResponseEntity.ok(response);
     }
 
 }
