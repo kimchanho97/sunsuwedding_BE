@@ -18,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name = "chat_room")
-@SQLDelete(sql = "UPDATE chat SET is_deleted = true, deleted_at = NOW() WHERE chat_id = ?")
+@SQLDelete(sql = "UPDATE chat_room SET is_deleted = true, deleted_at = NOW() WHERE chat_room_id = ?")
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom extends BaseTimeEntity {

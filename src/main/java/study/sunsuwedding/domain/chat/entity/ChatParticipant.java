@@ -15,7 +15,10 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
-@Table(name = "chat_participant")
+@Table(
+        name = "chat_participant",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"chat_room_id", "user_id"})
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE chat_participant SET is_lefted = true, left_at = NOW() WHERE chat_participant_id = ?")
 @SQLRestriction("is_lefted = false")
@@ -30,7 +33,7 @@ public class ChatParticipant extends BaseTimeEntity {
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
