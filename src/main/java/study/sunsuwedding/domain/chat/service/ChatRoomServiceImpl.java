@@ -3,12 +3,11 @@ package study.sunsuwedding.domain.chat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.sunsuwedding.domain.chat.dto.ChatRoomCreateResponse;
-import study.sunsuwedding.domain.chat.dto.ChatRoomPartnerProfileRequest;
-import study.sunsuwedding.domain.chat.dto.ChatRoomPartnerProfileResponse;
+import study.sunsuwedding.domain.chat.dto.*;
 import study.sunsuwedding.domain.chat.entity.ChatRoom;
 import study.sunsuwedding.domain.chat.repository.ChatParticipantQueryRepository;
 import study.sunsuwedding.domain.chat.repository.ChatParticipantRepository;
+import study.sunsuwedding.domain.chat.repository.ChatRoomQueryRepository;
 import study.sunsuwedding.domain.chat.repository.ChatRoomRepository;
 import study.sunsuwedding.domain.portfolio.exception.PortfolioException;
 import study.sunsuwedding.domain.user.entity.Planner;
@@ -18,6 +17,8 @@ import study.sunsuwedding.domain.user.repository.PlannerRepository;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final UserRepository userRepository;
     private final PlannerRepository plannerRepository;
     private final ChatParticipantQueryRepository chatParticipantQueryRepository;
+    private final ChatRoomQueryRepository chatRoomQueryRepository;
 
     @Override
     public boolean validateChatRoom(String chatRoomCode, Long userId) {
@@ -42,11 +44,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         Planner planner = getPlannerById(plannerId);
 
         return chatRoomRepository.findExistingChatRoom(userId, plannerId)
-                .map(ChatRoomCreateResponse::fromEntity)
+                .map(room -> ChatRoomCreateResponse.fromEntity(room, true)) // 기존 방 존재
                 .orElseGet(() -> {
-                    ChatRoom chatRoom = ChatRoom.create(user, planner);
-                    chatRoomRepository.save(chatRoom);
-                    return ChatRoomCreateResponse.fromEntity(chatRoom);
+                    ChatRoom newRoom = ChatRoom.create(user, planner);
+                    chatRoomRepository.save(newRoom);
+                    return ChatRoomCreateResponse.fromEntity(newRoom, false); // 새로 생성
                 });
     }
 
@@ -64,6 +66,25 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public ChatRoomPartnerProfileResponse findPartnerProfile(String chatRoomCode, Long requesterId) {
         return chatParticipantQueryRepository.findPartner(chatRoomCode, requesterId)
                 .orElseThrow(UserException::userNotFound);
+    }
+
+    @Override
+    public List<String> findChatRoomCodesByUserIdSorted(Long userId, int size) {
+        return chatRoomQueryRepository.findChatRoomCodesByUserIdSorted(userId, size);
+    }
+
+    @Override
+    public long countChatRoomsByUserId(Long userId) {
+        return chatParticipantRepository.countByUserId(userId);
+    }
+
+    @Override
+    public Map<String, ChatRoomMetaResponse> getChatRoomMetas(List<String> chatRoomCodes) {
+        return chatRoomQueryRepository.findChatRoomMetas(chatRoomCodes).stream()
+                .collect(Collectors.toMap(
+                        ChatRoomMetaDto::getChatRoomCode,
+                        dto -> new ChatRoomMetaResponse(dto.getLastMessage(), dto.getLastMessageAt(), dto.getLastMessageSeqId())
+                ));
     }
 
     private User getUserById(Long userId) {

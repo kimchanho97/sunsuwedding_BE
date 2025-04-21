@@ -28,8 +28,9 @@ public class ChatRoom extends BaseTimeEntity {
     @Column(name = "chat_room_id")
     private Long id;
 
-    private LocalDateTime lastMessageAt; // 마지막 메시지 시간
     private String lastMessage; // 마지막 메시지
+    private LocalDateTime lastMessageAt; // 마지막 메시지 시간
+    private Long lastMessageSeqId; // 마지막 메시지 시퀀스 ID
 
     @Column(nullable = false)
     private Boolean isDeleted;
@@ -51,5 +52,8 @@ public class ChatRoom extends BaseTimeEntity {
     private ChatRoom(Boolean isDeleted) {
         this.isDeleted = isDeleted;
         this.chatRoomCode = UUID.randomUUID().toString();
+        this.lastMessage = "";
+        this.lastMessageAt = LocalDateTime.now();
+        this.lastMessageSeqId = 0L;
     }
 }

@@ -9,8 +9,9 @@ import study.sunsuwedding.domain.chat.entity.ChatRoom;
 public class ChatRoomCreateResponse {
 
     private final String chatRoomCode;
+    private final boolean alreadyExists;
 
-    public static ChatRoomCreateResponse fromEntity(ChatRoom chatRoom) {
-        return new ChatRoomCreateResponse(chatRoom.getChatRoomCode());
+    public static ChatRoomCreateResponse fromEntity(ChatRoom chatRoom, boolean alreadyExists) {
+        return new ChatRoomCreateResponse(chatRoom.getChatRoomCode(), alreadyExists);
     }
 }

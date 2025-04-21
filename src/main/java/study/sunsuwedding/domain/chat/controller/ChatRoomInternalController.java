@@ -7,6 +7,7 @@ import study.sunsuwedding.domain.chat.dto.*;
 import study.sunsuwedding.domain.chat.service.ChatRoomService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +38,24 @@ public class ChatRoomInternalController {
     public ResponseEntity<List<ChatRoomPartnerProfileResponse>> getPartnerProfiles(@RequestBody ChatRoomPartnerProfileRequest request) {
         List<ChatRoomPartnerProfileResponse> response = chatRoomService.findPartnerProfiles(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/sorted")
+    public ResponseEntity<List<String>> getSortedChatRoomCodes(@RequestParam Long userId, @RequestParam int size) {
+        List<String> codes = chatRoomService.findChatRoomCodesByUserIdSorted(userId, size);
+        return ResponseEntity.ok(codes);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countChatRooms(@RequestParam Long userId) {
+        long count = chatRoomService.countChatRoomsByUserId(userId);
+        return ResponseEntity.ok(count);
+    }
+
+    @PostMapping("/meta")
+    public ResponseEntity<Map<String, ChatRoomMetaResponse>> getChatRoomMetas(@RequestBody List<String> chatRoomCodes) {
+        Map<String, ChatRoomMetaResponse> result = chatRoomService.getChatRoomMetas(chatRoomCodes);
+        return ResponseEntity.ok(result);
     }
 
 }

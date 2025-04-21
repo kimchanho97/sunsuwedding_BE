@@ -28,5 +28,13 @@ public interface ChatParticipantRepository extends JpaRepository<ChatParticipant
             """)
     List<Long> findUserIdsByChatRoomCode(@Param("chatRoomCode") String chatRoomCode);
 
+    @Query("""
+                SELECT COUNT(cp)
+                FROM ChatParticipant cp
+                JOIN cp.user u
+                WHERE u.id = :userId
+            """)
+    long countByUserId(@Param("userId") Long userId);
+
 
 }
