@@ -7,6 +7,8 @@ import study.sunsuwedding.domain.chat.dto.ChatRoomMetaDto;
 import study.sunsuwedding.domain.chat.dto.QChatRoomMetaDto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static study.sunsuwedding.domain.chat.entity.QChatParticipant.chatParticipant;
 import static study.sunsuwedding.domain.chat.entity.QChatRoom.chatRoom;
@@ -40,5 +42,18 @@ public class ChatRoomQueryRepository {
                 .from(chatRoom)
                 .where(chatRoom.chatRoomCode.in(chatRoomCodes))
                 .fetch();
+    }
+
+    public Map<String, Long> findChatRoomCodeToIdMap(List<String> chatRoomCodes) {
+        return queryFactory
+                .select(chatRoom.chatRoomCode, chatRoom.id)
+                .from(chatRoom)
+                .where(chatRoom.chatRoomCode.in(chatRoomCodes))
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(chatRoom.chatRoomCode),
+                        tuple -> tuple.get(chatRoom.id)
+                ));
     }
 }

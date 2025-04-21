@@ -29,7 +29,7 @@ public class PaymentFailureRecoveryScheduler {
      * [결제 실패 복구 배치]
      */
     @Transactional
-    @Scheduled(fixedDelay = 60 * 1000)
+    @Scheduled(fixedDelay = 3 * 60 * 1000)
     public void recoverFailedPayments() {
         List<PaymentFailureLog> failureLogs = failureLogRepository.findUnrecovered();
 
