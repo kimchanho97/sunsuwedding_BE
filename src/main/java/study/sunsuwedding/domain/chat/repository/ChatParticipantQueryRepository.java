@@ -58,7 +58,7 @@ public class ChatParticipantQueryRepository {
         return Optional.ofNullable(result);
     }
 
-    public Map<Long, Long> findUserReadSeqMapByChatRoomCode(String chatRoomCode) {
+    public Map<Long, Long> findReadSequencesGroupedByUserInRoom(String chatRoomCode) {
         return queryFactory
                 .select(chatParticipant.user.id, chatParticipant.lastReadSeqId)
                 .from(chatParticipant)
@@ -69,9 +69,26 @@ public class ChatParticipantQueryRepository {
                 .stream()
                 .collect(Collectors.toMap(
                         tuple -> tuple.get(chatParticipant.user.id),
-                        tuple -> tuple.get(chatParticipant.lastReadSeqId)
+                        tuple -> Optional.ofNullable(tuple.get(chatParticipant.lastReadSeqId)).orElse(0L)
                 ));
+    }
 
+    public Map<String, Long> findReadSequencesGroupedByChatRoomForUser(List<String> chatRoomCodes, Long userId) {
+        return queryFactory
+                .select(chatRoom.chatRoomCode, chatParticipant.lastReadSeqId)
+                .from(chatParticipant)
+                .join(chatParticipant.chatRoom, chatRoom)
+                .join(chatParticipant.user, user)
+                .where(
+                        chatRoom.chatRoomCode.in(chatRoomCodes),
+                        user.id.eq(userId)
+                )
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(chatRoom.chatRoomCode),
+                        tuple -> Optional.ofNullable(tuple.get(chatParticipant.lastReadSeqId)).orElse(0L)
+                ));
     }
 
 }
