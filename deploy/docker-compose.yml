@@ -40,6 +40,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      VIRTUAL_HOST: ${DOMAIN}
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
       DATASOURCE_URL: jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&rewriteBatchedStatements=true&useSSL=false

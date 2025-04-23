@@ -26,6 +26,6 @@ echo "📦 앱 이미지 최신 pull 중..."
 docker-compose pull app
 
 echo "🚀 컨테이너 재시작 중..."
-docker-compose up -d nginx-proxy redis app letsencrypt
+docker-compose up -d nginx-proxy redis app
 
 echo "✅ 배포 완료!"
