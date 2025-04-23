@@ -116,18 +116,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // 1) 로컬과 배포 환경의 프론트 도메인만 허용
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "https://sunsu-wedding.shop"
         ));
-        // 2) 허용할 HTTP 메서드
-        configuration.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
-        // 3) 허용할 요청 헤더
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        // 4) 쿠키 포함 요청 허용
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
