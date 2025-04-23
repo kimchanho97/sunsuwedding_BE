@@ -26,7 +26,7 @@ import study.sunsuwedding.common.response.ErrorResponse;
 import study.sunsuwedding.infra.security.SessionAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 import static study.sunsuwedding.common.exception.CommonErrorCode.FORBIDDEN;
 import static study.sunsuwedding.common.exception.CommonErrorCode.UNAUTHORIZED_ACCESS;
@@ -113,17 +113,26 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-
-        //configuration.addAllowedOriginPattern("http://localhost:3000");
-        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));  // 모든 Origin 허용
-        configuration.setAllowCredentials(true);  // 쿠키 포함 요청 허용 (세션 기반 인증 필요)
+        // 1) 로컬과 배포 환경의 프론트 도메인만 허용
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://sunsu-wedding.shop"
+        ));
+        // 2) 허용할 HTTP 메서드
+        configuration.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+        // 3) 허용할 요청 헤더
+        configuration.setAllowedHeaders(List.of("*"));
+        // 4) 쿠키 포함 요청 허용
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        // API 경로에만 적용
+        source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
 
