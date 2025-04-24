@@ -44,6 +44,17 @@ public class ChatRoomQueryRepository {
                 .fetch();
     }
 
+    public List<ChatRoomMetaDto> findAllChatRoomMetas() {
+        return queryFactory
+                .select(new QChatRoomMetaDto(
+                        chatRoom.chatRoomCode,
+                        chatRoom.lastMessage,
+                        chatRoom.lastMessageAt,
+                        chatRoom.lastMessageSeqId))
+                .from(chatRoom)
+                .fetch();
+    }
+
     public Map<String, Long> findChatRoomCodeToIdMap(List<String> chatRoomCodes) {
         return queryFactory
                 .select(chatRoom.chatRoomCode, chatRoom.id)

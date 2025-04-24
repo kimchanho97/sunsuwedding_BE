@@ -87,6 +87,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 ));
     }
 
+    @Override
+    public Map<String, ChatRoomMetaResponse> getAllChatRoomMetas() {
+        return chatRoomQueryRepository.findAllChatRoomMetas().stream()
+                .collect(Collectors.toMap(
+                        ChatRoomMetaDto::getChatRoomCode,
+                        dto -> new ChatRoomMetaResponse(dto.getLastMessage(), dto.getLastMessageAt(), dto.getLastMessageSeqId())
+                ));
+    }
+
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserException::userNotFound);

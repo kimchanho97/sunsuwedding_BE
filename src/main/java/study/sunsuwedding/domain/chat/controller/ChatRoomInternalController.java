@@ -58,5 +58,11 @@ public class ChatRoomInternalController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/meta/all")
+    public ResponseEntity<Map<String, ChatRoomMetaResponse>> getAllChatRoomMetas() {
+        Map<String, ChatRoomMetaResponse> result = chatRoomService.getAllChatRoomMetas();
+        return ResponseEntity.ok(result);
+    }
+
 }
 

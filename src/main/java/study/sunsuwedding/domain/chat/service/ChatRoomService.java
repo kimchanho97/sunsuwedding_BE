@@ -25,4 +25,7 @@ public interface ChatRoomService {
     long countChatRoomsByUserId(Long userId);
 
     Map<String, ChatRoomMetaResponse> getChatRoomMetas(List<String> chatRoomCodes);
+
+    Map<String, ChatRoomMetaResponse> getAllChatRoomMetas();
+
 }
