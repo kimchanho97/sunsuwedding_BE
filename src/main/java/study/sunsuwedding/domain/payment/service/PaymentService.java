@@ -7,5 +7,5 @@ public interface PaymentService {
 
     void save(Long userId, PaymentSaveRequest request);
 
-    void approvePaymentAndUpgradeUser(Long userId, PaymentApproveRequest request);
+    void approvePayment(Long userId, PaymentApproveRequest request);
 }

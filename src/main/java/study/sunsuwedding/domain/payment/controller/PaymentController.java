@@ -33,7 +33,7 @@ public class PaymentController {
      */
     @PostMapping("/approve")
     public ApiResponse<Void> approve(@AuthenticationPrincipal Long userId, @Valid @RequestBody PaymentApproveRequest request) {
-        paymentService.approvePaymentAndUpgradeUser(userId, request);
+        paymentService.approvePayment(userId, request);
         return ApiResponse.success(null);
     }
 }
