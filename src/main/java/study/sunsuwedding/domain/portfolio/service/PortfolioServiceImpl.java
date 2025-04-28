@@ -99,9 +99,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     public void deletePortfolio(Long userId) {
         Planner planner = getPlannerById(userId);
         Portfolio portfolio = getPortfolioByPlanner(planner);
-        deleteExistingPortfolioData(portfolio);
+        // deleteExistingPortfolioData(portfolio);
         portfolioRepository.delete(portfolio);
-        portfolioCacheService.evictAll(); // 캐시 전체 무효화
+        // portfolioCacheService.evictAll(); // 캐시 전체 무효화
     }
 
     @Override
