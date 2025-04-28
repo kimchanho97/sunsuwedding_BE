@@ -57,8 +57,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void withdraw(Long userId) {
         User user = getUserById(userId);
-        deleteUserProfileImage(user);
-        userRepository.delete(user);
+        // deleteUserProfileImage(user);
+        // userRepository.delete(user);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteProfileImage(Long userId) {
         User user = getUserById(userId);
-        deleteUserProfileImage(user);
+        // deleteUserProfileImage(user);
     }
 
     private void deleteUserProfileImage(User user) {
