@@ -100,7 +100,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Planner planner = getPlannerById(userId);
         Portfolio portfolio = getPortfolioByPlanner(planner);
         // deleteExistingPortfolioData(portfolio);
-        portfolioRepository.delete(portfolio);
+        // portfolioRepository.delete(portfolio);
         // portfolioCacheService.evictAll(); // 캐시 전체 무효화
     }
 
