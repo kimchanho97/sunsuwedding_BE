@@ -106,7 +106,7 @@
 
 분산 환경에서 결제 처리 시 다음과 같은 일관성 문제가 발생할 수 있습니다:
 
-<img width="450" alt="결제 처리 분산 환경 구조" src="https://github.com/user-attachments/assets/7e6a9538-19fe-46d6-aa86-e3b812751bb2" />
+<img width="600" alt="결제 처리 분산 환경 구조" src="https://github.com/user-attachments/assets/7e6a9538-19fe-46d6-aa86-e3b812751bb2" />
 
 | 시나리오 | 결과 | 비즈니스 영향 |
 |:-----|:-----|:------|
