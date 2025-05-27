@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.sunsuwedding.common.response.ApiResponse;
 import study.sunsuwedding.domain.payment.dto.PaymentApproveRequest;
-import study.sunsuwedding.domain.payment.dto.PaymentSaveRequest;
+import study.sunsuwedding.domain.payment.dto.PaymentSaveResponse;
 import study.sunsuwedding.domain.payment.service.PaymentService;
 
 @RestController
@@ -23,9 +23,8 @@ public class PaymentController {
      * 결제 데이터 저장
      */
     @PostMapping("/save")
-    public ApiResponse<Void> save(@AuthenticationPrincipal Long userId, @Valid @RequestBody PaymentSaveRequest request) {
-        paymentService.save(userId, request);
-        return ApiResponse.success(null);
+    public ApiResponse<PaymentSaveResponse> save(@AuthenticationPrincipal Long userId) {
+        return ApiResponse.success(paymentService.save(userId));
     }
 
     /**

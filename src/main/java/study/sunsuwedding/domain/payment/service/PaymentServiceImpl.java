@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.payment.client.PaymentApprovalClient;
 import study.sunsuwedding.domain.payment.dto.PaymentApproveRequest;
-import study.sunsuwedding.domain.payment.dto.PaymentSaveRequest;
+import study.sunsuwedding.domain.payment.dto.PaymentSaveResponse;
 import study.sunsuwedding.domain.payment.dto.TossPaymentResponse;
 import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
@@ -14,6 +14,10 @@ import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.UserRepository;
+
+import java.util.UUID;
+
+import static study.sunsuwedding.domain.payment.constant.PaymentConst.SUNSU_MEMBERSHIP_PRICE;
 
 @Slf4j
 @Service
@@ -28,9 +32,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void save(Long userId, PaymentSaveRequest request) {
+    public PaymentSaveResponse save(Long userId) {
         User user = getValidatedUser(userId);
-        paymentRepository.save(new Payment(user, request.getOrderId(), request.getAmount()));
+
+        String orderId = UUID.randomUUID().toString();
+        long amount = SUNSU_MEMBERSHIP_PRICE;
+
+        paymentRepository.save(new Payment(user, orderId, amount));
+
+        return new PaymentSaveResponse(orderId, amount);
     }
 
     /**

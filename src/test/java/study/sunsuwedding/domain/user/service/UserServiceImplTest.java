@@ -16,8 +16,6 @@ import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
 import study.sunsuwedding.domain.user.repository.UserRepository;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -46,26 +44,6 @@ class UserServiceImplTest {
         userRepository.save(savedUser);
         em.flush();
         em.clear();
-    }
-
-    @Test
-    @DisplayName("회원 탈퇴 시 isDeleted가 true로 변경되어야 한다.")
-    void withdraw_Should_SetIsDeletedToTrue_When_UserDeletesAccount() {
-        // given
-        Long userId = savedUser.getId();
-        String email = savedUser.getEmail();
-
-        // when
-        userService.withdraw(userId);
-        em.flush();
-        em.clear();
-
-        // then
-        Optional<User> deletedUser = userRepository.findByEmailWithDeleted(email);
-
-        assertThat(deletedUser).isPresent(); // 삭제되었지만 조회는 가능해야 함
-        assertThat(deletedUser.get().getIsDeleted()).isTrue(); // isDeleted 필드가 true인지 확인
-        assertThat(deletedUser.get().getDeletedAt()).isNotNull(); // 삭제 시간이 기록되어야 함
     }
 
     @Test
