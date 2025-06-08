@@ -1,4 +1,4 @@
-package study.sunsuwedding.domain.payment.service;
+package study.sunsuwedding.domain.payment.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
