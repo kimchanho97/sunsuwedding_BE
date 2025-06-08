@@ -18,6 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "portfolio")
+// DB 제약조건: 활성 포트폴리오는 플래너당 최대 1개
 @Getter
 @SQLDelete(sql = "UPDATE portfolio SET is_deleted = true, deleted_at = NOW() WHERE portfolio_id = ?")
 @SQLRestriction("is_deleted = false")
