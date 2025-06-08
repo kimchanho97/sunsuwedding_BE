@@ -23,24 +23,27 @@ public class PaymentException extends BusinessException {
         return new PaymentException(PAYMENT_MISMATCH);
     }
 
-    public static PaymentException paymentApprovalFailed() {
-        return new PaymentException(PAYMENT_APPROVAL_FAILED);
-    }
-
     public static PaymentException alreadyApproved() {
         return new PaymentException(ALREADY_APPROVED);
     }
 
-    public static PaymentException statusQueryFailed() {
-        return new PaymentException(PAYMENT_STATUS_QUERY_FAILED);
+    public static PaymentException paymentFailed() {
+        return new PaymentException(PAYMENT_FAILED);
     }
 
-    public static PaymentException statusNotConfirmedYet() {
-        return new PaymentException(PAYMENT_STATUS_NOT_CONFIRMED_YET);
+    public static PaymentException paymentTimeout() {
+        return new PaymentException(PAYMENT_TIMEOUT);
     }
 
-    public static PaymentException internalProcessingFailed() {
-        return new PaymentException(INTERNAL_PROCESSING_FAILED);
+    public static PaymentException paymentUncertainStatus() {
+        return new PaymentException(PAYMENT_UNCERTAIN);
     }
 
+    public static PaymentException paymentCompletedButDelayed() {
+        return new PaymentException(PAYMENT_TIMEOUT);
+    }
+
+    public boolean isTimeout() {
+        return this.getErrorCode() == PAYMENT_TIMEOUT;
+    }
 }

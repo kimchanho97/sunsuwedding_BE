@@ -16,6 +16,8 @@ import study.sunsuwedding.domain.user.repository.UserRepository;
 
 import java.util.List;
 
+import static study.sunsuwedding.domain.payment.entity.PaymentFailureLog.FailureType.DB_WRITE_FAILED;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class PaymentFailureRecoveryScheduler {
     @Transactional
     @Scheduled(fixedDelay = 3 * 60 * 1000)
     public void recoverFailedPayments() {
-        List<PaymentFailureLog> failureLogs = failureLogRepository.findUnrecovered();
+        List<PaymentFailureLog> failureLogs = failureLogRepository.findByFailureTypeAndNotRecovered(DB_WRITE_FAILED);
 
         for (PaymentFailureLog failureLogEntry : failureLogs) {
             try {

@@ -48,24 +48,44 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public void approvePayment(Long userId, PaymentApproveRequest request) {
-        // 1) 사전 검증 (read-only 트랜잭션)
+        // 1) 사전 검증
         processingService.validateForApproval(userId, request);
 
-        // 2) Toss 승인 요청 (트랜잭션 없음)
-        TossPaymentResponse response = approvalClient.approve(request);
-        if (!response.isDone()) {
-            response = approvalClient.getPaymentStatusByOrderId(request.getOrderId());
-            if (!response.isDone()) {
-                throw PaymentException.statusNotConfirmedYet();
+        // 2) Toss 승인 요청
+        try {
+            TossPaymentResponse response = approvalClient.approve(request);
+            processSuccess(userId, response);
+        } catch (PaymentException e) {
+            if (!e.isTimeout()) {
+                throw e;
             }
+            handleApprovalTimeout(userId, request);
         }
+    }
 
-        // 3) 내부 DB 반영 (write 트랜잭션)
+    private void handleApprovalTimeout(Long userId, PaymentApproveRequest request) {
+        try {
+            Thread.sleep(500);
+            TossPaymentResponse response = approvalClient.getPaymentResponseByOrderId(request.getOrderId());
+
+            if (response.isDone()) {
+                processSuccess(userId, response);
+            } else {
+                throw PaymentException.paymentFailed();
+            }
+            
+        } catch (Exception e) {
+            failureLogService.recordNetworkFailure(userId, request, e);
+            throw PaymentException.paymentUncertainStatus();
+        }
+    }
+
+    private void processSuccess(Long userId, TossPaymentResponse response) {
         try {
             processingService.applyApproval(userId, response);
-        } catch (Exception ex) {
-            failureLogService.recordFailure(userId, request, ex);
-            throw PaymentException.internalProcessingFailed();
+        } catch (Exception e) {
+            failureLogService.recordDbWriteFailure(userId, response, e);
+            throw PaymentException.paymentCompletedButDelayed();
         }
     }
 

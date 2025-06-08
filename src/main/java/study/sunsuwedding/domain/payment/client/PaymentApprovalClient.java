@@ -7,5 +7,5 @@ public interface PaymentApprovalClient {
 
     TossPaymentResponse approve(PaymentApproveRequest request);
 
-    TossPaymentResponse getPaymentStatusByOrderId(String orderId);
+    TossPaymentResponse getPaymentResponseByOrderId(String orderId);
 }

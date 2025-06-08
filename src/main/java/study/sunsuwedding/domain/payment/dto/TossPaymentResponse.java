@@ -12,7 +12,8 @@ public class TossPaymentResponse {
     private String status;
     private String paymentKey;
     private String orderId;
-
+    private Long totalAmount;
+    
     public boolean isDone() {
         return "DONE".equalsIgnoreCase(this.status);
     }

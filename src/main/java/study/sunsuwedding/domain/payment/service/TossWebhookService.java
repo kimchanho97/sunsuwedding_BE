@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.payment.dto.TossWebhookRequest;
 import study.sunsuwedding.domain.payment.entity.Payment;
+import study.sunsuwedding.domain.payment.entity.PaymentFailureLog;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
+import study.sunsuwedding.domain.payment.repository.PaymentFailureLogRepository;
 import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
@@ -19,6 +21,7 @@ public class TossWebhookService {
 
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
+    private final PaymentFailureLogRepository failureLogRepository;
 
     @Transactional
     public void processWebhook(TossWebhookRequest payload) {
@@ -46,6 +49,9 @@ public class TossWebhookService {
 
         user.upgrade();
         payment.markAsApproved(paymentKey);
+        failureLogRepository.findPaymentFailureLogByOrderId(orderId)
+                .ifPresent(PaymentFailureLog::markAsRecovered);
+
         log.info("[웹훅][복구 완료] orderId={}, userId={}", orderId, user.getId());
     }
 }
