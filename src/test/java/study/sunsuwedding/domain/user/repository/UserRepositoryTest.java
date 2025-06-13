@@ -4,16 +4,14 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import study.sunsuwedding.domain.user.constant.Grade;
 import study.sunsuwedding.domain.user.entity.Couple;
 import study.sunsuwedding.domain.user.entity.User;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class UserRepositoryTest {
 
     @Autowired

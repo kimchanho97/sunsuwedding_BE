@@ -12,7 +12,7 @@ class UserTest {
 
     @Test
     @DisplayName("유저 엔티티 생성 테스트")
-    void createUser() {
+    void save_alreadyPremiumUser_throwsPaymentException() {
         // given
         String username = "testUser";
         String email = "test@example.com";
@@ -31,7 +31,7 @@ class UserTest {
 
     @Test
     @DisplayName("유저 프리미엄 업그레이드 테스트")
-    void upgradeUser() {
+    void upgrade_normalUser_upgradesGradeToPremium() {
         // given
         User user = new Couple("testUser", "test@example.com", "password123");
 
@@ -45,7 +45,7 @@ class UserTest {
 
     @Test
     @DisplayName("이미 프리미엄인 유저 업그레이드 시 예외 발생 테스트")
-    void upgradeAlreadyPremiumUser() {
+    void upgrade_alreadyPremiumUser_throwsPaymentException() {
         // given
         User user = new Couple("testUser", "test@example.com", "password123");
         user.upgrade();
@@ -57,7 +57,7 @@ class UserTest {
 
     @Test
     @DisplayName("유저 프리미엄 상태 확인 테스트")
-    void isPremium() {
+    void isPremium_normalAndPremiumUser_returnsCorrectStatus() {
         // given
         User normalUser = new Couple("testUser", "test@example.com", "password123");
         User premiumUser = new Couple("testUser", "test@example.com", "password123");

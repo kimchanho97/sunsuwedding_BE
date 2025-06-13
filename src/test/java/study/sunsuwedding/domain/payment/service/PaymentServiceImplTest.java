@@ -36,7 +36,7 @@ class PaymentServiceImplTest {
 
     @Test
     @DisplayName("결제 정보 저장")
-    void save_payment_success() {
+    void save_validUserId_returnsPaymentSaveResponse() {
         // given
         Long userId = 1L;
         Couple testUser = new Couple("testCouple", "couple@example.com", "password123");
@@ -53,7 +53,7 @@ class PaymentServiceImplTest {
 
     @Test
     @DisplayName("결제 정보 저장 실패 - 존재하지 않는 유저")
-    void save_payment_fail_user_not_found() {
+    void save_nonExistentUser_throwsUserException() {
         // given
         Long userId = 1L;
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -65,7 +65,7 @@ class PaymentServiceImplTest {
 
     @Test
     @DisplayName("결제 정보 저장 실패 - 이미 프리미엄 유저")
-    void save_payment_fail_already_premium() {
+    void save_alreadyPremiumUser_throwsPaymentException() {
         // given
         Long userId = 1L;
         Couple testUser = new Couple("testCouple", "couple@example.com", "password123");
