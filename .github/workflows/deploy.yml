@@ -38,7 +38,7 @@ jobs:
 
       # 테스트 결과 리포트 업로드 (실패해도 결과 확인 가능)
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()  # 테스트 실패해도 결과 업로드
         with:
           name: test-results
