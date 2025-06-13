@@ -6,7 +6,48 @@ on:
       - main  # 🚀 main 브랜치에 push될 때 실행
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # JDK 21 설정
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # Gradle 캐싱 (빌드 속도 향상)
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 테스트 실행 (가장 먼저, 빠른 피드백)
+      - name: Run tests
+        run: ./gradlew test --stacktrace
+
+      # 테스트 결과 리포트 업로드 (실패해도 결과 확인 가능)
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()  # 테스트 실패해도 결과 업로드
+        with:
+          name: test-results
+          path: |
+            build/reports/tests/
+            build/test-results/
+
   CI:
+    needs: [ test ]  # 테스트 성공 후에만 빌드 진행
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +66,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Docker 이미지 빌드 & 푸시
+      # 🐳 Docker 이미지 빌드 & 푸시 (테스트 제외)
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
