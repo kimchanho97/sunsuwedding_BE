@@ -21,13 +21,13 @@ import java.util.Map;
 @Component
 public class TossPaymentApprovalClient implements PaymentApprovalClient {
 
-    @Value("${payment.toss.secret}")
-    private String secretKey;
-
+    private final String secretKey;
     private final WebClient webClient;
 
-    public TossPaymentApprovalClient(@Qualifier("tossWebClient") WebClient webClient) {
+    public TossPaymentApprovalClient(@Qualifier("tossWebClient") WebClient webClient,
+                                     @Value("${payment.toss.secret}") String secretKey) {
         this.webClient = webClient;
+        this.secretKey = secretKey;
     }
 
     @Override
