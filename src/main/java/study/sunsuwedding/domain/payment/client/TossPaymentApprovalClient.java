@@ -1,42 +1,34 @@
 package study.sunsuwedding.domain.payment.client;
 
-import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
 import study.sunsuwedding.domain.payment.dto.PaymentApproveRequest;
 import study.sunsuwedding.domain.payment.dto.TossPaymentResponse;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
 
-import java.time.Duration;
 import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class TossPaymentApprovalClient implements PaymentApprovalClient {
 
     @Value("${payment.toss.secret}")
     private String secretKey;
 
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl("https://api.tosspayments.com")
-            .clientConnector(new ReactorClientHttpConnector(
-                    HttpClient.create()
-                            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000) // 연결 타임아웃 3초
-                            .responseTimeout(Duration.ofSeconds(7)) // 응답 타임아웃 7초
-            ))
-            .build();
+    private final WebClient webClient;
+
+    public TossPaymentApprovalClient(@Qualifier("tossWebClient") WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     @Override
     public TossPaymentResponse approve(PaymentApproveRequest request) {
