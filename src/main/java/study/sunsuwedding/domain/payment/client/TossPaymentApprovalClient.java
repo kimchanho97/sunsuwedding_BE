@@ -51,7 +51,7 @@ public class TossPaymentApprovalClient implements PaymentApprovalClient {
                         response -> Mono.error(PaymentException.paymentFailed()))
                 .bodyToMono(TossPaymentResponse.class)
                 .onErrorMap(ReadTimeoutException.class, e -> PaymentException.paymentTimeout())
-                .onErrorMap(Exception.class, e -> PaymentException.paymentFailed())
+                .onErrorMap(e -> !(e instanceof PaymentException), e -> PaymentException.paymentFailed())
                 .block();
     }
 
