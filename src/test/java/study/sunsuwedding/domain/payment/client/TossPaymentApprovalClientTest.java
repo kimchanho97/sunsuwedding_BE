@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("TossPaymentApprovalClient 테스트")
 class TossPaymentApprovalClientTest {
 
     @Mock
@@ -73,7 +74,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("정상적인 결제 승인 요청이 성공한다")
-        void shouldApprovePaymentSuccessfully() {
+        void approvePaymentSuccessfully() {
             // given
             PaymentApproveRequest request = PaymentApproveRequest.builder()
                     .paymentKey("test_payment_key")
@@ -113,7 +114,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("ReadTimeoutException 발생 시 PaymentException(timeout=true)으로 변환된다")
-        void shouldConvertReadTimeoutExceptionToPaymentTimeoutException() {
+        void convertReadTimeoutException() {
             // given
             PaymentApproveRequest request = createDefaultRequest();
 
@@ -131,7 +132,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("HTTP 에러 상태 코드 발생 시 PaymentException(timeout=false)으로 변환된다")
-        void shouldConvertHttpErrorToPaymentFailedException() {
+        void convertHttpErrorToPaymentException() {
             // given
             PaymentApproveRequest request = createDefaultRequest();
 
@@ -150,7 +151,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("일반 Exception 발생 시 PaymentException(timeout=false)으로 변환된다")
-        void shouldConvertGeneralExceptionToPaymentFailedException() {
+        void convertGeneralExceptionToPaymentException() {
             // given
             PaymentApproveRequest request = createDefaultRequest();
 
@@ -181,7 +182,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("주문 ID로 결제 정보 조회가 성공한다")
-        void shouldGetPaymentResponseByOrderIdSuccessfully() {
+        void getPaymentResponseByOrderId() {
             // given
             String orderId = "test_order_id";
             TossPaymentResponse expectedResponse = TossPaymentResponse.builder()
@@ -211,7 +212,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("존재하지 않는 주문 ID 조회 시 PaymentException이 발생한다")
-        void shouldThrowPaymentExceptionWhenOrderNotFound() {
+        void throwPaymentExceptionWhenOrderNotFound() {
             // given
             String orderId = "non_existent_order_id";
 
@@ -235,7 +236,7 @@ class TossPaymentApprovalClientTest {
 
         @Test
         @DisplayName("Basic Auth 헤더가 올바르게 생성된다")
-        void shouldGenerateCorrectBasicAuthHeader() {
+        void generateCorrectBasicAuthHeader() {
             // given
             PaymentApproveRequest request = PaymentApproveRequest.builder()
                     .paymentKey("test_payment_key")
