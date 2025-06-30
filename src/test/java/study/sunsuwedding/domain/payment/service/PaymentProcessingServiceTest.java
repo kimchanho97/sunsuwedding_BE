@@ -158,7 +158,7 @@ class PaymentProcessingServiceTest {
             given(paymentRepository.findByOrderId(testOrderId)).willReturn(Optional.of(payment));
 
             // when
-            paymentProcessingService.applyApproval(testUserId, response);
+            paymentProcessingService.applyApproval(testUserId, response.getOrderId(), response.getPaymentKey());
 
             // then
             verify(user).upgrade();
@@ -173,7 +173,7 @@ class PaymentProcessingServiceTest {
             given(userRepository.findById(testUserId)).willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response))
+            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response.getOrderId(), response.getPaymentKey()))
                     .isInstanceOf(UserException.class);
         }
 
@@ -186,7 +186,7 @@ class PaymentProcessingServiceTest {
             given(userRepository.findById(testUserId)).willReturn(Optional.of(premiumUser));
 
             // when & then
-            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response))
+            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response.getOrderId(), response.getPaymentKey()))
                     .isInstanceOf(PaymentException.class);
         }
 
@@ -203,7 +203,7 @@ class PaymentProcessingServiceTest {
             given(paymentRepository.findByOrderId(testOrderId)).willReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response))
+            assertThatThrownBy(() -> paymentProcessingService.applyApproval(testUserId, response.getOrderId(), response.getPaymentKey()))
                     .isInstanceOf(PaymentException.class);
         }
     }

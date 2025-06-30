@@ -120,7 +120,7 @@ class PaymentServiceImplTest {
         @DisplayName("정상적인 결제 승인이 성공한다")
         void approvePaymentSuccessfully() {
             // given
-            TossPaymentResponse successResponse = mock(TossPaymentResponse.class);
+            TossPaymentResponse successResponse = createTossPaymentResponse();
             given(approvalClient.approve(testApproveRequest)).willReturn(successResponse);
 
             // when
@@ -129,7 +129,7 @@ class PaymentServiceImplTest {
             // then
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient).approve(testApproveRequest);
-            verify(processingService).applyApproval(testUserId, successResponse);
+            verify(processingService).applyApproval(testUserId, testApproveRequest.getOrderId(), testApproveRequest.getPaymentKey());
         }
 
         @Test
@@ -145,7 +145,7 @@ class PaymentServiceImplTest {
 
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient, never()).approve(any());
-            verify(processingService, never()).applyApproval(any(), any());
+            verify(processingService, never()).applyApproval(any(), any(), any());
         }
 
         @Test
@@ -162,7 +162,7 @@ class PaymentServiceImplTest {
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient).approve(testApproveRequest);
             verify(approvalClient, never()).getPaymentResponseByOrderId(any());
-            verify(processingService, never()).applyApproval(any(), any());
+            verify(processingService, never()).applyApproval(any(), any(), any());
         }
 
         @Test
@@ -170,8 +170,7 @@ class PaymentServiceImplTest {
         void handleTimeoutWithSuccessfulRetry() {
             // given
             PaymentException timeoutException = PaymentException.paymentTimeout();
-            TossPaymentResponse doneResponse = mock(TossPaymentResponse.class);
-            given(doneResponse.isDone()).willReturn(true);
+            TossPaymentResponse doneResponse = createCompletedTossPaymentResponse();
 
             given(approvalClient.approve(testApproveRequest)).willThrow(timeoutException);
             given(approvalClient.getPaymentResponseByOrderId(testApproveRequest.getOrderId()))
@@ -184,7 +183,7 @@ class PaymentServiceImplTest {
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient).approve(testApproveRequest);
             verify(approvalClient).getPaymentResponseByOrderId(testApproveRequest.getOrderId());
-            verify(processingService).applyApproval(testUserId, doneResponse);
+            verify(processingService).applyApproval(testUserId, testApproveRequest.getOrderId(), testApproveRequest.getPaymentKey());
         }
 
         @Test
@@ -192,8 +191,7 @@ class PaymentServiceImplTest {
         void handleTimeoutWithIncompleteStatus() {
             // given
             PaymentException timeoutException = PaymentException.paymentTimeout();
-            TossPaymentResponse pendingResponse = mock(TossPaymentResponse.class);
-            given(pendingResponse.isDone()).willReturn(false);
+            TossPaymentResponse pendingResponse = createIncompleteTossPaymentResponse();
 
             given(approvalClient.approve(testApproveRequest)).willThrow(timeoutException);
             given(approvalClient.getPaymentResponseByOrderId(testApproveRequest.getOrderId()))
@@ -206,7 +204,7 @@ class PaymentServiceImplTest {
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient).approve(testApproveRequest);
             verify(approvalClient).getPaymentResponseByOrderId(testApproveRequest.getOrderId());
-            verify(processingService, never()).applyApproval(any(), any());
+            verify(processingService, never()).applyApproval(any(), any(), any());
         }
 
         @Test
@@ -228,19 +226,19 @@ class PaymentServiceImplTest {
             verify(approvalClient).approve(testApproveRequest);
             verify(approvalClient).getPaymentResponseByOrderId(testApproveRequest.getOrderId());
             verify(failureLogService).recordNetworkFailure(testUserId, testApproveRequest, retryException);
-            verify(processingService, never()).applyApproval(any(), any());
+            verify(processingService, never()).applyApproval(any(), any(), any());
         }
 
         @Test
         @DisplayName("승인 성공 후 내부 처리 실패 시 지연 완료로 처리한다")
         void handleSuccessWithInternalProcessingFailure() {
             // given
-            TossPaymentResponse successResponse = mock(TossPaymentResponse.class);
+            TossPaymentResponse successResponse = createTossPaymentResponse();
             RuntimeException internalException = new RuntimeException("DB 처리 오류");
 
             given(approvalClient.approve(testApproveRequest)).willReturn(successResponse);
             doThrow(internalException).when(processingService)
-                    .applyApproval(testUserId, successResponse);
+                    .applyApproval(testUserId, testApproveRequest.getOrderId(), testApproveRequest.getPaymentKey());
 
             // when & then
             assertThatThrownBy(() -> paymentService.approvePayment(testUserId, testApproveRequest))
@@ -248,7 +246,7 @@ class PaymentServiceImplTest {
 
             verify(processingService).validateForApproval(testUserId, testApproveRequest);
             verify(approvalClient).approve(testApproveRequest);
-            verify(processingService).applyApproval(testUserId, successResponse);
+            verify(processingService).applyApproval(testUserId, testApproveRequest.getOrderId(), testApproveRequest.getPaymentKey());
             verify(failureLogService).recordDbWriteFailure(testUserId, successResponse, internalException);
         }
     }
@@ -260,5 +258,26 @@ class PaymentServiceImplTest {
             user.upgrade();
         }
         return user;
+    }
+
+    private TossPaymentResponse createTossPaymentResponse() {
+        TossPaymentResponse response = mock(TossPaymentResponse.class);
+        given(response.getOrderId()).willReturn(testApproveRequest.getOrderId());
+        given(response.getPaymentKey()).willReturn(testApproveRequest.getPaymentKey());
+        return response;
+    }
+
+    private TossPaymentResponse createCompletedTossPaymentResponse() {
+        TossPaymentResponse response = mock(TossPaymentResponse.class);
+        given(response.isDone()).willReturn(true);
+        given(response.getOrderId()).willReturn(testApproveRequest.getOrderId());
+        given(response.getPaymentKey()).willReturn(testApproveRequest.getPaymentKey());
+        return response;
+    }
+
+    private TossPaymentResponse createIncompleteTossPaymentResponse() {
+        TossPaymentResponse response = mock(TossPaymentResponse.class);
+        given(response.isDone()).willReturn(false);
+        return response;
     }
 }

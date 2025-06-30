@@ -73,7 +73,7 @@ public class PaymentServiceImpl implements PaymentService {
             } else {
                 throw PaymentException.paymentFailed();
             }
-            
+
         } catch (Exception e) {
             failureLogService.recordNetworkFailure(userId, request, e);
             throw PaymentException.paymentUncertainStatus();
@@ -82,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private void processSuccess(Long userId, TossPaymentResponse response) {
         try {
-            processingService.applyApproval(userId, response);
+            processingService.applyApproval(userId, response.getOrderId(), response.getPaymentKey());
         } catch (Exception e) {
             failureLogService.recordDbWriteFailure(userId, response, e);
             throw PaymentException.paymentCompletedButDelayed();

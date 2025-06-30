@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.payment.dto.PaymentApproveRequest;
-import study.sunsuwedding.domain.payment.dto.TossPaymentResponse;
 import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
 import study.sunsuwedding.domain.payment.repository.PaymentRepository;
@@ -26,12 +25,12 @@ public class PaymentProcessingService {
     }
 
     @Transactional
-    public void applyApproval(Long userId, TossPaymentResponse response) {
+    public void applyApproval(Long userId, String orderId, String paymentKey) {
         User user = getValidatedUser(userId);
-        Payment payment = getPaymentByOrderId(response.getOrderId());
+        Payment payment = getPaymentByOrderId(orderId);
 
         user.upgrade();
-        payment.markAsApproved(response.getPaymentKey());
+        payment.markAsApproved(paymentKey);
     }
 
     private void validateUserNotPremium(Long userId) {
