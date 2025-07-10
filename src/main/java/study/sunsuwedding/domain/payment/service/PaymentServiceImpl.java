@@ -2,6 +2,7 @@ package study.sunsuwedding.domain.payment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.sunsuwedding.domain.payment.client.PaymentApprovalClient;
@@ -10,6 +11,7 @@ import study.sunsuwedding.domain.payment.dto.PaymentSaveResponse;
 import study.sunsuwedding.domain.payment.dto.TossPaymentResponse;
 import study.sunsuwedding.domain.payment.entity.Payment;
 import study.sunsuwedding.domain.payment.exception.PaymentException;
+import study.sunsuwedding.domain.payment.exception.RetryExhaustedException;
 import study.sunsuwedding.domain.payment.repository.PaymentRepository;
 import study.sunsuwedding.domain.user.entity.User;
 import study.sunsuwedding.domain.user.exception.UserException;
@@ -83,7 +85,22 @@ public class PaymentServiceImpl implements PaymentService {
     private void processSuccess(Long userId, TossPaymentResponse response) {
         try {
             processingService.applyApproval(userId, response.getOrderId(), response.getPaymentKey());
+
+        } catch (RetryExhaustedException e) {
+            // 3번 재시도 후에도 실패한 경우
+            log.warn("결제 DB 반영 실패 (재시도 소진): orderId={}", response.getOrderId());
+            failureLogService.recordDbWriteFailure(userId, response, e);
+            throw PaymentException.paymentCompletedButDelayed();
+
+        } catch (DataIntegrityViolationException e) {
+            // 재시도해도 의미 없는 에러 (즉시 실패 처리)
+            log.error("결제 DB 반영 실패 (복구 불가능한 에러): orderId={}", response.getOrderId(), e);
+            failureLogService.recordDbWriteFailure(userId, response, e);
+            throw PaymentException.paymentCompletedButDelayed();
+
         } catch (Exception e) {
+            // 예상치 못한 에러
+            log.error("결제 DB 반영 실패 (예상치 못한 에러): orderId={}", response.getOrderId(), e);
             failureLogService.recordDbWriteFailure(userId, response, e);
             throw PaymentException.paymentCompletedButDelayed();
         }
